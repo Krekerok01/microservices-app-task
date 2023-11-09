@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL}
+
+spring:
+  application:
+    name: gateway
+  config:
+    import: optional:file:./gateway/.env[.properties]
