@@ -2,6 +2,7 @@ package com.specificgroup.blog.service.impl;
 
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.entity.Post;
+import com.specificgroup.blog.exception.EntityNotFoundException;
 import com.specificgroup.blog.repository.PostRepository;
 import com.specificgroup.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class PostServiceImpl implements PostService {
     public Post findById(Long id) {
         log.info("Finding post by id={}", id);
         return postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
     }
 
     @Override
