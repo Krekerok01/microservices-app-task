@@ -11,3 +11,12 @@ spring:
     name: gateway
   config:
     import: optional:file:./gateway/.env[.properties]
+  cloud:
+    gateway:
+      routes:
+        - id: posts
+          uri: lb://blog-service
+          predicates:
+            - Path=/posts/**
+          filters:
+            - RewritePath=/posts(?<remaining>.*), /api/v1/posts${remaining}
