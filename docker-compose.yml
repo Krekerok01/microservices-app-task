@@ -25,3 +25,29 @@ services:
     depends_on:
       eureka-service:
         condition: service_healthy
+
+
+  blog-service:
+    image: microservices-blog:latest
+    build: blog
+    container_name: blog-service
+    environment:
+      DB_URL: jdbc:postgresql://blog-database:5432/blog-db
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+      EUREKA_URL: http://eureka-service:8761/eureka/
+    depends_on:
+      eureka-service:
+        condition: service_healthy
+      blog-database:
+        condition: service_started
+
+  blog-database:
+    container_name: blog-database
+    image: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: blog-db
