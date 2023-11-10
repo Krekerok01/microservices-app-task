@@ -21,8 +21,10 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Override
+    @Transactional
     public Post createPost(PostRequest postRequest, Long userId) {
-        log.info("Creating of a new post: {}", postRequest);
+        log.info("Creating a new post using the following information: {}", postRequest);
+
         Post post = Post.builder()
                 .title(postRequest.getTitle())
                 .text(postRequest.getText())
@@ -49,19 +51,20 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Long updatePost(PostRequest postRequest, Long postId) {
-        log.info("Updating post info: {}", postRequest);
+        log.info("Updating the post with id={} using following information: {}", postId, postRequest);
 
         Post post = findById(postId);
         post.setText(postRequest.getText());
         post.setTitle(postRequest.getTitle());
         post.setModificationDate(LocalDateTime.now());
 
+        postRepository.save(post);
         return postId;
     }
 
     @Override
     public void deletePost(Long id) {
-        log.info("Deleting post with id={}", id);
-        postRepository.deleteById(id);
+        log.info("Deleting the post with id={}", id);
+        postRepository.delete(findById(id));
     }
 }
