@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
@@ -29,7 +30,9 @@ public class ApplicationExceptionHandler {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
 
-        String errorMessage = !errors.isEmpty() ? errors.get(0) : "Argument validation failed";
+        String errorMessage = !errors.isEmpty() ?
+                errors.stream().collect(Collectors.joining("; ")):
+                "Argument validation failed";
 
         return new ResponseEntity<>(buildExceptionResponse(errorMessage, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
