@@ -9,6 +9,6 @@ public interface PostService {
     Post createPost(PostRequest postRequest, Long userId);
     List<Post> findAll();
     Post findById(Long id);
-    Long updatePost(PostRequest postRequest);
+    Long updatePost(PostRequest postRequest, Long postId);
     void deletePost(Long id);
 }
