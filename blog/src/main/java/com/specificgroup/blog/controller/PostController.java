@@ -1,14 +1,16 @@
 package com.specificgroup.blog.controller;
 
-
+import com.specificgroup.blog.util.JwtUtil;
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.entity.Post;
 import com.specificgroup.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -20,8 +22,9 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody @Valid PostRequest postRequest){
-        Long userId = 1L;
+    public ResponseEntity<Post> createPost(@RequestBody @Valid PostRequest postRequest,  HttpServletRequest httpRequest){
+
+        Long userId = getUserIdFromTheTokenInTheHttpRequest(httpRequest);
         return new ResponseEntity<>(postService.createPost(postRequest, userId), HttpStatus.CREATED);
     }
 
@@ -44,5 +47,10 @@ public class PostController {
     public ResponseEntity<?> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private Long getUserIdFromTheTokenInTheHttpRequest(HttpServletRequest httpRequest) {
+        String userId = JwtUtil.getUserIdFromToken(httpRequest.getHeader(HttpHeaders.AUTHORIZATION));
+        return Long.parseLong(userId);
     }
 }
