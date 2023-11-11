@@ -29,8 +29,8 @@ public class PostServiceImpl implements PostService {
 
         LocalDateTime minskCurrentTime = DateTimeUtil.getMinskCurrentTime();
         Post post = Post.builder()
-                .title(postRequest.getTitle())
-                .text(postRequest.getText())
+                .title(postRequest.getTitle().trim())
+                .text(postRequest.getText().trim())
                 .userId(userId)
                 .creationDate(minskCurrentTime)
                 .modificationDate(minskCurrentTime)
@@ -60,8 +60,8 @@ public class PostServiceImpl implements PostService {
 
         accessVerification(post.getUserId(), userId);
 
-        post.setText(postRequest.getText());
-        post.setTitle(postRequest.getTitle());
+        post.setText(postRequest.getText().trim());
+        post.setTitle(postRequest.getTitle().trim());
         post.setModificationDate(DateTimeUtil.getMinskCurrentTime());
 
         postRepository.save(post);
