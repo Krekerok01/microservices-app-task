@@ -6,6 +6,7 @@ import com.specificgroup.blog.exception.AccessDeniedException;
 import com.specificgroup.blog.exception.EntityNotFoundException;
 import com.specificgroup.blog.repository.PostRepository;
 import com.specificgroup.blog.service.PostService;
+import com.specificgroup.blog.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,12 +27,13 @@ public class PostServiceImpl implements PostService {
     public Post createPost(PostRequest postRequest, Long userId) {
         log.info("Creating a new post using the following information: {}", postRequest);
 
+        LocalDateTime minskCurrentTime = DateTimeUtil.getMinskCurrentTime();
         Post post = Post.builder()
                 .title(postRequest.getTitle())
                 .text(postRequest.getText())
                 .userId(userId)
-                .creationDate(LocalDateTime.now())
-                .modificationDate(LocalDateTime.now())
+                .creationDate(minskCurrentTime)
+                .modificationDate(minskCurrentTime)
                 .build();
         return postRepository.save(post);
     }
@@ -60,7 +62,7 @@ public class PostServiceImpl implements PostService {
 
         post.setText(postRequest.getText());
         post.setTitle(postRequest.getTitle());
-        post.setModificationDate(LocalDateTime.now());
+        post.setModificationDate(DateTimeUtil.getMinskCurrentTime());
 
         postRepository.save(post);
         return postId;
