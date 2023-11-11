@@ -22,8 +22,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody @Valid PostRequest postRequest,  HttpServletRequest httpRequest){
-
+    public ResponseEntity<Post> createPost(@RequestBody @Valid PostRequest postRequest, HttpServletRequest httpRequest){
         Long userId = getUserIdFromTheTokenInTheHttpRequest(httpRequest);
         return new ResponseEntity<>(postService.createPost(postRequest, userId), HttpStatus.CREATED);
     }
@@ -39,13 +38,16 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}")
-    public Long updatePost(@PathVariable Long postId, @RequestBody @Valid PostRequest postRequest){
-        return postService.updatePost(postRequest, postId);
+    public Long updatePost(@PathVariable Long postId, @RequestBody @Valid PostRequest postRequest,
+                           HttpServletRequest httpRequest){
+        Long userId = getUserIdFromTheTokenInTheHttpRequest(httpRequest);
+        return postService.updatePost(postRequest, postId, userId);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable Long postId) {
-        postService.deletePost(postId);
+    public ResponseEntity<?> deletePost(@PathVariable Long postId, HttpServletRequest httpRequest) {
+        Long userId = getUserIdFromTheTokenInTheHttpRequest(httpRequest);
+        postService.deletePost(postId, userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

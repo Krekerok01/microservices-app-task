@@ -1,6 +1,7 @@
 package com.specificgroup.blog.controller.handler;
 
 import com.specificgroup.blog.dto.response.ExceptionResponse;
+import com.specificgroup.blog.exception.AccessDeniedException;
 import com.specificgroup.blog.exception.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,11 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionResponse> entityNotFoundExceptionHandler(EntityNotFoundException e) {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionResponse> accessDeniedExceptionHandler(AccessDeniedException e) {
+        return new ResponseEntity<>(buildExceptionResponse(e.getMessage(), HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

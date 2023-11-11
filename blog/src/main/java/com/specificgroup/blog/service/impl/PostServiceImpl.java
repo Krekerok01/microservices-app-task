@@ -2,6 +2,7 @@ package com.specificgroup.blog.service.impl;
 
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.entity.Post;
+import com.specificgroup.blog.exception.AccessDeniedException;
 import com.specificgroup.blog.exception.EntityNotFoundException;
 import com.specificgroup.blog.repository.PostRepository;
 import com.specificgroup.blog.service.PostService;
@@ -50,10 +51,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Long updatePost(PostRequest postRequest, Long postId) {
+    public Long updatePost(PostRequest postRequest, Long postId, Long userId) {
         log.info("Updating the post with id={} using following information: {}", postId, postRequest);
 
         Post post = findById(postId);
+
+        accessVerification(post.getUserId(), userId);
+
         post.setText(postRequest.getText());
         post.setTitle(postRequest.getTitle());
         post.setModificationDate(LocalDateTime.now());
@@ -63,8 +67,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(Long id) {
+    public void deletePost(Long id, Long userId) {
         log.info("Deleting the post with id={}", id);
-        postRepository.delete(findById(id));
+        Post post = findById(id);
+        accessVerification(post.getUserId(), userId);
+        postRepository.delete(post);
+    }
+
+    private void accessVerification(Long savedUserId, Long currentUserId) {
+        if (!savedUserId.equals(currentUserId)) {
+            throw new AccessDeniedException("Access denied.");
+        }
     }
 }
