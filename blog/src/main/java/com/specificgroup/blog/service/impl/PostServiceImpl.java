@@ -2,6 +2,7 @@ package com.specificgroup.blog.service.impl;
 
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.entity.Post;
+import com.specificgroup.blog.exception.AccessDeniedException;
 import com.specificgroup.blog.exception.EntityNotFoundException;
 import com.specificgroup.blog.repository.PostRepository;
 import com.specificgroup.blog.service.PostService;
@@ -21,8 +22,10 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Override
+    @Transactional
     public Post createPost(PostRequest postRequest, Long userId) {
-        log.info("Creating of a new post: {}", postRequest);
+        log.info("Creating a new post using the following information: {}", postRequest);
+
         Post post = Post.builder()
                 .title(postRequest.getTitle())
                 .text(postRequest.getText())
@@ -48,20 +51,32 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Long updatePost(PostRequest postRequest, Long postId) {
-        log.info("Updating post info: {}", postRequest);
+    public Long updatePost(PostRequest postRequest, Long postId, Long userId) {
+        log.info("Updating the post with id={} using following information: {}", postId, postRequest);
 
         Post post = findById(postId);
+
+        accessVerification(post.getUserId(), userId);
+
         post.setText(postRequest.getText());
         post.setTitle(postRequest.getTitle());
         post.setModificationDate(LocalDateTime.now());
 
+        postRepository.save(post);
         return postId;
     }
 
     @Override
-    public void deletePost(Long id) {
-        log.info("Deleting post with id={}", id);
-        postRepository.deleteById(id);
+    public void deletePost(Long id, Long userId) {
+        log.info("Deleting the post with id={}", id);
+        Post post = findById(id);
+        accessVerification(post.getUserId(), userId);
+        postRepository.delete(post);
+    }
+
+    private void accessVerification(Long savedUserId, Long currentUserId) {
+        if (!savedUserId.equals(currentUserId)) {
+            throw new AccessDeniedException("Access denied.");
+        }
     }
 }
