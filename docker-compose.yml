@@ -25,3 +25,29 @@ services:
     depends_on:
       eureka-service:
         condition: service_healthy
+
+  db:
+    container_name: users-postgres
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresqlcd
+
+  user-service:
+    image: microservices-user:latest
+    build: user
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    environment:
+      EUREKA_URL: http://eureka-service:8761/eureka/
+    depends_on:
+      eureka-service:
+        condition: service_healthy
+      db:
+        condition: service_started
