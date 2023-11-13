@@ -11,24 +11,36 @@ class PostsComponent extends React.Component {
     }
 
     componentDidMount(): void {
-        ApiClient.posts().then(
+        this.refreshPostCards();
+        setInterval(this.refreshPostCards.bind(this), 5000);
+    }
+
+    refreshPostCards() {
+        this.getPostsData().then(json => {
+                this.setState({
+                    data: json
+                });
+            }
+        )
+    }
+
+    getPostsData(): Promise {
+        return ApiClient.posts().then(
             response => {
                 if (response.ok) {
-                    response.json().then(json => {
-                        for (var i in json)
-                            this.state.data.push([i, json[i]]);
-                    })
+                    return response.json();
+                } else {
+                    return Promise.reject("Post-service: error response");
                 }
             }
         )
     }
 
     render() {
-        return <div class="card-grid">
-            {this.state.data.map(post => (
-                    <PostCard title={post.title} text={post.text}/>
-                )
-            )}
+        return <div className="card-grid">
+            {this.state.data.map(post => {
+                return <PostCard key={post.postId} title={post.title} text={post.text}/>
+            })}
         </div>
     }
 }
