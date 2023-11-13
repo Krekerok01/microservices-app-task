@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +41,13 @@ public class ApplicationExceptionHandler {
                 errors.stream().collect(Collectors.joining("; ")):
                 "Argument validation failed";
 
+        return new ResponseEntity<>(buildExceptionResponse(errorMessage, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ExceptionResponse> mismatchArgumentTypeExceptionHandler(
+            MethodArgumentTypeMismatchException e) {
+        String errorMessage = "Incorrect data format for the " + e.getParameter().getParameterName();
         return new ResponseEntity<>(buildExceptionResponse(errorMessage, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
