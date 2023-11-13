@@ -14,6 +14,14 @@ services:
       timeout: 5s
       retries: 10
 
+  frontend-service:
+    image: microservices-blog-frontend:latest
+    build: blog-frontend
+    container_name: frontend
+    ports:
+      - '3000:3000'
+
+
   gateway-service:
     image: microservices-gateway:latest
     build: gateway
@@ -35,8 +43,6 @@ services:
       - POSTGRES_PASSWORD=password
     ports:
       - "5433:5432"
-    volumes:
-      - ./pgdata:/var/lib/postgresqlcd
 
   user-service:
     image: microservices-user:latest
