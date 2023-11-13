@@ -11,11 +11,11 @@ import com.specificgroup.blog.util.DateTimeUtil;
 import com.specificgroup.blog.util.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,9 +44,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponse> findAll() {
+    public List<PostResponse> findAll(Specification<Post> specification) {
         log.info("Finding all posts");
-        return postRepository.findAll()
+        return postRepository.findAll(specification)
                 .stream()
                 .map(mapper::postToPostResponse)
                 .collect(Collectors.toList());
