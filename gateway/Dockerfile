@@ -11,6 +11,4 @@ ENV APP_HOME=/app/
 ENV ARTIFACT_NAME=gateway-0.0.1-SNAPSHOT.jar
 ARG JAR_FILE=$APP_HOME/build/libs/$ARTIFACT_NAME
 COPY --from=build $JAR_FILE /opt/gateway/app.jar
-COPY entrypoint.sh /opt/gateway/entrypoint.sh
-RUN chmod +x /opt/gateway/entrypoint.sh
-ENTRYPOINT ["/opt/gateway/entrypoint.sh"]
+ENTRYPOINT ["java", "-jar", "/opt/gateway/app.jar"]

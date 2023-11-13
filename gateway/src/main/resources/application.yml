@@ -11,3 +11,22 @@ spring:
     name: gateway
   config:
     import: optional:file:./gateway/.env[.properties]
+  cloud:
+    gateway:
+      routes:
+        - id: posts
+          uri: lb://blog-service
+          predicates:
+            - Path=/posts/**
+          filters:
+            - RewritePath=/posts(?<remaining>.*), /api/v1/posts${remaining}
+        - id: users
+          uri: http://user-service:8081
+          predicates:
+            - Path=/users/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000/"
+            allowedHeaders: "*"
+            allowedMethods: "*"
