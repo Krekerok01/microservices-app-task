@@ -58,7 +58,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: blog-db
- db:
+
+  db:
     container_name: users-postgres
     image: postgres
     restart: always
@@ -66,7 +67,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
     ports:
-      - "5433:5432"
+      - "5432:5432"
 
   user-service:
     image: microservices-user:latest
