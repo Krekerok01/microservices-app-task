@@ -1,19 +1,23 @@
 package com.specificgroup.blog.service.impl;
 
 import com.specificgroup.blog.dto.request.PostRequest;
+import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.entity.Post;
 import com.specificgroup.blog.exception.AccessDeniedException;
 import com.specificgroup.blog.exception.EntityNotFoundException;
 import com.specificgroup.blog.repository.PostRepository;
 import com.specificgroup.blog.service.PostService;
 import com.specificgroup.blog.util.DateTimeUtil;
+import com.specificgroup.blog.util.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -21,10 +25,11 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final PostMapper mapper;
 
     @Override
     @Transactional
-    public Post createPost(PostRequest postRequest, Long userId) {
+    public PostResponse createPost(PostRequest postRequest, Long userId) {
         log.info("Creating a new post using the following information: {}", postRequest);
 
         LocalDateTime minskCurrentTime = DateTimeUtil.getMinskCurrentTime();
@@ -35,20 +40,23 @@ public class PostServiceImpl implements PostService {
                 .creationDate(minskCurrentTime)
                 .modificationDate(minskCurrentTime)
                 .build();
-        return postRepository.save(post);
+        return mapper.postToPostResponse(postRepository.save(post));
     }
 
     @Override
-    public List<Post> findAll() {
+    public List<PostResponse> findAll() {
         log.info("Finding all posts");
-        return postRepository.findAll();
+        return postRepository.findAll()
+                .stream()
+                .map(mapper::postToPostResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Post findById(Long id) {
+    public PostResponse findById(Long id) {
         log.info("Finding post by id={}", id);
-        return postRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+        Post post = findByIdOrThrowNoyFoundException(id);
+        return mapper.postToPostResponse(post);
     }
 
     @Override
@@ -56,7 +64,7 @@ public class PostServiceImpl implements PostService {
     public Long updatePost(PostRequest postRequest, Long postId, Long userId) {
         log.info("Updating the post with id={} using following information: {}", postId, postRequest);
 
-        Post post = findById(postId);
+        Post post = findByIdOrThrowNoyFoundException(postId);
 
         accessVerification(post.getUserId(), userId);
 
@@ -71,9 +79,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Long id, Long userId) {
         log.info("Deleting the post with id={}", id);
-        Post post = findById(id);
+        Post post = findByIdOrThrowNoyFoundException(id);
         accessVerification(post.getUserId(), userId);
         postRepository.delete(post);
+    }
+
+    private Post findByIdOrThrowNoyFoundException(Long id){
+        return postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
     }
 
     private void accessVerification(Long savedUserId, Long currentUserId) {
