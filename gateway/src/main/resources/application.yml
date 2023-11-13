@@ -11,11 +11,3 @@ spring:
     name: gateway
   config:
     import: optional:file:./gateway/.env[.properties]
-
-  cloud:
-    gateway:
-      routes:
-        - id: users
-          uri: http://user-service:8081
-          predicates:
-            - Path=/users/**
