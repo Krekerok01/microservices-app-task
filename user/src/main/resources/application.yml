@@ -12,11 +12,11 @@ spring:
   config:
     import: optional:file:./user/.env[.properties]
   datasource:
-    url: jdbc:postgresql://db:5432/postgres
-#    url: jdbc:postgresql://localhost:5432/postgres
+#    url: jdbc:postgresql://db:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: password
-#    password: mysecretpassword
+#    password: password
+    password: mysecretpassword
   jpa:
     show-sql: true
     properties:

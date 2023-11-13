@@ -1,12 +1,15 @@
 package com.specificgroup.user.service.impl;
 
 import com.specificgroup.user.model.User;
+import com.specificgroup.user.model.dto.UserAuthDto;
 import com.specificgroup.user.repos.UserRepository;
 import com.specificgroup.user.service.UserService;
+import com.specificgroup.user.util.JwtGenerator;
 import com.specificgroup.user.util.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.message.AuthException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -52,5 +55,15 @@ public class UserServiceImpl implements UserService {
         existingUser.setRole(user.getRole());
 
         userRepository.save(existingUser);
+    }
+
+    @Override
+    public Optional<String> jwtTokenOf(UserAuthDto userAuthDto) throws AuthException {
+        Optional<User> existingUser = userRepository.findByEmail(userAuthDto.getEmail());
+
+        if(existingUser.isPresent() && PasswordEncoder.encode(userAuthDto.getPassword()).equals(existingUser.get().getPassword())) {
+            return Optional.of(JwtGenerator.generate(userAuthDto));
+        }
+        throw new AuthException();
     }
 }

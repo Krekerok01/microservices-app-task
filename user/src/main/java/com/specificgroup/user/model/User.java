@@ -23,7 +23,7 @@ public class User {
 
     @RequiredArgsConstructor
     @Getter
-    enum Role {
+    public enum Role {
         DEFAULT("Default"),
         ADMIN("Admin");
 
