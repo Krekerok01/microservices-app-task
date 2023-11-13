@@ -1,6 +1,6 @@
 package com.specificgroup.news.controller;
 
-import com.specificgroup.news.dto.response.NewsResponse;
+import com.specificgroup.news.dto.NewsResponse;
 import com.specificgroup.news.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
