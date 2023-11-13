@@ -1,5 +1,6 @@
 package com.specificgroup.blog.controller;
 
+import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.util.JwtUtil;
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.entity.Post;
@@ -22,18 +23,18 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody @Valid PostRequest postRequest, HttpServletRequest httpRequest){
+    public ResponseEntity<PostResponse> createPost(@RequestBody @Valid PostRequest postRequest, HttpServletRequest httpRequest){
         Long userId = getUserIdFromTheTokenInTheHttpRequest(httpRequest);
         return new ResponseEntity<>(postService.createPost(postRequest, userId), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<Post> findPosts(){
+    public List<PostResponse> findPosts(){
         return postService.findAll();
     }
 
     @GetMapping("/{postId}")
-    public Post findPostById(@PathVariable Long postId) {
+    public PostResponse findPostById(@PathVariable Long postId) {
         return postService.findById(postId);
     }
 
