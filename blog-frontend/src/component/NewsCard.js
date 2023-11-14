@@ -4,13 +4,13 @@ export default function NewsCard(props) {
     const {sourceName, title, url, publishedAt} = props;
     return (
         <div class="news">
-            <h6>{sourceName}</h6>
-            <h5>
+            <h6>
                 <a href={url} target="_blank" rel="noopener noreferrer">
                     {title}...
                 </a>
-            </h5>
-            <h6>{publishedAt}</h6>
+            </h6>
+            <h6><small><em>{sourceName}</em></small></h6>
+            <h6><small><em>{publishedAt}</em></small></h6>
         </div>
     );
 }

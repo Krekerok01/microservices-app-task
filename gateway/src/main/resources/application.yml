@@ -30,6 +30,12 @@ spring:
             - Path=/news/**
           filters:
             - RewritePath=/news(?<remaining>.*), /api/v1/news${remaining}
+        - id: jobs
+          uri: lb://job-service
+          predicates:
+            - Path=/jobs/**
+          filters:
+            - RewritePath=/jobs(?<remaining>.*), /api/v1/jobs${remaining}
       globalcors:
         cors-configurations:
           '[/**]':
