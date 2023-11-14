@@ -12,7 +12,7 @@ class NewsComponent extends React.Component {
 
     componentDidMount(): void {
         this.refreshNewsCards();
-        setInterval(this.refreshNewsCards.bind(this), 60000);
+        setInterval(this.refreshNewsCards.bind(this), 600000);
     }
 
     refreshNewsCards() {
@@ -37,7 +37,7 @@ class NewsComponent extends React.Component {
     }
 
     render() {
-        return <div className="news-grid">
+        return <div className="news-container">
             {this.state.data.map(news => {
                 return <NewsCard key={news.url} sourceName={news.sourceName} title={news.title} url={news.url} publishedAt={news.publishedAt}/>
             })}
