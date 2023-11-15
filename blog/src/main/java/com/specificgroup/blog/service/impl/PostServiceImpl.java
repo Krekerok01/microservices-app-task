@@ -1,5 +1,6 @@
 package com.specificgroup.blog.service.impl;
 
+import com.specificgroup.blog.dto.kafka.UserServiceMessage;
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.entity.Post;
@@ -82,6 +83,13 @@ public class PostServiceImpl implements PostService {
         Post post = findByIdOrThrowNoyFoundException(id);
         accessVerification(post.getUserId(), userId);
         postRepository.delete(post);
+    }
+
+    @Override
+    @Transactional
+    public void deletePostsByUserId(UserServiceMessage message) {
+        log.info("Deleting posts with userId={}", message.getUserId());
+        postRepository.deleteAllByUserId(message.getUserId());
     }
 
     private Post findByIdOrThrowNoyFoundException(Long id) {

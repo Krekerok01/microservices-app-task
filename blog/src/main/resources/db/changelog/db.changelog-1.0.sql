@@ -14,3 +14,13 @@ create table if not exists posts(
 
     constraint posts_pk primary key(post_id)
 );
+
+-- changeset vmamatsiuk:3
+INSERT INTO posts (user_id, title, text, creation_date, modification_date)
+VALUES
+    (1, 'First Post', 'This is the content of the first post.', '2023-11-15 08:00:00', '2023-11-15 08:00:00'),
+    (2, 'Second Post', 'Content of the second post goes here.', '2023-11-14 12:30:00', '2023-11-14 12:30:00'),
+    (3, 'Interesting Post', 'Content of the interesting post goes here.', '2023-11-14 12:30:00', '2023-11-14 12:30:00'),
+    (1, 'Cool Post', 'Content of the cool post goes here.', '2023-11-14 12:30:00', '2023-11-14 12:30:00'),
+    (2, 'Boring Post', 'Content of the boring post goes here.', '2023-11-14 12:30:00', '2023-11-14 12:30:00'),
+    (1, 'Another Post', 'More content for another post.', '2023-11-13 18:45:00', '2023-11-13 18:45:00');
