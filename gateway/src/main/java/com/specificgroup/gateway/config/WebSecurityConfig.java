@@ -21,7 +21,7 @@ public class WebSecurityConfig {
         return http
                 .authorizeExchange()
                 .pathMatchers("/posts/**").permitAll()
-                .pathMatchers("/users/**").authenticated()
+//                .pathMatchers("/users/**").authenticated()
                 .and().authenticationManager(authenticationManager)
                 .authorizeExchange().anyExchange().permitAll().and()
                 .httpBasic().and()

@@ -25,4 +25,4 @@ spring:
     hibernate:
       ddl-auto: update
   kafka:
-    bootstrap-servers: "29092:29092"
+    bootstrap-servers: "29092"
