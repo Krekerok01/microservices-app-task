@@ -92,3 +92,13 @@ services:
     depends_on:
       eureka-service:
         condition: service_healthy
+
+  job-service:
+    image: microservices-job:latest
+    build: job
+    container_name: job-service
+    environment:
+      EUREKA_URL: http://eureka-service:8761/eureka/
+    depends_on:
+      eureka-service:
+        condition: service_healthy

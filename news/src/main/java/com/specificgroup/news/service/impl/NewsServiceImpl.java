@@ -3,6 +3,7 @@ package com.specificgroup.news.service.impl;
 import com.specificgroup.news.dto.NewsResponse;
 import com.specificgroup.news.exception.ReceiveDataException;
 import com.specificgroup.news.service.NewsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.json.Json;
@@ -23,10 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<NewsResponse> findCurrentNews() {
+        log.info("Receiving news...");
         List<NewsResponse> responseList = null;
         try {
             HttpRequest request = HttpRequest.newBuilder()
