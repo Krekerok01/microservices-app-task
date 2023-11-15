@@ -24,6 +24,18 @@ spring:
           uri: http://user-service:8081
           predicates:
             - Path=/users/**
+        - id: news
+          uri: lb://news-service
+          predicates:
+            - Path=/news/**
+          filters:
+            - RewritePath=/news(?<remaining>.*), /api/v1/news${remaining}
+        - id: jobs
+          uri: lb://job-service
+          predicates:
+            - Path=/jobs/**
+          filters:
+            - RewritePath=/jobs(?<remaining>.*), /api/v1/jobs${remaining}
       globalcors:
         cors-configurations:
           '[/**]':
