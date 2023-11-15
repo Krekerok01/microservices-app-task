@@ -84,7 +84,7 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(post);
     }
 
-    private Post findByIdOrThrowNoyFoundException(Long id){
+    private Post findByIdOrThrowNoyFoundException(Long id) {
         return postRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found"));
     }

@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> newUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.add(user));
+    public ResponseEntity<UserDto> newUser(@RequestBody User user) {
+        return ResponseEntity.ok(DtoMapper.mapToUserDto(userService.add(user)));
     }
 
     @PostMapping("/auth")

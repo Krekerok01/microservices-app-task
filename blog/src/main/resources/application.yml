@@ -17,6 +17,18 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
+  kafka:
+    consumer:
+        bootstrap-servers: "29092:29092"
+        auto-offset-reset: earliest
+        group-id: 1
+        key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+        properties:
+          spring.json.trusted.packages: '*'
+          spring.json.use.type.headers: false
+          spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+          spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
 
   liquibase:
     enabled: true
@@ -28,3 +40,4 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_URL}
+

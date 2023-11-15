@@ -34,6 +34,28 @@ services:
       eureka-service:
         condition: service_healthy
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: LISTENER://kafka:9092,LISTENER_HOST://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER:PLAINTEXT,LISTENER_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
   blog-service:
     image: microservices-blog:latest
     build: blog
@@ -47,6 +69,8 @@ services:
       eureka-service:
         condition: service_healthy
       blog-database:
+        condition: service_started
+      kafka:
         condition: service_started
 
   blog-database:
@@ -81,4 +105,6 @@ services:
       eureka-service:
         condition: service_healthy
       db:
+        condition: service_started
+      kafka:
         condition: service_started

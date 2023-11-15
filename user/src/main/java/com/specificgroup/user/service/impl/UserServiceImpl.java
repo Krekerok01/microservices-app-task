@@ -3,6 +3,7 @@ package com.specificgroup.user.service.impl;
 import com.specificgroup.user.model.User;
 import com.specificgroup.user.model.dto.UserAuthDto;
 import com.specificgroup.user.repos.UserRepository;
+import com.specificgroup.user.service.KafkaService;
 import com.specificgroup.user.service.UserService;
 import com.specificgroup.user.util.JwtGenerator;
 import com.specificgroup.user.util.PasswordEncoder;
@@ -18,7 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
+    private final KafkaService kafkaService;
+    private final String TOPIC_BLOG_USER = "blog-user";
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(long id) {
         userRepository.deleteById(id);
+        kafkaService.notify(TOPIC_BLOG_USER, id);
     }
 
     @Override
