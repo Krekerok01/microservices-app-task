@@ -19,6 +19,6 @@ public class KafkaServiceImpl implements KafkaService {
     public void notify(String topicName, Long userId) {
         BlogServiceMessage message = BlogServiceMessage.builder().userId(userId).build();
         kafka.send(topicName, message);
-        log.info("User {} requested to delete all his posts. Sent successfully in the topic {}", userId, topicName);
+        log.info("User {} requested to delete all his posts. Sent successfully to the topic {}", userId, topicName);
     }
 }
