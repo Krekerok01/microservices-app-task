@@ -19,16 +19,20 @@ spring:
       ddl-auto: validate
   kafka:
     consumer:
-        bootstrap-servers: "29092:29092"
-        auto-offset-reset: earliest
-        group-id: 1
-        key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-        value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-        properties:
-          spring.json.trusted.packages: '*'
-          spring.json.use.type.headers: false
-          spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
-          spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+      bootstrap-servers: ${BOOTSTRAP_SERVERS}
+      auto-offset-reset: earliest
+      group-id: ${GROUP_ID}
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.specificgroup.blog.dto.kafka.UserServiceMessage
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+    topics:
+      user: blog-user
+
 
   liquibase:
     enabled: true

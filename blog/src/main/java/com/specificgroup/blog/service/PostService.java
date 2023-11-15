@@ -1,5 +1,6 @@
 package com.specificgroup.blog.service;
 
+import com.specificgroup.blog.dto.kafka.UserServiceMessage;
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.entity.Post;
@@ -14,4 +15,6 @@ public interface PostService {
     PostResponse findById(Long id);
     Long updatePost(PostRequest postRequest, Long postId, Long userId);
     void deletePost(Long id, Long userId);
+
+    void deletePostsByUserId(UserServiceMessage message);
 }
