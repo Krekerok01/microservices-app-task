@@ -39,7 +39,7 @@ class PostsComponent extends React.Component {
     render() {
         return <div className="card-grid">
             {this.state.data.map(post => {
-                return <PostCard key={post.postId} title={post.title} text={post.text}/>
+                return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text}/>
             })}
         </div>
     }
