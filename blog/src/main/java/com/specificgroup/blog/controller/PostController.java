@@ -65,7 +65,6 @@ public class PostController {
     }
 
     private Long getUserIdFromTheTokenInTheHttpRequest(HttpServletRequest httpRequest) {
-        String userId = JwtUtil.getUserIdFromToken(httpRequest.getHeader(HttpHeaders.AUTHORIZATION));
-        return Long.parseLong(userId);
+        return JwtUtil.getUserIdFromToken(httpRequest.getHeader(HttpHeaders.AUTHORIZATION));
     }
 }
