@@ -6,7 +6,8 @@ class PostsComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            flag: false
         }
     }
 
@@ -35,9 +36,28 @@ class PostsComponent extends React.Component {
             }
         )
     }
-
     render() {
         return <div className="card-grid">
+            <button id="button_log" onClick={() => {
+                if(this.state.flag === false) {
+                    const btn = document.getElementById("button_create");
+                    btn.style.display = "block";
+                    const btn1 = document.getElementById("button_log");
+                    btn1.textContent = "Log out";
+                    this.setState({
+                        flag: true
+                    });
+                } else {
+                    const btn = document.getElementById("button_create");
+                    btn.style.display = "none";
+                    const btn1 = document.getElementById("button_log");
+                    btn1.textContent = "Log in";
+                    this.setState({
+                        flag: false
+                    });
+                }
+            }} className="button-login">Log in</button>
+            <button id="button_create" className="button-create" style={{display: 'none'}}>Create post</button>
             {this.state.data.map(post => {
                 return <PostCard key={post.postId} title={post.title} text={post.text}/>
             })}
