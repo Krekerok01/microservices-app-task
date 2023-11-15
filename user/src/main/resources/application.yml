@@ -25,4 +25,7 @@ spring:
     hibernate:
       ddl-auto: update
   kafka:
-    bootstrap-servers: "kafka:9092"
+    producer:
+      bootstrap-servers: ${BOOTSTRAP_SERVERS}
+    topics:
+      blog-user: blog-user

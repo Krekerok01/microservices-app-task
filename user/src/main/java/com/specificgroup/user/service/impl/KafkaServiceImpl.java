@@ -1,5 +1,6 @@
 package com.specificgroup.user.service.impl;
 
+import com.specificgroup.user.model.dto.BlogServiceMessage;
 import com.specificgroup.user.service.KafkaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +13,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaServiceImpl implements KafkaService {
-    private final KafkaTemplate<String, Long> kafka;
+    private final KafkaTemplate<String, Object> kafka;
 
     @Override
     public void notify(String topicName, Long userId) {
-        kafka.send(topicName, userId);
+        BlogServiceMessage message = BlogServiceMessage.builder().userId(userId).build();
+        kafka.send(topicName, message);
         log.info("User {} requested to delete all his posts. Sent successfully in the topic {}", userId, topicName);
     }
 }
