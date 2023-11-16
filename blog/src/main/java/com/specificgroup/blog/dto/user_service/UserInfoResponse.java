@@ -1,4 +1,4 @@
-package com.specificgroup.blog.dto.user;
+package com.specificgroup.blog.dto.user_service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package com.specificgroup.blog.util.getter;
 
 import com.netflix.discovery.EurekaClient;
-import com.specificgroup.blog.dto.user.UserInfoResponse;
+import com.specificgroup.blog.dto.user_service.UserInfoResponse;
 import com.specificgroup.blog.exception.ServiceClientException;
 import com.specificgroup.blog.exception.ServiceUnavailableException;
 import lombok.RequiredArgsConstructor;
