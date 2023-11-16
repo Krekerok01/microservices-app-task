@@ -3,7 +3,7 @@ import '../App.css';
 export default function PostCard(props) {
     const {username, title, text} = props;
     return (
-        <div class="card">
+        <div className="card">
             <h2>{title}</h2>
             <h3>{text}</h3>
             <hr/>

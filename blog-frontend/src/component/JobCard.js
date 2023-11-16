@@ -4,7 +4,7 @@ export default function JobCard(props) {
 
     const {title, url, companyName, jobSource} = props;
     return (
-        <div class="job">
+        <div className="job">
             <h6><strong>{companyName}</strong> is looking for</h6>
             <h6><strong>{title}</strong></h6>
             <h6>
