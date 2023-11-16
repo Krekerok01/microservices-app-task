@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Create new post Copy",
+			"name": "Create new post",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -45,7 +45,7 @@
 			"response": []
 		},
 		{
-			"name": "Get all posts by specification Copy",
+			"name": "Get all posts by specification",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -86,7 +86,7 @@
 			"response": []
 		},
 		{
-			"name": "Get post by id Copy",
+			"name": "Get post by id",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -106,14 +106,14 @@
 			"response": []
 		},
 		{
-			"name": "Update post Copy",
+			"name": "Update post",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiI2IiwiaWF0IjoxNTE2MjM5MDIyfQ._4tuwROMr2ZNKlRpLv7LkFVLCC3J9xdNvMhg7wRPpsw",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJERUZBVUxUIn0.VOOq6t-DcRKBOIyP_BjWksdQfjPVGzjeFAuOgkttJ78",
 							"type": "string"
 						}
 					]
@@ -145,7 +145,7 @@
 			"response": []
 		},
 		{
-			"name": "Delete post Copy",
+			"name": "Delete post",
 			"request": {
 				"auth": {
 					"type": "bearer",

@@ -3,6 +3,8 @@ package com.specificgroup.blog.controller.handler;
 import com.specificgroup.blog.dto.response.ExceptionResponse;
 import com.specificgroup.blog.exception.AccessDeniedException;
 import com.specificgroup.blog.exception.EntityNotFoundException;
+import com.specificgroup.blog.exception.ServiceClientException;
+import com.specificgroup.blog.exception.ServiceUnavailableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,6 +28,16 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ExceptionResponse> accessDeniedExceptionHandler(AccessDeniedException e) {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage(), HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<ExceptionResponse> serviceUnavailableExceptionHandler(ServiceUnavailableException e) {
+        return new ResponseEntity<>(buildExceptionResponse(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE), HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler(ServiceClientException.class)
+    public ResponseEntity<ExceptionResponse> serviceClientExceptionHandler(ServiceClientException e) {
+        return new ResponseEntity<>(buildExceptionResponse(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

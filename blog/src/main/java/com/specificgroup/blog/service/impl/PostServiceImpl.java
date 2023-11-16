@@ -4,7 +4,6 @@ import com.specificgroup.blog.dto.kafka.BlogServiceResponseMessage;
 import com.specificgroup.blog.dto.kafka.UserServiceMessage;
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.dto.response.PostResponse;
-import com.specificgroup.blog.dto.user.UserInfoResponse;
 import com.specificgroup.blog.entity.Post;
 import com.specificgroup.blog.exception.AccessDeniedException;
 import com.specificgroup.blog.exception.EntityNotFoundException;

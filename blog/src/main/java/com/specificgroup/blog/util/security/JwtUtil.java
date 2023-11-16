@@ -1,4 +1,4 @@
-package com.specificgroup.blog.util;
+package com.specificgroup.blog.util.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
