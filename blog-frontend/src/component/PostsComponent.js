@@ -59,7 +59,7 @@ class PostsComponent extends React.Component {
             }} className="button-login">Log in</button>
             <button id="button_create" className="button-create" style={{display: 'none'}}>Create post</button>
             {this.state.data.map(post => {
-                return <PostCard key={post.postId} title={post.title} text={post.text}/>
+                return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text}/>
             })}
         </div>
     }
