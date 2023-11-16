@@ -1,6 +1,7 @@
 package com.specificgroup.user.util;
 
 import com.specificgroup.user.model.User;
+import com.specificgroup.user.model.dto.UserAuthDto;
 import com.specificgroup.user.model.dto.UserDto;
 
 import java.util.List;
@@ -15,7 +16,17 @@ public class DtoMapper {
                 user.getRole()
         );
     }
+
     public static List<UserDto> mapToUserDto(List<User> users) {
         return users.stream().map(DtoMapper::mapToUserDto).collect(Collectors.toList());
+    }
+
+    public static UserAuthDto mapToUserAuthDto(User user) {
+        return new UserAuthDto(
+                user.getId(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole()
+        );
     }
 }

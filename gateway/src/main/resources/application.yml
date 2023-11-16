@@ -1,6 +1,10 @@
 server:
   port: 8080
 
+security:
+  jwt:
+    secret: MTA1NDQ2NDYyMjkxODQ3NjI0NjM4NjUxNTYxZGZnMTU2MTQ4ZGY5NDE4MTk0OTg=
+
 eureka:
   client:
     service-url:

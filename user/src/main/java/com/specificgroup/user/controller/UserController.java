@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.security.auth.message.AuthException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("users")
@@ -53,6 +54,15 @@ public class UserController {
         } catch (AuthException e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
+    }
+
+    @GetMapping("/auth/{email}")
+    public ResponseEntity<UserAuthDto> authenticateUserByEmail(@PathVariable(name = "email") String email) {
+        return ResponseEntity.of(
+                Optional.of(
+                        userService.checkUserEmail(email)
+                )
+        );
     }
 
     @DeleteMapping("/{id}")

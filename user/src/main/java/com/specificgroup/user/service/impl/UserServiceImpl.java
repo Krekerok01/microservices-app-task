@@ -5,6 +5,7 @@ import com.specificgroup.user.model.dto.UserAuthDto;
 import com.specificgroup.user.repos.UserRepository;
 import com.specificgroup.user.service.KafkaService;
 import com.specificgroup.user.service.UserService;
+import com.specificgroup.user.util.DtoMapper;
 import com.specificgroup.user.util.JwtGenerator;
 import com.specificgroup.user.util.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,9 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final KafkaService kafkaService;
+    private final JwtGenerator jwtGenerator;
     private final String TOPIC_BLOG_USER = "blog-user";
+
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
@@ -64,9 +67,18 @@ public class UserServiceImpl implements UserService {
     public Optional<String> jwtTokenOf(UserAuthDto userAuthDto) throws AuthException {
         Optional<User> existingUser = userRepository.findByEmail(userAuthDto.getEmail());
 
-        if(existingUser.isPresent() && PasswordEncoder.encode(userAuthDto.getPassword()).equals(existingUser.get().getPassword())) {
-            return Optional.of(JwtGenerator.generate(userAuthDto));
+        if (existingUser.isPresent() && PasswordEncoder.encode(userAuthDto.getPassword()).equals(existingUser.get().getPassword())) {
+            return Optional.of(jwtGenerator.generate(userAuthDto));
         }
         throw new AuthException();
     }
+
+    @Override
+    public UserAuthDto checkUserEmail(String email) {
+        return DtoMapper.mapToUserAuthDto(
+                userRepository.findByEmail(email)
+                        .orElseThrow(NoSuchElementException::new)
+        );
+    }
+
 }
