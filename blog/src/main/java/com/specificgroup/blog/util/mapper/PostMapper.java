@@ -10,5 +10,6 @@ public interface PostMapper {
 
     @Mapping(target = "creationDate", source = "creationDate", dateFormat = "dd MMM yyyy, HH:mm")
     @Mapping(target = "modificationDate", source = "modificationDate", dateFormat = "dd MMM yyyy, HH:mm")
+    @Mapping(target = "username", ignore = true)
     PostResponse postToPostResponse(Post post);
 }
