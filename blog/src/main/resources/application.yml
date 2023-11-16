@@ -18,8 +18,8 @@ spring:
     hibernate:
       ddl-auto: validate
   kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVERS}
     consumer:
-      bootstrap-servers: ${BOOTSTRAP_SERVERS}
       auto-offset-reset: earliest
       group-id: ${GROUP_ID}
       key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
@@ -31,7 +31,12 @@ spring:
         spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
     topics:
-      user: blog-user
+      user:
+        service:
+          request: blog-user
+          response:
+            successful: successful-response
+
 
 
   liquibase:

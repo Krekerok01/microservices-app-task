@@ -1,5 +1,6 @@
 package com.specificgroup.blog.service.impl;
 
+import com.specificgroup.blog.dto.kafka.BlogServiceResponseMessage;
 import com.specificgroup.blog.dto.kafka.UserServiceMessage;
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.dto.response.PostResponse;
@@ -7,6 +8,7 @@ import com.specificgroup.blog.dto.user.UserInfoResponse;
 import com.specificgroup.blog.entity.Post;
 import com.specificgroup.blog.exception.AccessDeniedException;
 import com.specificgroup.blog.exception.EntityNotFoundException;
+import com.specificgroup.blog.kafka.KafkaProducer;
 import com.specificgroup.blog.repository.PostRepository;
 import com.specificgroup.blog.service.PostService;
 import com.specificgroup.blog.util.DateTimeUtil;
@@ -14,6 +16,7 @@ import com.specificgroup.blog.util.getter.UserInfoGetter;
 import com.specificgroup.blog.util.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,10 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final PostMapper mapper;
+    private final KafkaProducer kafkaProducer;
+
+    @Value("${spring.kafka.topics.user.service.response.successful}")
+    private String successfulResponseTopic;
     private final UserInfoGetter userInfoGetter;
 
     @Override
@@ -102,6 +109,11 @@ public class PostServiceImpl implements PostService {
     public void deletePostsByUserId(UserServiceMessage message) {
         log.info("Deleting posts with userId={}", message.getUserId());
         postRepository.deleteAllByUserId(message.getUserId());
+        BlogServiceResponseMessage responseMessage = BlogServiceResponseMessage.builder()
+                .deletedUserId(message.getUserId())
+                .message("Request successfully processed.")
+                .build();
+        kafkaProducer.notify(successfulResponseTopic, responseMessage);
     }
 
     private Post findByIdOrThrowNoyFoundException(Long id) {
