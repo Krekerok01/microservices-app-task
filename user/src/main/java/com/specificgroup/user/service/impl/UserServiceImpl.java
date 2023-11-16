@@ -1,5 +1,6 @@
 package com.specificgroup.user.service.impl;
 
+import com.specificgroup.user.exception.DuplicateEmailException;
 import com.specificgroup.user.model.User;
 import com.specificgroup.user.model.dto.UserAuthDto;
 import com.specificgroup.user.repos.UserRepository;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.message.AuthException;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -40,10 +42,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User add(User user) {
-        user.setPassword(PasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public User add(@Valid User user) {
+        if (!checkUserEmailDuplicate(user.getEmail())) {
+            user.setPassword(PasswordEncoder.encode(user.getPassword()));
+            return userRepository.save(user);
+        }
+        throw new DuplicateEmailException("User with such email already exists! Please change your email!");
     }
+
 
     @Override
     public void delete(long id) {
@@ -52,19 +58,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
-        User existingUser = userRepository.findByEmail(user.getEmail())
+    public void update(final long id, final User user) {
+        User existingUser = userRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
 
-        existingUser.setUsername(user.getUsername());
-        existingUser.setPassword(PasswordEncoder.encode(user.getPassword()));
-        existingUser.setRole(user.getRole());
+        if (!checkUserEmailDuplicate(user.getEmail())) {
+            existingUser.setEmail(user.getEmail());
+            existingUser.setUsername(user.getUsername());
+            existingUser.setPassword(PasswordEncoder.encode(user.getPassword()));
+            existingUser.setRole(user.getRole());
 
-        userRepository.save(existingUser);
+            userRepository.save(existingUser);
+        } else {
+            throw new DuplicateEmailException("User with such email already exists! Please change your email!");
+        }
     }
 
     @Override
-    public Optional<String> jwtTokenOf(UserAuthDto userAuthDto) throws AuthException {
+    public Optional<String> jwtTokenOf(final UserAuthDto userAuthDto) throws AuthException {
         Optional<User> existingUser = userRepository.findByEmail(userAuthDto.getEmail());
 
         if (existingUser.isPresent() && PasswordEncoder.encode(userAuthDto.getPassword()).equals(existingUser.get().getPassword())) {
@@ -74,11 +85,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserAuthDto checkUserEmail(String email) {
+    public UserAuthDto checkUserEmail(final String email) {
         return DtoMapper.mapToUserAuthDto(
                 userRepository.findByEmail(email)
                         .orElseThrow(NoSuchElementException::new)
         );
+    }
+
+    private boolean checkUserEmailDuplicate(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
 }

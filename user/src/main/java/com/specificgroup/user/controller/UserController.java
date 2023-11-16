@@ -10,10 +10,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.security.auth.message.AuthException;
+import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +47,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> newUser(@RequestBody User user) {
+    public ResponseEntity<UserDto> newUser(@RequestBody @Valid User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder sb = new StringBuilder();
+            for (ObjectError error : bindingResult.getFieldErrors()) {
+                sb.append(error.getDefaultMessage());
+            }
+            throw new ValidationException(sb.toString());
+        }
         return ResponseEntity.ok(DtoMapper.mapToUserDto(userService.add(user)));
     }
 
@@ -76,9 +87,10 @@ public class UserController {
                 );
     }
 
-    @PutMapping
-    public ResponseEntity<String> updateUser(@RequestBody User user) {
-        userService.update(user);
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable(name = "id") long userId,
+                                             @RequestBody User user) {
+        userService.update(userId, user);
         return ResponseEntity
                 .status(204)
                 .body(UtilStrings.userWasSuccessfullyModified(

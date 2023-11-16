@@ -18,9 +18,9 @@ public interface UserService {
 
     void delete(final long id);
 
-    void update(final User user);
+    void update(final long id, final User user);
 
-    Optional<String> jwtTokenOf(UserAuthDto userAuthDto) throws AuthException;
+    Optional<String> jwtTokenOf(final UserAuthDto userAuthDto) throws AuthException;
 
-    UserAuthDto checkUserEmail(String email);
+    UserAuthDto checkUserEmail(final String email);
 }
