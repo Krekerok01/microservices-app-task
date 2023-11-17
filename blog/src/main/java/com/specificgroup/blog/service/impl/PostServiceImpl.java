@@ -11,7 +11,7 @@ import com.specificgroup.blog.kafka.KafkaProducer;
 import com.specificgroup.blog.repository.PostRepository;
 import com.specificgroup.blog.service.PostService;
 import com.specificgroup.blog.util.DateTimeUtil;
-import com.specificgroup.blog.util.getter.UserInfoGetter;
+import com.specificgroup.blog.util.getter.InfoGetter;
 import com.specificgroup.blog.util.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class PostServiceImpl implements PostService {
 
     @Value("${spring.kafka.topics.user.service.response.successful}")
     private String successfulResponseTopic;
-    private final UserInfoGetter userInfoGetter;
+    private final InfoGetter infoGetter;
 
     @Override
     @Transactional
@@ -52,7 +52,7 @@ public class PostServiceImpl implements PostService {
                 .build();
 
         PostResponse postResponse = mapper.postToPostResponse(postRepository.save(post));
-        postResponse.setUsername(userInfoGetter.getUsernameByUserId(postResponse.getUserId()));
+        postResponse.setUsername(infoGetter.getUsernameByUserId(postResponse.getUserId()));
         return postResponse;
     }
 
@@ -63,9 +63,24 @@ public class PostServiceImpl implements PostService {
                 .stream()
                 .map(post -> {
                         PostResponse postResponse = mapper.postToPostResponse(post);
-                        postResponse.setUsername(userInfoGetter.getUsernameByUserId(postResponse.getUserId()));
+                        postResponse.setUsername(infoGetter.getUsernameByUserId(postResponse.getUserId()));
                         return postResponse;
                     })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostResponse> findSubscriptionsPostsByUserId(Long requestUserId) {
+        log.info("Finding all posts for userId=" + requestUserId);
+        List<Long> subscriptionIds = infoGetter.getSubscriptionIdsListBySubscriberId(requestUserId);
+        subscriptionIds.add(requestUserId);
+        return postRepository.findAllByUserIdIn(subscriptionIds)
+                .stream()
+                .map(post -> {
+                    PostResponse postResponse = mapper.postToPostResponse(post);
+                    postResponse.setUsername(infoGetter.getUsernameByUserId(postResponse.getUserId()));
+                    return postResponse;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -74,7 +89,7 @@ public class PostServiceImpl implements PostService {
         log.info("Finding post by id={}", id);
         Post post = findByIdOrThrowNoyFoundException(id);
         PostResponse postResponse = mapper.postToPostResponse(post);
-        postResponse.setUsername(userInfoGetter.getUsernameByUserId(postResponse.getUserId()));
+        postResponse.setUsername(infoGetter.getUsernameByUserId(postResponse.getUserId()));
         return postResponse;
     }
 

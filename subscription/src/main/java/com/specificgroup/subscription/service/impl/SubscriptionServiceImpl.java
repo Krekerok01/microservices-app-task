@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,9 +44,12 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     }
 
     @Override
-    public List<Subscription> getSubscriptionsBySubscriberId(Long userSubscriberId) {
+    public List<Long> getSubscriptionsBySubscriberId(Long userSubscriberId) {
         log.info("Getting subscriptions for user with id={}", userSubscriberId);
-        return subscriptionRepository.findAllByUserSubscriberId(userSubscriberId);
+        return subscriptionRepository.findAllByUserSubscriberId(userSubscriberId)
+                .stream()
+                .map(Subscription::getUserPublisherId)
+                .collect(Collectors.toList());
     }
 
     @Override

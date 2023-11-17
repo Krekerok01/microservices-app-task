@@ -41,6 +41,12 @@ public class PostController {
                 .findAll(PostSpecification.getSpecification(userId, title, creationDate, modificationDate));
     }
 
+    @GetMapping("/subscriptions")
+    public List<PostResponse> findSubscriptionsPosts(HttpServletRequest httpRequest){
+        Long requestUserId = getUserIdFromTheTokenInTheHttpRequest(httpRequest);
+        return postService.findSubscriptionsPostsByUserId(requestUserId);
+    }
+
     @GetMapping("/{postId}")
     public PostResponse findPostById(@PathVariable Long postId) {
         return postService.findById(postId);
