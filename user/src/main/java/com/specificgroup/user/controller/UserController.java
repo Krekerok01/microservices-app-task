@@ -98,4 +98,9 @@ public class UserController {
                         )
                 );
     }
+
+    @GetMapping("/exists/{id}")
+    public Boolean existsByUserId(@PathVariable(name = "id") long userId) {
+        return userService.existsByUserId(userId);
+    }
 }

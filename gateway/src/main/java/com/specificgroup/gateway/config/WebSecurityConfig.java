@@ -25,7 +25,7 @@ public class WebSecurityConfig {
                 .permitAll()
                 .pathMatchers(HttpMethod.GET, "/posts/**")
                 .permitAll()
-                .pathMatchers("/users/**", "/posts/**")
+                .pathMatchers("/users/**", "/posts/**", "/subscriptions/**")
                 .authenticated()
                 .and()
                 .authenticationManager(authenticationManager)

@@ -92,6 +92,11 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
+    public Boolean existsByUserId(long userId) {
+        return userRepository.existsById(userId);
+    }
+
     private boolean checkUserEmailDuplicate(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
