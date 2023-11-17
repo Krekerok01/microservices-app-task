@@ -2,10 +2,7 @@ package com.specificgroup.user.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 
 @Data
@@ -14,7 +11,8 @@ import javax.validation.constraints.Email;
 @Entity(name = "_user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "postsSeqGenerator")
+    @SequenceGenerator(name = "postsSeqGenerator", sequenceName = "users_seq", allocationSize = 1)
     private long id;
     private String username;
     private String password;

@@ -35,6 +35,7 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
     implementation "io.jsonwebtoken:jjwt-gson:${jjwtVersion}"
+    implementation 'org.liquibase:liquibase-core'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
