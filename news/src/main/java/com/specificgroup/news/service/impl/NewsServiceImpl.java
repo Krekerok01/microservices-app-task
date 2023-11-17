@@ -32,25 +32,26 @@ public class NewsServiceImpl implements NewsService {
         log.info("Receiving news...");
         List<NewsResponse> responseList = null;
         try {
+
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=b2538538ca3c4f9d9acdcf82b85950b8"))
+                    .uri(URI.create("https://newsi-api.p.rapidapi.com/api/category?category=science_and_technology&language=en&country=us&sort=top&page=1&limit=10"))
+                    .header("X-RapidAPI-Key", "282b39271cmsha8d3e3cae2dc2d1p112500jsnd0941072cd85")
+                    .header("X-RapidAPI-Host", "newsi-api.p.rapidapi.com")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
-            HttpResponse<String> response = HttpClient.newHttpClient()
-                    .send(request, HttpResponse.BodyHandlers.ofString());
-            responseList = processNewsapiServiceResponse(response.body());
+            responseList = processNewsApiServiceResponse(response.body());
         } catch (IOException | InterruptedException e) {
             throw new ReceiveDataException("Data receiving problems.");
         }
         return responseList;
     }
 
-    private List<NewsResponse> processNewsapiServiceResponse(String body) {
-        JsonObject jsonObject = Json.createReader(new StringReader(body))
-                .readObject();
+    private List<NewsResponse> processNewsApiServiceResponse(String body) {
+        JsonArray array = Json.createReader(new StringReader(body))
+                .readArray();
 
-        JsonArray array = jsonObject.getJsonArray("articles");
         return convertJSONObjectToNewsResponseList(array, new ArrayList<NewsResponse>());
     }
 
@@ -58,9 +59,9 @@ public class NewsServiceImpl implements NewsService {
         for (JsonValue jsonValue: array){
             JsonObject jsonOb = jsonValue.asJsonObject();
             responseList.add(NewsResponse.builder()
-                    .sourceName(jsonOb.getJsonObject("source").getString("name"))
+                    .sourceName(jsonOb.getString("sourceName"))
                     .title(jsonOb.getString("title"))
-                    .url(jsonOb.getString("url"))
+                    .url(jsonOb.getString("link"))
                     .publishedAt(formatDate(jsonOb.getString("publishedAt")))
                     .build());
         }
