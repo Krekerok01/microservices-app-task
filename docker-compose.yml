@@ -131,3 +131,28 @@ services:
     depends_on:
       eureka-service:
         condition: service_healthy
+
+  subscription-service:
+    image: microservices-subscription:latest
+    build: subscription
+    container_name: subscription-service
+    environment:
+      DB_URL: jdbc:postgresql://subscription-database:5432/subscription-db
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+      EUREKA_URL: http://eureka-service:8761/eureka/
+    depends_on:
+      eureka-service:
+        condition: service_healthy
+      subscription-database:
+        condition: service_started
+
+  subscription-database:
+    container_name: subscription-database
+    image: postgres
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: subscription-db
