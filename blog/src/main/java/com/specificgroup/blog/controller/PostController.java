@@ -2,12 +2,10 @@ package com.specificgroup.blog.controller;
 
 import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.repository.PostSpecification;
-import com.specificgroup.blog.util.JwtUtil;
+import com.specificgroup.blog.util.security.JwtUtil;
 import com.specificgroup.blog.dto.request.PostRequest;
-import com.specificgroup.blog.entity.Post;
 import com.specificgroup.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController

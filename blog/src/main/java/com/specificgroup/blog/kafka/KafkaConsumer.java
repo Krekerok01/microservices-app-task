@@ -1,4 +1,4 @@
-package com.specificgroup.blog.consumer;
+package com.specificgroup.blog.kafka;
 
 import com.specificgroup.blog.dto.kafka.UserServiceMessage;
 import com.specificgroup.blog.service.PostService;
@@ -14,7 +14,7 @@ public class KafkaConsumer {
 
     private final PostService postService;
 
-    @KafkaListener(topics = "${spring.kafka.topics.user}")
+    @KafkaListener(topics = "${spring.kafka.topics.user.service.request}")
     public void consumeUserPostsDeleting(UserServiceMessage message)  {
         log.info("Received a request to delete posts for user {}", message);
         postService.deletePostsByUserId(message);

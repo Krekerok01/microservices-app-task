@@ -3,7 +3,7 @@ import '../App.css';
 export default function NewsCard(props) {
     const {sourceName, title, url, publishedAt} = props;
     return (
-        <div class="news">
+        <div className="news">
             <h6>
                 <a href={url} target="_blank" rel="noopener noreferrer">
                     {title}...
