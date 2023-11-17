@@ -13,6 +13,9 @@ create table if not exists subscriptions(
 );
 
 -- changeset vmamatsiuk:3
+create index idx_user_subscriber_id on subscriptions(user_subscriber_id);
+
+-- changeset vmamatsiuk:4
 INSERT INTO subscriptions (user_subscriber_id, user_publisher_id)
 VALUES
     (1, 2),

@@ -28,8 +28,13 @@ public class SubscriptionController {
     }
 
     @GetMapping
-    public List<Subscription> findAllSubscriptions(){
-        return subscriptionService.getAllSubscriptions();
+    public List<Subscription> findAllSubscriptions(@RequestParam(value = "userSubscriberId", required = false)
+                                                       Long userSubscriberId){
+        if (userSubscriberId != null){
+            return subscriptionService.getSubscriptionsBySubscriberId(userSubscriberId);
+        } else {
+            return subscriptionService.getAllSubscriptions();
+        }
     }
 
     @DeleteMapping("/{subscriptionId}")
