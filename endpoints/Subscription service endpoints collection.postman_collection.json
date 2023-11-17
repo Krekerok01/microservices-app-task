@@ -1,0 +1,106 @@
+{
+	"info": {
+		"_postman_id": "3713f3df-f96a-4f40-8955-49201d11da03",
+		"name": "Subscription service endpoints collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29920715"
+	},
+	"item": [
+		{
+			"name": "Create subscription",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiREVGQVVMVCIsInVzZXJJZCI6NCwic3ViIjoiZGdiZGZkZmJAZGdmLnZmZ3IifQ.NFjp8shOWHCBfAvOSstsK_DeMjr-XQSQpv7XUQO-hC8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/subscriptions/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subscriptions",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get subscriptions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiREVGQVVMVCIsInVzZXJJZCI6NCwic3ViIjoiZGdiZGZkZmJAZGdmLnZmZ3IifQ.NFjp8shOWHCBfAvOSstsK_DeMjr-XQSQpv7XUQO-hC8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/subscriptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subscriptions"
+					],
+					"query": [
+						{
+							"key": "userSubscriberId",
+							"value": "4",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete subscription",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiREVGQVVMVCIsInVzZXJJZCI6NCwic3ViIjoiZGdiZGZkZmJAZGdmLnZmZ3IifQ.NFjp8shOWHCBfAvOSstsK_DeMjr-XQSQpv7XUQO-hC8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/subscriptions/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subscriptions",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
