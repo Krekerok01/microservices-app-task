@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Saira+Semi+Condensed&display=swap');
+
 .App {
     text-align: center;
 }
@@ -252,7 +254,7 @@ body {
 .button-create {
     position: absolute;
     top: 0;
-    right: 250px;
+    right: 150px;
     background-color: #f8f9fa;
     border: 1px solid #f8f9fa;
     border-radius: 4px;
