@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(PasswordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         }
-        throw new DuplicateEmailException("User with such email already exists! Please change your email!");
+        throw new DuplicateEmailException("User with such email already exists!;");
     }
 
 

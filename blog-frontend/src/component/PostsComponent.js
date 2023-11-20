@@ -41,23 +41,24 @@ class PostsComponent extends React.Component {
     render() {
         return <div className="card-grid">
             <button id="button_log" onClick={() => {
-                if (this.state.flag === false) {
-                    const btn = document.getElementById("button_create");
-                    btn.style.display = "block";
-                    const btn1 = document.getElementById("button_log");
-                    btn1.textContent = "Log out";
-                    this.setState({
-                        flag: true
-                    });
-                } else {
-                    const btn = document.getElementById("button_create");
-                    btn.style.display = "none";
-                    const btn1 = document.getElementById("button_log");
-                    btn1.textContent = "Log in";
-                    this.setState({
-                        flag: false
-                    });
-                }
+                // if (this.state.flag === false) {
+                //     const btn = document.getElementById("button_create");
+                //     btn.style.display = "block";
+                //     const btn1 = document.getElementById("button_log");
+                //     btn1.textContent = "Log out";
+                //     this.setState({
+                //         flag: true
+                //     });
+                // } else {
+                //     const btn = document.getElementById("button_create");
+                //     btn.style.display = "none";
+                //     const btn1 = document.getElementById("button_log");
+                //     btn1.textContent = "Log in";
+                //     this.setState({
+                //         flag: false
+                //     });
+                // }
+                window.location.href = '/login';
             }} className="button-login">Log in
             </button>
             <button id="button_create" className="button-login" onClick={() => {

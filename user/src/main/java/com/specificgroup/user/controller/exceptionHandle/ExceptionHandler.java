@@ -1,6 +1,7 @@
 package com.specificgroup.user.controller.exceptionHandle;
 
 import com.specificgroup.user.exception.DuplicateEmailException;
+import com.specificgroup.user.exception.dto.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -10,12 +11,12 @@ import javax.validation.ValidationException;
 @RestControllerAdvice
 public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(DuplicateEmailException.class)
-    public ResponseEntity<String> handleDuplicateEmailException(DuplicateEmailException dee) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dee.getMessage());
+    public ResponseEntity<ExceptionResponse> handleDuplicateEmailException(DuplicateEmailException dee) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(dee.getMessage()));
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(ValidationException.class)
-    public ResponseEntity<String> handleValidationException(ValidationException ve) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ve.getMessage());
+    public ResponseEntity<ExceptionResponse> handleValidationException(ValidationException ve) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ve.getMessage()));
     }
 }

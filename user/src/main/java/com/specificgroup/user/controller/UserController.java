@@ -51,7 +51,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             for (ObjectError error : bindingResult.getFieldErrors()) {
-                sb.append(error.getDefaultMessage());
+                sb.append(String.format("%s; ", error.getDefaultMessage()));
             }
             throw new ValidationException(sb.toString());
         }
