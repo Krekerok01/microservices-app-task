@@ -27,7 +27,6 @@ public class UserInfoGetter {
                 .block();
     }
 
-
     private String getUserUrlFromEureka() {
         try {
             return eurekaClient.getNextServerFromEureka("user", false).getHomePageUrl();
