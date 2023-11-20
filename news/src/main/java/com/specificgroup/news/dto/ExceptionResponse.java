@@ -7,6 +7,4 @@ import lombok.Value;
 @Builder
 public class ExceptionResponse {
     String message;
-    int statusCode;
-    String statusMessage;
 }
