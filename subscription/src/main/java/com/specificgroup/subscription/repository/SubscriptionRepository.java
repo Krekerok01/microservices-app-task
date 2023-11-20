@@ -10,4 +10,5 @@ import java.util.List;
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
     List<Subscription> findAllByUserSubscriberId(Long userSubscriberId);
     boolean existsByUserSubscriberIdAndUserPublisherId(Long userSubscriberId, Long userPublisherId);
+    void deleteAllByUserSubscriberId(Long userId);
 }

@@ -141,10 +141,14 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: password
       EUREKA_URL: http://eureka-service:8761/eureka/
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: test
     depends_on:
       eureka-service:
         condition: service_healthy
       subscription-database:
+        condition: service_started
+      kafka:
         condition: service_started
 
   subscription-database:
