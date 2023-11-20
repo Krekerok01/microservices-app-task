@@ -1,13 +1,17 @@
 package com.specificgroup.subscription.service.impl;
 
+import com.specificgroup.subscription.dto.SubscriptionServiceResponseMessage;
+import com.specificgroup.subscription.dto.UserServiceMessage;
 import com.specificgroup.subscription.entity.Subscription;
 import com.specificgroup.subscription.exception.AccessDeniedException;
 import com.specificgroup.subscription.exception.EntityNotFoundException;
+import com.specificgroup.subscription.kafka.KafkaProducer;
 import com.specificgroup.subscription.repository.SubscriptionRepository;
 import com.specificgroup.subscription.service.SubscriptionService;
 import com.specificgroup.subscription.util.getter.UserInfoGetter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -23,6 +27,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
     private final SubscriptionRepository subscriptionRepository;
     private final UserInfoGetter userInfoGetter;
+    private final KafkaProducer kafkaProducer;
+    @Value("${spring.kafka.topics.user.service.response.successful}")
+    private String successfulResponseTopic;
 
     @Override
     @Transactional
@@ -64,6 +71,19 @@ public class SubscriptionServiceImpl implements SubscriptionService{
             throw new AccessDeniedException("Access denied");
 
         subscriptionRepository.delete(subscription);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSubscriptionsByUserId(UserServiceMessage message) {
+        log.info("Deleting subscriptions with userId={}", message.getUserId());
+        subscriptionRepository.deleteAllByUserSubscriberId(message.getUserId());
+
+        SubscriptionServiceResponseMessage responseMessage = SubscriptionServiceResponseMessage.builder()
+                .deletedUserId(message.getUserId())
+                .message("Request successfully processed.")
+                .build();
+        kafkaProducer.notify(successfulResponseTopic, responseMessage);
     }
 
     private void checkThePossibilityOfCreatingASubscription(Long userSubscriberId, Long userPublisherId) {
