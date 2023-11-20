@@ -2,6 +2,10 @@ import React from "react";
 
 const FormPost = () => {
     return <div className="div-form">
+        <button id="button_back" className="button-login" onClick={() => {
+            window.history.back();
+        }} style={{right: '1900px'}}>Back
+        </button>
         <form id="div-form" action="/" className="decor">
             <div className="form-left-decoration"></div>
             <div className="form-right-decoration"></div>
