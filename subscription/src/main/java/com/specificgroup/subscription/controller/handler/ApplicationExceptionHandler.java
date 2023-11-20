@@ -10,12 +10,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.persistence.EntityExistsException;
+
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionResponse> entityNotFoundExceptionHandler(EntityNotFoundException e) {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<ExceptionResponse> entityExistsExceptionHandler(EntityExistsException e) {
+        return new ResponseEntity<>(buildExceptionResponse(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
