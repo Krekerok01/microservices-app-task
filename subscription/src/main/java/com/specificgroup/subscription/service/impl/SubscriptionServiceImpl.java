@@ -9,6 +9,8 @@ import com.specificgroup.subscription.util.getter.UserInfoGetter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityExistsException;
 import javax.transaction.Transactional;
 
 import java.util.List;
@@ -26,8 +28,8 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     @Transactional
     public Long createSubscription(Long userSubscriberId, Long userPublisherId) {
         log.info("User with id={} subscribing to user with id={}", userSubscriberId, userPublisherId);
-        if (!userInfoGetter.existsUserById(userPublisherId))
-            throw new EntityNotFoundException("Publisher with id=" + userPublisherId + " not found");
+
+        checkThePossibilityOfCreatingASubscription(userSubscriberId, userPublisherId);
 
         Subscription subscription = Subscription.builder()
                 .userSubscriberId(userSubscriberId)
@@ -62,6 +64,17 @@ public class SubscriptionServiceImpl implements SubscriptionService{
             throw new AccessDeniedException("Access denied");
 
         subscriptionRepository.delete(subscription);
+    }
+
+    private void checkThePossibilityOfCreatingASubscription(Long userSubscriberId, Long userPublisherId) {
+        if (userSubscriberId.equals(userPublisherId))
+            throw new AccessDeniedException("Impossible to subscribe to yourself");
+
+        if (subscriptionRepository.existsByUserSubscriberIdAndUserPublisherId(userSubscriberId, userPublisherId))
+            throw new EntityExistsException("This subscription already exists");
+
+        if (!userInfoGetter.existsUserById(userPublisherId))
+            throw new EntityNotFoundException("Publisher with id=" + userPublisherId + " not found");
     }
 
     private Subscription getSubscriptionById(Long subscriptionId) {

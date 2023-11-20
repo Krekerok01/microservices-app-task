@@ -2,12 +2,10 @@ package com.specificgroup.blog.dto.kafka;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 public class UserServiceMessage {
     private Long userId;
 }

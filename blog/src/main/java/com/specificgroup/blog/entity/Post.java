@@ -6,11 +6,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "posts")
-@Setter
-@Getter
+@Data
 @Builder
-@ToString
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post {
