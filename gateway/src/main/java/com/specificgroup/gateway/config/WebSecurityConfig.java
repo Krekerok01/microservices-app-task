@@ -32,12 +32,6 @@ public class WebSecurityConfig {
                 .and()
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(customSecurityContextRepository)
-                .authorizeExchange()
-                .anyExchange()
-                .permitAll()
-                .and()
-                .httpBasic()
-                .and()
                 .build();
     }
 }

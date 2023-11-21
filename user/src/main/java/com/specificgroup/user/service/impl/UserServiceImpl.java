@@ -12,6 +12,7 @@ import com.specificgroup.user.util.DtoMapper;
 import com.specificgroup.user.util.JwtGenerator;
 import com.specificgroup.user.util.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.message.AuthException;
@@ -21,6 +22,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll() {
+        log.info("Getting all users.");
         return userRepository.findAll();
     }
 

@@ -25,4 +25,6 @@ public interface UserService {
     Optional<TokenResponse> jwtTokenOf(final UserAuthDtoRequest userAuthDto) throws AuthException;
 
     UserAuthDtoResponse checkUserEmail(final String email);
+
+    Boolean existsByUserId(long userId);
 }
