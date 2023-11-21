@@ -46,10 +46,3 @@ spring:
             - Path=/subscriptions/**
           filters:
             - RewritePath=/subscriptions(?<remaining>.*), /api/v1/subscriptions${remaining}
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "http://localhost:3000/"
-            allowedHeaders: "*"
-            allowedMethods: "*"
-            allowCredentials: true
