@@ -25,7 +25,7 @@ spring:
           filters:
             - RewritePath=/posts(?<remaining>.*), /api/v1/posts${remaining}
         - id: users
-          uri: http://user-service:8081
+          uri: lb://user
           predicates:
             - Path=/users/**
         - id: news
