@@ -1,9 +1,11 @@
 package com.specificgroup.blog.service;
 
+import com.specificgroup.blog.dto.kafka.UserServiceMessage;
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.entity.Post;
 import com.specificgroup.blog.exception.AccessDeniedException;
+import com.specificgroup.blog.kafka.KafkaProducer;
 import com.specificgroup.blog.repository.PostRepository;
 import com.specificgroup.blog.repository.PostSpecification;
 import com.specificgroup.blog.service.impl.PostServiceImpl;
@@ -37,6 +39,8 @@ public class PostServiceImplTest {
     private PostMapper noMockedMapper = Mappers.getMapper(PostMapper.class);
     @Mock
     private InfoGetter infoGetter;
+    @Mock
+    private KafkaProducer kafkaProducer;
     @InjectMocks
     private PostServiceImpl postService;
 
@@ -65,6 +69,7 @@ public class PostServiceImplTest {
     }
 
     @Test
+    @DisplayName("Find all posts. Full list. Successful request")
     void findAll_NotEmptyList(){
         Long userId = 1L;
         Specification<Post> specification = PostSpecification.getSpecification(userId, null, null, null);
@@ -87,6 +92,7 @@ public class PostServiceImplTest {
     }
 
     @Test
+    @DisplayName("Find all posts. Empty list. Successful request")
     void findAll_EmptyList(){
         Long userId = 1L;
         Specification<Post> specification = PostSpecification.getSpecification(userId, null, null, null);
@@ -106,6 +112,7 @@ public class PostServiceImplTest {
     }
 
     @Test
+    @DisplayName("Find post by id. Successful request")
     void findByIdTest_SuccessfulRequest(){
         Long postId = 1L;
         String username = "username";
@@ -126,6 +133,7 @@ public class PostServiceImplTest {
     }
 
     @Test
+    @DisplayName("Find subscriptions posts by user id. Successful request")
     void findSubscriptionsPostsByUserIdTest(){
         Long requestUserId = 1L;
         List<Long> subscriptionIds = new ArrayList<>();
@@ -150,6 +158,25 @@ public class PostServiceImplTest {
     }
 
     @Test
+    @DisplayName("Update a post. Successful request")
+    void updatePostTest_SuccessfulRequest(){
+        PostRequest postRequest = new PostRequest("New title", "New Interesting text");
+        Long postId = 1L;
+        Long userId = 1L;
+
+        Post post = buildPost(postId, userId, "Old title", "Old Interesting text");
+        doReturn(Optional.of(post)).when(postRepository).findById(postId);
+        Long resultPostId = postService.updatePost(postRequest, postId, userId);
+
+        assertNotNull(resultPostId);
+        assertEquals(postId, resultPostId);
+        verify(postRepository, times(1)).findById(postId);
+        verify(postRepository, times(1)).save(any(Post.class));
+        verifyNoMoreInteractions(postRepository);
+    }
+
+    @Test
+    @DisplayName("Delete post. Successful request")
     void deletePostTest_SuccessfulRequest(){
         Long postId = 1L;
         Long userId = 1L;
@@ -168,6 +195,7 @@ public class PostServiceImplTest {
     }
 
     @Test
+    @DisplayName("Delete post. Throw AccessDeniedException")
     void deletePostTest_ThrowAccessDeniedException(){
         Long postId = 1L;
         Long userId = 1L;
@@ -179,6 +207,20 @@ public class PostServiceImplTest {
             postService.deletePost(postId, 99L);
         });
         verify(postRepository, times(1)).findById(postId);
+        verifyNoMoreInteractions(postRepository);
+    }
+
+    @Test
+    @DisplayName("Delete post by user id. Successful request")
+    void deletePostByUserId_SuccessfulRequest(){
+        Long userId = 1L;
+        UserServiceMessage userServiceMessage = UserServiceMessage.builder().userId(userId).build();
+
+        boolean result = assertDoesNotThrow(() -> {
+            postService.deletePostsByUserId(userServiceMessage);
+            return true;});
+        assertTrue(result);
+        verify(postRepository, times(1)).deleteAllByUserId(userId);
         verifyNoMoreInteractions(postRepository);
     }
 
