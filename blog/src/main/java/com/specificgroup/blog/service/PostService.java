@@ -6,7 +6,6 @@ import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.entity.Post;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface PostService {
@@ -15,6 +14,6 @@ public interface PostService {
     PostResponse findById(Long id);
     Long updatePost(PostRequest postRequest, Long postId, Long userId);
     void deletePost(Long id, Long userId);
-
     void deletePostsByUserId(UserServiceMessage message);
+    List<PostResponse> findSubscriptionsPostsByUserId(Long requestUserId);
 }

@@ -20,5 +20,4 @@ public class JwtUtil {
             throw new RuntimeException("Token has expired!");
         }
     }
-
 }

@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final KafkaService kafkaService;
     private final JwtGenerator jwtGenerator;
     private final String TOPIC_BLOG_USER = "blog-user";
+    private final String TOPIC_SUBSCRIPTION_USER = "subscription-user";
 
     @Override
     public List<User> getAll() {
@@ -57,6 +58,7 @@ public class UserServiceImpl implements UserService {
     public void delete(long id) {
         userRepository.deleteById(id);
         kafkaService.notify(TOPIC_BLOG_USER, id);
+        kafkaService.notify(TOPIC_SUBSCRIPTION_USER, id);
     }
 
     @Override
@@ -105,6 +107,11 @@ public class UserServiceImpl implements UserService {
                 userRepository.findByEmail(email)
                         .orElseThrow(NoSuchElementException::new)
         );
+    }
+
+    @Override
+    public Boolean existsByUserId(long userId) {
+        return userRepository.existsById(userId);
     }
 
     private boolean checkUserEmailDuplicate(String email) {

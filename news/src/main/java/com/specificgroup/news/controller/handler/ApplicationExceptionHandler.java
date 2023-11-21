@@ -10,14 +10,12 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(ReceiveDataException.class)
     public ResponseEntity<ExceptionResponse> entityNotFoundExceptionHandler(ReceiveDataException e) {
-        return new ResponseEntity<>(buildExceptionResponse(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE), HttpStatus.SERVICE_UNAVAILABLE);
+        return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
-    private ExceptionResponse buildExceptionResponse(String message, HttpStatus httpStatus) {
+    private ExceptionResponse buildExceptionResponse(String message) {
         return ExceptionResponse.builder()
                 .message(message)
-                .statusCode(httpStatus.value())
-                .statusMessage(httpStatus.getReasonPhrase())
                 .build();
     }
 }

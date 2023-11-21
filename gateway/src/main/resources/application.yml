@@ -40,6 +40,12 @@ spring:
             - Path=/jobs/**
           filters:
             - RewritePath=/jobs(?<remaining>.*), /api/v1/jobs${remaining}
+        - id: subscriptions
+          uri: lb://subscription-service
+          predicates:
+            - Path=/subscriptions/**
+          filters:
+            - RewritePath=/subscriptions(?<remaining>.*), /api/v1/subscriptions${remaining}
       globalcors:
         cors-configurations:
           '[/**]':
