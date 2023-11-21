@@ -1,7 +1,9 @@
 package com.specificgroup.user.controller;
 
 import com.specificgroup.user.model.User;
-import com.specificgroup.user.model.dto.UserAuthDto;
+import com.specificgroup.user.model.dto.TokenResponse;
+import com.specificgroup.user.model.dto.UserAuthDtoRequest;
+import com.specificgroup.user.model.dto.UserAuthDtoResponse;
 import com.specificgroup.user.model.dto.UserDto;
 import com.specificgroup.user.service.UserService;
 import com.specificgroup.user.util.DtoMapper;
@@ -59,7 +61,7 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<String> authenticateUser(@RequestBody UserAuthDto userAuthDto) {
+    public ResponseEntity<TokenResponse> authenticateUser(@RequestBody UserAuthDtoRequest userAuthDto) {
         try {
             return ResponseEntity.of(userService.jwtTokenOf(userAuthDto));
         } catch (AuthException e) {
@@ -68,7 +70,7 @@ public class UserController {
     }
 
     @GetMapping("/auth/{email}")
-    public ResponseEntity<UserAuthDto> authenticateUserByEmail(@PathVariable(name = "email") String email) {
+    public ResponseEntity<UserAuthDtoResponse> authenticateUserByEmail(@PathVariable(name = "email") String email) {
         return ResponseEntity.of(
                 Optional.of(
                         userService.checkUserEmail(email)

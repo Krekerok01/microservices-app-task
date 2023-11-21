@@ -46,3 +46,4 @@ spring:
             allowedOrigins: "http://localhost:3000/"
             allowedHeaders: "*"
             allowedMethods: "*"
+            allowCredentials: true

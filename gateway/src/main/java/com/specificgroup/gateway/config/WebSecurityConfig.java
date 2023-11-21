@@ -18,7 +18,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http) {
-        return http.cors().and().csrf()
+        return http.csrf()
                 .disable()
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.POST, "/users/**")

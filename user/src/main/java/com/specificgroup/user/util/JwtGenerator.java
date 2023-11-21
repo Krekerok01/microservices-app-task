@@ -1,6 +1,6 @@
 package com.specificgroup.user.util;
 
-import com.specificgroup.user.model.dto.UserAuthDto;
+import com.specificgroup.user.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class JwtGenerator {
     @Value("${security.jwt.secret}")
     private String secret;
 
-    public String generate(UserAuthDto dto) {
+    public String generate(User user) {
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secret);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
 
@@ -29,13 +29,13 @@ public class JwtGenerator {
         map.put("typ", "JWT");
 
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("userId", dto.getId());
-        extraClaims.put("role", dto.getRole());
+        extraClaims.put("userId", user.getId());
+        extraClaims.put("role", user.getRole());
 
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setHeader(map)
-                .setSubject(dto.getEmail())
+                .setSubject(user.getEmail())
                 .signWith(SignatureAlgorithm.HS256, signingKey)
                 .compact();
     }

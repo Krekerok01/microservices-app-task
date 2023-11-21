@@ -2,7 +2,9 @@ package com.specificgroup.user.service.impl;
 
 import com.specificgroup.user.exception.DuplicateEmailException;
 import com.specificgroup.user.model.User;
-import com.specificgroup.user.model.dto.UserAuthDto;
+import com.specificgroup.user.model.dto.TokenResponse;
+import com.specificgroup.user.model.dto.UserAuthDtoRequest;
+import com.specificgroup.user.model.dto.UserAuthDtoResponse;
 import com.specificgroup.user.repos.UserRepository;
 import com.specificgroup.user.service.KafkaService;
 import com.specificgroup.user.service.UserService;
@@ -75,17 +77,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<String> jwtTokenOf(final UserAuthDto userAuthDto) throws AuthException {
+    public Optional<TokenResponse> jwtTokenOf(final UserAuthDtoRequest userAuthDto) throws AuthException {
         Optional<User> existingUser = userRepository.findByEmail(userAuthDto.getEmail());
 
-        if (existingUser.isPresent() && PasswordEncoder.encode(userAuthDto.getPassword()).equals(existingUser.get().getPassword())) {
-            return Optional.of(jwtGenerator.generate(userAuthDto));
+        if (existingUser.isPresent()
+                &&
+                PasswordEncoder.encode(
+                                userAuthDto.getPassword())
+                        .equals(
+                                existingUser
+                                        .get()
+                                        .getPassword()
+                        )
+        ) {
+            return Optional.of(
+                    new TokenResponse(
+                            jwtGenerator.generate(existingUser.get())
+                    )
+            );
         }
         throw new AuthException();
     }
 
     @Override
-    public UserAuthDto checkUserEmail(final String email) {
+    public UserAuthDtoResponse checkUserEmail(final String email) {
         return DtoMapper.mapToUserAuthDto(
                 userRepository.findByEmail(email)
                         .orElseThrow(NoSuchElementException::new)

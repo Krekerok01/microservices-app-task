@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UserAuthDto {
+public class UserAuthDtoResponse {
     private long id;
     private String email;
     private String password;

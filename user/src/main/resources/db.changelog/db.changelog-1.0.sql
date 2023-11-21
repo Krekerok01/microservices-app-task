@@ -14,6 +14,6 @@ create table if not exists _user(
 -- changeset vlad-savko:3
 INSERT INTO _user (email, password, role, username)
 VALUES
-    ('user@user.com', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 0, 'default'),
-    ('vladik@specific-group.by', 'A35CAF514FFEE332947000A264E6E11D5B395F96E1A51C46EA2DC8F0042D3D48', 0, 'vladik'),
-    ('admin@admin.com', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', 1, 'admin');
+    ('user@user.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0, 'default'),
+    ('vladik@specific-group.by', 'a35caf514ffee332947000a264e6e11d5b395f96e1a51c46ea2dc8f0042d3d48', 0, 'vladik'),
+    ('admin@admin.com', '8c6976e5b5410415bde908Bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1, 'admin');

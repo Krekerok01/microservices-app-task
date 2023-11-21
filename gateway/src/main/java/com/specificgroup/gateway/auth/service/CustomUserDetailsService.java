@@ -17,6 +17,7 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements ReactiveUserDetailsService {
+
     private final EurekaClient eurekaClient;
     private final WebClient webClient;
     private final String AUTH_URL = "users/auth";
