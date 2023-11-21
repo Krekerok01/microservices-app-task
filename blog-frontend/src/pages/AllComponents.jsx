@@ -4,9 +4,9 @@ import NewsComponent from "../component/NewsComponent";
 
 const AllComponents = () => {
     return <div className="container">
-        {/*<JobsComponent/>*/}
+        <JobsComponent/>
         <PostsComponent/>
-        {/*<NewsComponent/>*/}
+        <NewsComponent/>
     </div>
 }
 

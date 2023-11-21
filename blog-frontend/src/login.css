@@ -14,6 +14,14 @@ body {
     padding: 20px;
     width: 500px;
 }
+.login-form {
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-sizing: border-box;
+    height: 370px;
+    padding: 20px;
+    width: 400px;
+}
 
 .title {
     color: #000000;
@@ -28,6 +36,13 @@ body {
     font-family: sans-serif;
     font-size: 16px;
     font-weight: 600;
+    margin-top: 10px;
+}
+.login-subtitle {
+    color: #000000;
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: 700;
     margin-top: 10px;
 }
 
@@ -123,6 +138,28 @@ body {
 }
 
 .submit:active {
+    background-color: #06b;
+}
+
+.login-submit {
+    border-bottom: 4px solid #0f2e80;
+    background: #142bc6;
+    border-radius: 20px;
+    box-sizing: border-box;
+    color: #eee;
+    cursor: pointer;
+    font-size: 18px;
+    height: 50px;
+    margin-top: 70px;
+    outline: 0;
+    text-align: center;
+    width: 100%;
+}
+.login-submit:hover {
+    background: #0f8fec;
+}
+
+.login-submit:active {
     background-color: #06b;
 }
 

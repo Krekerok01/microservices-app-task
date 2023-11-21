@@ -28,11 +28,22 @@ const SignUpForm = () => {
 const sendData = () => {
     const password = document.getElementById("password").value;
     const email = document.getElementById("email").value;
-    fetch(`http://localhost:8081/users/auth/${email}`, {
-        method: "GET"
+    fetch(`http://localhost:8081/users/auth`, {
+        method: "POST",
+        body: JSON.stringify({
+            password: password,
+            email: email
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
     }).then(response => {
         if (response.ok) {
-            window.location.href = '/';
+            response.json().then(responseJson => {
+                window.sessionStorage.setItem('token', responseJson['token']);
+            });
+            console.log(window.sessionStorage.getItem('token'));
+            window.location.href = '/users';
         } else if (response.status === 400) {
             response.json().then(responseJson => {
                 showError(responseJson['message']);
