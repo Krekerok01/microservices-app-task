@@ -24,7 +24,7 @@ class ApiClient {
         const token = window.sessionStorage.getItem('token');
         console.log(token);
 
-        return axios.get(
+        return fetch(
             this.SERVER_URL + this.GET_USERS,
             {headers: {
                     "Content-type": "Application/json",

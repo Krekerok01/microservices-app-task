@@ -27,13 +27,13 @@ class UsersComponent extends React.Component {
 
     getUsersData(): Promise {
         return ApiClient.users().then(
-            response => {
+             response => {
                 if (response.ok) {
                     return response.json();
                 } else {
                     return Promise.reject("User-service: error response");
                 }
-            }
+             }
         )
     }
 

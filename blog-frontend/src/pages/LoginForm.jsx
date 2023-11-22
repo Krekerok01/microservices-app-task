@@ -28,7 +28,7 @@ const SignUpForm = () => {
 const sendData = () => {
     const password = document.getElementById("password").value;
     const email = document.getElementById("email").value;
-    fetch(`http://localhost:8081/users/auth`, {
+    fetch(`http://localhost:8080/users/auth`, {
         method: "POST",
         body: JSON.stringify({
             password: password,

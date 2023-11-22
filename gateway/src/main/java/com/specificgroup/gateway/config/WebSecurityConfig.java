@@ -38,7 +38,7 @@ public class WebSecurityConfig {
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.POST, "/users/**")
                 .permitAll()
-                .pathMatchers(HttpMethod.GET, "/posts/**")
+                .pathMatchers(HttpMethod.GET, "/posts/**", "/news/**", "/jobs/**")
                 .permitAll()
                 .pathMatchers(HttpMethod.GET, "/subscriptions")
                 .hasAuthority("ADMIN")
