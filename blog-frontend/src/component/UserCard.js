@@ -1,11 +1,14 @@
-import '../App.css';
+import '../user.css';
 
 export default function UserCard(props) {
     const {username, email} = props;
     return (
-        <div className="card">
-            <h2>{username}</h2>
-            <h3>{email}</h3>
-        </div>
+        <article className="profile">
+            <h2 className="profile-username">{username}</h2>
+            <small className="profile-user-handle">{email}</small>
+            <div className="profile-actions">
+                <button className="btn btn--primary">Follow</button>
+            </div>
+        </article>
     );
 }

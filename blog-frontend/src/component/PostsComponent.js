@@ -7,15 +7,16 @@ class PostsComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
-            flag: false,
-            showForm: false
+            data: []
         }
     }
 
     componentDidMount(): void {
         this.refreshPostCards();
         setInterval(this.refreshPostCards.bind(this), 5000);
+        window.sessionStorage.getItem('username') == null ?
+            document.getElementById('button_log').innerText = "Log in" :
+            document.getElementById('button_log').innerText = "Log out";
     }
 
     refreshPostCards() {
@@ -38,6 +39,7 @@ class PostsComponent extends React.Component {
             }
         )
     }
+
     render() {
         return <div className="card-grid">
             <button id="button_sign_up" onClick={() => {
@@ -46,7 +48,7 @@ class PostsComponent extends React.Component {
             </button>
             <button id="button_log" onClick={() => {
                 window.location.href = '/login';
-            }} className="button-login">Log in
+            }} className="button-login">
             </button>
             <button id="button_create" className="button-login" onClick={() => {
                 window.location.href = '/addPost';

@@ -283,3 +283,34 @@ body {
     border-color: #4285f4;
     outline: none;
 }
+
+.user-h1 {
+    position: relative;
+    top: 10px;
+}
+
+.user-header {
+    padding: 10px 16px;
+    background: #8c898a;
+    color: #f1f1f1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    word-wrap: break-word;
+    word-break: break-all;
+    border-width: 0 5px 5px 0;
+    border-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.user-header img {
+    max-width: 100px;
+    max-height: 120px;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%
+}

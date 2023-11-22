@@ -41,6 +41,7 @@ const sendData = () => {
         if (response.ok) {
             response.json().then(responseJson => {
                 window.sessionStorage.setItem('token', responseJson['token']);
+                window.sessionStorage.setItem('username', responseJson['username']);
             });
             console.log(window.sessionStorage.getItem('token'));
             window.location.href = '/users';
