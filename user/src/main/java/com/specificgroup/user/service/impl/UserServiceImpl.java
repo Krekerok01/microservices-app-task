@@ -95,9 +95,11 @@ public class UserServiceImpl implements UserService {
                                         .getPassword()
                         )
         ) {
+            User user = existingUser.get();
             return Optional.of(
                     new TokenResponse(
-                            jwtGenerator.generate(existingUser.get())
+                            jwtGenerator.generate(user),
+                            user.getUsername()
                     )
             );
         }
