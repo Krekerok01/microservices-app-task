@@ -26,7 +26,7 @@ class ApiClient {
             this.SERVER_URL + this.GET_USERS,
             {headers: {
                     "Content-type": "Application/json",
-                    "Authorization": `Bearer ${token}`,
+                    "Authorization": `Bearer ${token}`
                     }
                 }
           )
