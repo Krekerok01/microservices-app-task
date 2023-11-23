@@ -24,12 +24,13 @@ class ApiClient {
 
         return fetch(
             this.SERVER_URL + this.GET_USERS,
-            {headers: {
+            {
+                headers: {
                     "Content-type": "Application/json",
                     "Authorization": `Bearer ${token}`
-                    }
                 }
-          )
+            }
+        )
     }
 
     static userPosts(): Promise<Response> {
@@ -38,12 +39,24 @@ class ApiClient {
 
         return fetch(
             this.SERVER_URL + this.GET_POSTS + this.GET_POSTS_FOR_USER,
-            {headers: {
+            {
+                headers: {
                     "Content-type": "Application/json",
                     "Authorization": `Bearer ${token}`,
                 }
             }
         )
+    }
+
+    static onePost(id): Promise<Response> {
+        return fetch(
+            this.SERVER_URL + this.GET_POSTS + '/' + id,
+            {
+                headers: {
+                    "Content-type": "Application/json"
+                }
+            }
+        );
     }
 }
 

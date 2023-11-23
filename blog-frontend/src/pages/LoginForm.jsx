@@ -62,7 +62,7 @@ const showError = (message) => {
     }
     for (const str of errors) {
         const li = document.createElement('div');
-        li.className = 'error-list-li';
+        li.className = 'error-list-login';
         li.innerText = str;
         errorList.appendChild(li);
     }
