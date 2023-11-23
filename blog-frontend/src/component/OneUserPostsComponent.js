@@ -49,7 +49,7 @@ class OneUserPostsComponent extends React.Component {
             }}>Create post
             </button>
             {this.state.data.map(post => {
-                return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text}/>
+                return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text} postId={post.postId}/>
             })}
         </div>
     }

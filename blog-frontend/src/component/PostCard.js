@@ -7,7 +7,8 @@ class PostCard extends React.Component {
         this.state = {
             username: props.username,
             title: props.title,
-            text: props.text
+            text: props.text,
+            postId: props.postId
         }
     }
     DeleteButton(props) {
@@ -18,7 +19,7 @@ class PostCard extends React.Component {
 
     UpdateButton(props) {
         return (
-            <button id="update_btn" className={props.className} style={props.style}>{props.text}</button>
+            <button id="update_btn" className={props.className} style={props.style} onClick={() => {window.location.href = '/updatePost?id=' + props.postId}}>{props.text}</button>
         );
     }
 
@@ -28,8 +29,8 @@ class PostCard extends React.Component {
             display: 'none',
         }
         if (window.sessionStorage.getItem('username') === this.state.username) {
-            deleteButton = <this.DeleteButton text="Delete post" className="delete-update-button"/>;
-            updateButton = <this.UpdateButton text="Edit post" className="delete-update-button"/>;
+            deleteButton = <this.DeleteButton text="Delete post" className="delete-update-button" postId={this.props.postId}/>;
+            updateButton = <this.UpdateButton text="Edit post" className="delete-update-button" postId={this.props.postId}/>;
         } else {
             deleteButton = <this.DeleteButton text="Delete post" style={none}/>;
             updateButton = <this.UpdateButton text="Edit post" style={none}/>;
