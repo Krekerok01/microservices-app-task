@@ -8,6 +8,11 @@ import com.specificgroup.user.model.dto.UserDto;
 import com.specificgroup.user.service.UserService;
 import com.specificgroup.user.util.DtoMapper;
 import com.specificgroup.user.util.UtilStrings;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,6 +35,15 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
 
+    @Operation(summary = "Getting all users or getting one user by email", description = "Getting all users(or one user by email) from the database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Error: There are no users in the database",
+                    content = @Content)})
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping
     public List<UserDto> getUsers(@RequestParam(name = "email", required = false) String userEmail) {
         if (userEmail == null) {
@@ -40,6 +54,15 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Getting user by id", description = "Getting user info by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Error: There is no such user in the database",
+                    content = @Content)})
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}")
     public UserDto get(@PathVariable(name = "id") long userId) {
         return DtoMapper.mapToUserDto(
@@ -69,6 +92,15 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Getting UserAuthDtoResponse", description = "Used for user authentication")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "400", description = "Error: There is no such user in the database",
+                    content = @Content)})
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/auth/{email}")
     public ResponseEntity<UserAuthDtoResponse> authenticateUserByEmail(@PathVariable(name = "email") String email) {
         return ResponseEntity.of(
@@ -78,6 +110,13 @@ public class UserController {
         );
     }
 
+    @Operation(summary = "Deletion user by id", description = "Deletion user by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content)})
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable(name = "id") long userId) {
         userService.delete(userId);
@@ -89,6 +128,15 @@ public class UserController {
                 );
     }
 
+    @Operation(summary = "Updating user", description = "Updating user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "400", description = "Error: There is no such user in the database or Error: Existing email",
+                    content = @Content)})
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable(name = "id") long userId,
                                              @RequestBody User user) {
@@ -101,6 +149,13 @@ public class UserController {
                 );
     }
 
+    @Operation(summary = "Checking for the existence of a user", description = "Checking for the existence of a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content)})
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/exists/{id}")
     public Boolean existsByUserId(@PathVariable(name = "id") long userId) {
         return userService.existsByUserId(userId);
