@@ -14,6 +14,14 @@ class UsersComponent extends React.Component {
     componentDidMount(): void {
         this.refreshUsers();
         setInterval(this.refreshUsers.bind(this), 5000);
+        this.checkBackButton();
+    }
+
+    checkBackButton() {
+        const username = window.sessionStorage.getItem('username');
+        if(username != null || username !== 'null') {
+            document.getElementById('button_back').style.top = '300px';
+        }
     }
 
     refreshUsers() {
@@ -38,7 +46,12 @@ class UsersComponent extends React.Component {
     }
 
     render() {
+
         return <div className="card-grid">
+            <button id="button_back" className="button-login" onClick={() => {
+                window.history.back();
+            }} style={{right: '1870px'}}>Back
+            </button>
             {this.state.data.map(user => {
                 return <UserCard key={user.id} username={user.username} email={user.email}/>
             })}

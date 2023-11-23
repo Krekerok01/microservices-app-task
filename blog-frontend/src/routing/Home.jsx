@@ -4,6 +4,7 @@ import FormPost from "../pages/FormPost";
 import SignUpForm from "../pages/SignUpForm";
 import LoginForm from "../pages/LoginForm";
 import UserPage from "../pages/UserPage";
+import OneUser from "../pages/OneUser";
 
 const Home = () => {
     return <BrowserRouter>
@@ -13,6 +14,7 @@ const Home = () => {
             <Route element={<SignUpForm/>} path='/signup'/>
             <Route element={<LoginForm/>} path='/login'/>
             <Route element={<UserPage/>} path='/users'/>
+            <Route element={<OneUser/>} path='/myPage'/>
 
 
             <Route path="*" element={<div>Error!</div>}/>

@@ -2,8 +2,9 @@ import React from "react";
 import PostCard from "./PostCard";
 import '../form.css'
 import ApiClient from "../client/ApiClient";
+import aaa from './data.json'
 
-class PostsComponent extends React.Component {
+class OneUserPostsComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +27,7 @@ class PostsComponent extends React.Component {
     }
 
     getPostsData(): Promise {
-        return ApiClient.posts().then(
+        return ApiClient.userPosts().then(
             response => {
                 if (response.ok) {
                     return response.json();
@@ -39,17 +40,13 @@ class PostsComponent extends React.Component {
 
     render() {
         return <div className="card-grid">
-            <button id="button_sign_up" onClick={() => {
-                window.location.href = '/signup';
-            }} className="button-login" style={{right: '120px'}}>Sign up
+            <button id="button_back" className="button-login" onClick={() => {
+                window.history.back();
+            }} style={{top: '300px', right: '1930px'}}>Back
             </button>
-            <button id="button_log" onClick={() => {
-                window.location.href = '/login';
-            }} className="button-login">Log in
-            </button>
-            <button id="button_create" className="button-login" onClick={() => {
-                window.location.href = '/addPost';
-            }} style={{display: 'none', right: '250px'}}>Create post
+            <button id="btn_create" className="button-login" onClick={() => {
+                window.location.href='/addPost';
+            }}>Create post
             </button>
             {this.state.data.map(post => {
                 return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text}/>
@@ -58,4 +55,4 @@ class PostsComponent extends React.Component {
     }
 }
 
-export default PostsComponent
+export default OneUserPostsComponent

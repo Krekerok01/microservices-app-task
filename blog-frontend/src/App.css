@@ -308,9 +308,46 @@ body {
     max-width: 100px;
     max-height: 120px;
 }
+.user-header button {
+    background: #142bc6;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    border-bottom: 3px solid #0f2e80;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    line-height: 1;
+    transition: 0.15s ease;
+}
+
+.user-header button:hover {
+    background: #0f8fec;
+}
 
 .sticky {
     position: fixed;
     top: 0;
     width: 100%
+}
+
+.delete-update-button {
+    background: #142bc6;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    border-bottom: 3px solid #0f2e80;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    line-height: 1;
+    transition: 0.15s ease;
+}
+
+.delete-update-button:hover {
+    background: #0f8fec;
 }

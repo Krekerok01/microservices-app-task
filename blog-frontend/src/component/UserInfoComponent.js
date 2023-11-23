@@ -20,14 +20,21 @@ class UserInfoComponent extends React.Component {
             }
         }
         const username = window.sessionStorage.getItem('username');
-        if(username == null) {
+        if(username == null || username === 'null') {
             header.style.display = 'none';
+            document.getElementById('logout_btn').style.display='none';
         } else {
-            console.log('Username: ' + username)
             this.setState({
                 username: username
             });
+            document.getElementById('logout_btn').style.display='block';
         }
+    }
+
+    logout = () => {
+        window.sessionStorage.setItem('username', null);
+        window.sessionStorage.setItem('token', null);
+        window.location.href='/';
     }
 
 
@@ -36,6 +43,7 @@ class UserInfoComponent extends React.Component {
         return <div className="user-header" id="userHeader">
             <img src="https://th.bing.com/th/id/R.bae2d37c4317140a408aef6671346186?rik=X1vYbxH6nQxCcA&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_218090.png&ehk=poXsiWmpbb3%2b%2bK%2blj8H9AQprCYsoz4kt%2bU4rFFKbOCo%3d&risl=&pid=ImgRaw&r=0" alt="Image"/>
             <h2>{this.state.username}</h2>
+            <button id="logout_btn" onClick={this.logout} style={{display: 'none'}}>Log out</button>
         </div>
     }
 }
