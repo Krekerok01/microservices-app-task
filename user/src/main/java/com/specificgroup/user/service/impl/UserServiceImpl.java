@@ -1,6 +1,8 @@
 package com.specificgroup.user.service.impl;
 
 import com.specificgroup.user.exception.DuplicateEmailException;
+import com.specificgroup.user.exception.NoSuchUserException;
+import com.specificgroup.user.exception.WrongPasswordException;
 import com.specificgroup.user.model.User;
 import com.specificgroup.user.model.dto.TokenResponse;
 import com.specificgroup.user.model.dto.UserAuthDtoRequest;
@@ -15,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.message.AuthException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<TokenResponse> jwtTokenOf(final UserAuthDtoRequest userAuthDto) throws AuthException {
+    public Optional<TokenResponse> jwtTokenOf(final UserAuthDtoRequest userAuthDto) {
         Optional<User> existingUser = userRepository.findByEmail(userAuthDto.getEmail());
 
         if (existingUser.isPresent()
@@ -102,8 +103,10 @@ public class UserServiceImpl implements UserService {
                             user.getUsername()
                     )
             );
+        } else if (existingUser.isEmpty()) {
+            throw new NoSuchUserException(userAuthDto.getEmail());
         }
-        throw new AuthException();
+        throw new WrongPasswordException(String.format("Wrong password for user %s;", userAuthDto.getEmail()));
     }
 
     @Override

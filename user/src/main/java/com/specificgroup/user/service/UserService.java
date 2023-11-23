@@ -22,7 +22,7 @@ public interface UserService {
 
     void update(final long id, final User user);
 
-    Optional<TokenResponse> jwtTokenOf(final UserAuthDtoRequest userAuthDto) throws AuthException;
+    Optional<TokenResponse> jwtTokenOf(final UserAuthDtoRequest userAuthDto);
 
     UserAuthDtoResponse checkUserEmail(final String email);
 

@@ -17,7 +17,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.security.auth.message.AuthException;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.util.List;
@@ -62,11 +61,7 @@ public class UserController {
 
     @PostMapping("/auth")
     public ResponseEntity<TokenResponse> authenticateUser(@RequestBody UserAuthDtoRequest userAuthDto) {
-        try {
-            return ResponseEntity.of(userService.jwtTokenOf(userAuthDto));
-        } catch (AuthException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
+        return ResponseEntity.of(userService.jwtTokenOf(userAuthDto));
     }
 
     @GetMapping("/auth/{email}")
