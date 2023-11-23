@@ -13,8 +13,23 @@ class PostCard extends React.Component {
     }
     DeleteButton(props) {
         return (
-            <button id="delete_btn" className={props.className} style={props.style}>{props.text}</button>
-        );
+            <button id="delete_btn" className={props.className} style={props.style} onClick={() => {
+                const token = window.sessionStorage.getItem('token');
+                fetch(`http://localhost:8080/posts/${props.postId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        "Authorization": `Bearer ${token}`
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = '/myPage';
+                    } else if (response.status === 400) {
+                        //     add error handling here
+                    }
+                });}}>
+                {props.text}
+            </button>);
     }
 
     UpdateButton(props) {
