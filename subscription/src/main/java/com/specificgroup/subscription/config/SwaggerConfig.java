@@ -1,5 +1,7 @@
 package com.specificgroup.subscription.config;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -11,13 +13,21 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class SpringFoxConfig {
+@SecurityScheme(
+        description = "Generate your JWT when you log in",
+        name = "Bearer Authentication",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
+public class SwaggerConfig {
     @Bean
     public GroupedOpenApi publicApi() {
-        return GroupedOpenApi.builder()
+        GroupedOpenApi subscriptions = GroupedOpenApi.builder()
                 .group("subscriptions")
                 .packagesToScan("com.specificgroup.subscription.controller")
                 .build();
+        return subscriptions;
     }
 
     @Bean

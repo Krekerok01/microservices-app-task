@@ -43,6 +43,8 @@ public class WebSecurityConfig {
                 .permitAll()
                 .pathMatchers(HttpMethod.GET, "/subscriptions")
                 .hasAuthority("ADMIN")
+                .pathMatchers("/api/v1/subscriptions/**", "/api/v1/posts/**")
+                .permitAll()
                 .pathMatchers("/posts/**", "/subscriptions/**", "/users/**")
                 .authenticated()
                 .and()

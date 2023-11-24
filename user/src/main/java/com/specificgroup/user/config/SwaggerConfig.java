@@ -21,7 +21,7 @@ import java.util.List;
         bearerFormat = "JWT",
         scheme = "bearer"
 )
-public class SpringFoxConfig {
+public class SwaggerConfig {
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()

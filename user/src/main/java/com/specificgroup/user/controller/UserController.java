@@ -71,6 +71,12 @@ public class UserController {
         );
     }
 
+    @Operation(summary = "Registering a new user", description = "Registering a new user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "400", description = "Error: Client request error(fields validation)",
+                    content = @Content)})
     @PostMapping
     public ResponseEntity<UserDto> newUser(@RequestBody @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -83,6 +89,14 @@ public class UserController {
         return ResponseEntity.ok(DtoMapper.mapToUserDto(userService.add(user)));
     }
 
+    @Operation(summary = "User authentication", description = "User authentication")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "400", description = "Error: Client request error(fields validation)",
+                    content = @Content),
+            @ApiResponse(responseCode = "406", description = "Error: Incorrect credentials)",
+                    content = @Content)})
     @PostMapping("/auth")
     public ResponseEntity<TokenResponse> authenticateUser(@RequestBody UserAuthDtoRequest userAuthDto) {
         try {
