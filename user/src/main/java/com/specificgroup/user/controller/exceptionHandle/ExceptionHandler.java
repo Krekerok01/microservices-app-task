@@ -28,7 +28,7 @@ public class ExceptionHandler {
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(WrongPasswordException.class)
-    public ResponseEntity<ExceptionResponse> handleNoSuchEmailException(WrongPasswordException wpe) {
+    public ResponseEntity<ExceptionResponse> handleWrongPasswordException(WrongPasswordException wpe) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(wpe.getMessage()));
     }
 }

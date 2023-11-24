@@ -44,7 +44,7 @@ const sendData = () => {
                 window.sessionStorage.setItem('username', responseJson['username']);
             });
             console.log(window.sessionStorage.getItem('token'));
-            window.location.href = '/users';
+            window.location.href = '/myPage';
         } else if (response.status === 400) {
             response.json().then(responseJson => {
                 showError(responseJson['message']);
