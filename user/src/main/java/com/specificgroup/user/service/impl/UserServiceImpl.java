@@ -97,10 +97,12 @@ public class UserServiceImpl implements UserService {
                         )
         ) {
             User user = existingUser.get();
+            boolean isAdmin = user.getRole().equals(User.Role.ADMIN);
             return Optional.of(
                     new TokenResponse(
                             jwtGenerator.generate(user),
-                            user.getUsername()
+                            user.getUsername(),
+                            isAdmin
                     )
             );
         } else if (existingUser.isEmpty()) {

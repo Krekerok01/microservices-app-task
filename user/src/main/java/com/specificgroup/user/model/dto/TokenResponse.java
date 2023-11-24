@@ -9,4 +9,5 @@ import lombok.RequiredArgsConstructor;
 public class TokenResponse {
     private String token;
     private String username;
+    private boolean isAdmin;
 }

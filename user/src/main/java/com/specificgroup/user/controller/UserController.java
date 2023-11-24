@@ -1,5 +1,6 @@
 package com.specificgroup.user.controller;
 
+import com.specificgroup.user.exception.NoPrivilegesException;
 import com.specificgroup.user.model.User;
 import com.specificgroup.user.model.dto.TokenResponse;
 import com.specificgroup.user.model.dto.UserAuthDtoRequest;
@@ -7,9 +8,11 @@ import com.specificgroup.user.model.dto.UserAuthDtoResponse;
 import com.specificgroup.user.model.dto.UserDto;
 import com.specificgroup.user.service.UserService;
 import com.specificgroup.user.util.DtoMapper;
+import com.specificgroup.user.util.JwtParser;
 import com.specificgroup.user.util.UtilStrings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,6 +20,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.security.auth.message.AuthException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.util.List;
@@ -74,14 +79,17 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable(name = "id") long userId) {
-        userService.delete(userId);
-        return ResponseEntity
-                .status(204)
-                .body(UtilStrings.userWasSuccessfullyModified(
-                                userId, UtilStrings.Action.DELETED
-                        )
-                );
+    public ResponseEntity<String> deleteUser(@PathVariable(name = "id") long userId, HttpServletRequest request) throws AuthException {
+        if (getUserIdFromToken(request) == userId || getRoleFromToken(request).equals(User.Role.ADMIN)) {
+            userService.delete(userId);
+            return ResponseEntity
+                    .status(204)
+                    .body(UtilStrings.userWasSuccessfullyModified(
+                                    userId, UtilStrings.Action.DELETED
+                            )
+                    );
+        }
+        throw new NoPrivilegesException();
     }
 
     @PutMapping("/{id}")
@@ -99,5 +107,13 @@ public class UserController {
     @GetMapping("/exists/{id}")
     public Boolean existsByUserId(@PathVariable(name = "id") long userId) {
         return userService.existsByUserId(userId);
+    }
+
+    private long getUserIdFromToken(HttpServletRequest request) {
+        return JwtParser.getUserIdFromToken(request.getHeader(HttpHeaders.AUTHORIZATION));
+    }
+
+    private User.Role getRoleFromToken(HttpServletRequest request) {
+        return User.Role.valueOf(JwtParser.getRoleFromToken(request.getHeader(HttpHeaders.AUTHORIZATION)));
     }
 }
