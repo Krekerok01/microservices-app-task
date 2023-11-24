@@ -46,3 +46,44 @@ spring:
             - Path=/subscriptions/**
           filters:
             - RewritePath=/subscriptions(?<remaining>.*), /api/v1/subscriptions${remaining}
+        - id: subscriptions-swagger
+          uri: lb://subscription-service
+          predicates:
+            - Path=/v3/api-docs/subscriptions
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: subscriptionBreaker
+                fallbackUri: forward:/fb/subscriptions/
+        - id: subscriptions-redirect
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/v1/subscriptions/**
+          filters:
+            - RewritePath=/api/v1/subscriptions(?<remaining>.*), /subscriptions${remaining}
+
+        - id: posts-swagger
+          uri: lb://blog-service
+          predicates:
+            - Path=/v3/api-docs/posts
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: postBreaker
+                fallbackUri: forward:/fb/posts/
+        - id: posts-redirect
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/v1/posts/**
+          filters:
+            - RewritePath=/api/v1/posts(?<remaining>.*), /posts${remaining}
+
+        - id: users-swagger
+          uri: lb://user
+          predicates:
+            - Path=/users/* , /v3/api-docs/users
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: userBreaker
+                fallbackUri: forward:/fb/users/
