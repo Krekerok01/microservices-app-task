@@ -1,4 +1,4 @@
-version: '3.5'
+version: '2.8'
 
 services:
   
@@ -20,6 +20,9 @@ services:
     container_name: frontend
     ports:
       - '3000:3000'
+    depends_on:
+      gateway-service:
+        condition: service_healthy
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -53,8 +56,23 @@ services:
     environment:
       EUREKA_URL: http://eureka-service:8761/eureka/
     depends_on:
+      blog-service:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+      news-service:
+        condition: service_healthy
+      job-service:
+        condition: service_healthy
       eureka-service:
         condition: service_healthy
+      subscription-service:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://localhost:8080" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   blog-service:
     image: microservices-blog:latest
@@ -74,6 +92,11 @@ services:
         condition: service_started
       kafka:
         condition: service_started
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://eureka-service:8761/eureka/apps/blog-service" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
   blog-database:
     container_name: blog-database
@@ -111,6 +134,11 @@ services:
         condition: service_started
       kafka:
         condition: service_started
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://eureka-service:8761/eureka/apps/user" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
   news-service:
     image: microservices-news:latest
@@ -121,6 +149,11 @@ services:
     depends_on:
       eureka-service:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://eureka-service:8761/eureka/apps/news-service" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
   job-service:
     image: microservices-job:latest
@@ -131,6 +164,11 @@ services:
     depends_on:
       eureka-service:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://eureka-service:8761/eureka/apps/job-service" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
   subscription-service:
     image: microservices-subscription:latest
@@ -150,6 +188,11 @@ services:
         condition: service_started
       kafka:
         condition: service_started
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://eureka-service:8761/eureka/apps/subscription-service" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
   subscription-database:
     container_name: subscription-database
