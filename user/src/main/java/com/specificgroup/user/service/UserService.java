@@ -14,6 +14,8 @@ public interface UserService {
 
     Optional<User> get(final long id);
 
+    String getUsername(final long id);
+
     Optional<User> getByEmail(final String email);
 
     User add(final User user);
@@ -27,4 +29,6 @@ public interface UserService {
     UserAuthDtoResponse checkUserEmail(final String email);
 
     Boolean existsByUserId(long userId);
+
+    void changePrivilege(final long userId);
 }

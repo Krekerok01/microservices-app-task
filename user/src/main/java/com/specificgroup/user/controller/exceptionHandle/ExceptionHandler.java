@@ -35,6 +35,6 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(NoPrivilegesException.class)
     public ResponseEntity<ExceptionResponse> handleNoPrivilegesException(NoPrivilegesException npe) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(npe.getMessage()));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(npe.getMessage()));
     }
 }

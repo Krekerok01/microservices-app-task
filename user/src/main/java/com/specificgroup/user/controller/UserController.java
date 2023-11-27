@@ -2,10 +2,7 @@ package com.specificgroup.user.controller;
 
 import com.specificgroup.user.exception.NoPrivilegesException;
 import com.specificgroup.user.model.User;
-import com.specificgroup.user.model.dto.TokenResponse;
-import com.specificgroup.user.model.dto.UserAuthDtoRequest;
-import com.specificgroup.user.model.dto.UserAuthDtoResponse;
-import com.specificgroup.user.model.dto.UserDto;
+import com.specificgroup.user.model.dto.*;
 import com.specificgroup.user.service.UserService;
 import com.specificgroup.user.util.DtoMapper;
 import com.specificgroup.user.util.JwtParser;
@@ -45,11 +42,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDto get(@PathVariable(name = "id") long userId) {
-        return DtoMapper.mapToUserDto(
-                userService.get(userId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
-        );
+    public User get(@PathVariable(name = "id") long userId,
+                    HttpServletRequest request) {
+        if (getUserIdFromToken(request) == userId) {
+            return userService.get(userId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        } else {
+            throw new NoPrivilegesException();
+        }
+    }
+
+    @GetMapping("/{id}/username")
+    public UsernameResponse getUsername(@PathVariable(name = "id") long userId) {
+        return new UsernameResponse(userService.getUsername(userId));
     }
 
     @PostMapping
@@ -94,14 +99,28 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable(name = "id") long userId,
-                                             @RequestBody User user) {
-        userService.update(userId, user);
-        return ResponseEntity
-                .status(204)
-                .body(UtilStrings.userWasSuccessfullyModified(
-                                user.getId(), UtilStrings.Action.UPDATED
-                        )
-                );
+                                             @RequestBody User user,
+                                             HttpServletRequest request) {
+        if (getUserIdFromToken(request) == userId) {
+            userService.update(userId, user);
+            return ResponseEntity
+                    .status(204)
+                    .body(UtilStrings.userWasSuccessfullyModified(
+                                    user.getId(), UtilStrings.Action.UPDATED
+                            )
+                    );
+        } else {
+            throw new NoPrivilegesException();
+        }
+    }
+
+    @PutMapping("/privilege/{userId}")
+    public void changePrivilege(@PathVariable(name = "userId") long userId, HttpServletRequest request) {
+        if (getRoleFromToken(request).equals(User.Role.ADMIN)) {
+            userService.changePrivilege(userId);
+        } else {
+            throw new NoPrivilegesException();
+        }
     }
 
     @GetMapping("/exists/{id}")
