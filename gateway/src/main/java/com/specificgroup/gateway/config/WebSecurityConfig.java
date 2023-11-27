@@ -36,12 +36,15 @@ public class WebSecurityConfig {
                 .configurationSource(corsConfiguration())
                 .and()
                 .authorizeExchange()
+                .pathMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/webjars/**").permitAll()
                 .pathMatchers(HttpMethod.POST, "/users/**")
                 .permitAll()
                 .pathMatchers(HttpMethod.GET, "/posts/**", "/news/**", "/jobs/**")
                 .permitAll()
                 .pathMatchers(HttpMethod.GET, "/subscriptions")
                 .hasAuthority("ADMIN")
+                .pathMatchers("/api/v1/subscriptions/**", "/api/v1/posts/**")
+                .permitAll()
                 .pathMatchers("/posts/**", "/subscriptions/**", "/users/**")
                 .authenticated()
                 .and()
@@ -54,7 +57,7 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfiguration() {
         CorsConfiguration corsConfig = new CorsConfiguration();
 
-        corsConfig.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfig.setAllowedOrigins(List.of("*"));
         corsConfig.setAllowedMethods(Arrays.asList("*"));
         corsConfig.setAllowedHeaders(Arrays.asList("*"));
 
