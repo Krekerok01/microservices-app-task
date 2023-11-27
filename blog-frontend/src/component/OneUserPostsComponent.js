@@ -2,7 +2,6 @@ import React from "react";
 import PostCard from "./PostCard";
 import '../form.css'
 import ApiClient from "../client/ApiClient";
-import aaa from './data.json'
 
 class OneUserPostsComponent extends React.Component {
     constructor(props) {
