@@ -161,12 +161,21 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable(name = "id") long userId,
-                                             @RequestBody User user,
-                                             HttpServletRequest request) {
+                                             @RequestBody @Valid User user,
+                                             BindingResult bindingResult,
+                                             HttpServletRequest request
+                                             ) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder sb = new StringBuilder();
+            for (ObjectError error : bindingResult.getFieldErrors()) {
+                sb.append(String.format("%s; ", error.getDefaultMessage()));
+            }
+            throw new ValidationException(sb.toString());
+        }
         if (getUserIdFromToken(request) == userId) {
             userService.update(userId, user);
             return ResponseEntity
-                    .status(204)
+                    .status(200)
                     .body(UtilStrings.userWasSuccessfullyModified(
                                     user.getId(), UtilStrings.Action.UPDATED
                             )

@@ -2,7 +2,7 @@ import React from "react";
 import '../login.css'
 
 const SignUpForm = () => {
-    return <div>
+    return <div style={{boxSizing: "border-box"}}>
         <button id="button_back" className="button-login" onClick={() => {
             window.history.back();
         }} style={{right: '1900px'}}>Back

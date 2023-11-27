@@ -66,7 +66,6 @@ class UpdateUserComponent extends React.Component {
                 username: username,
                 email: email,
                 password: password,
-                id: userId,
                 role: role
             }),
             headers: {
@@ -78,9 +77,28 @@ class UpdateUserComponent extends React.Component {
                 window.sessionStorage.setItem('username', username);
                 window.location.href = '/myPage';
             } else if (response.status === 400) {
-                //     add error handling here
+                response.json().then(responseJson => {
+                    this.showErrors(responseJson['message']);
+                });
             }
         });
+    }
+
+    showErrors = (message) => {
+        const errors = message.split(";");
+        console.log(message);
+        const errorList = document.getElementById('errorList');
+        while (errorList.firstChild) {
+            errorList.removeChild(errorList.firstChild);
+        }
+        for (const str of errors) {
+            const li = document.createElement('div');
+            li.className = 'error-list-login';
+            li.innerText = str;
+            errorList.appendChild(li);
+        }
+        errorList.style.display = 'block';
+        errorList.removeChild(errorList.lastChild);
     }
 
 
@@ -92,22 +110,24 @@ class UpdateUserComponent extends React.Component {
             }} style={{right: '1810px'}}>Back
             </button>
             <button id="button_delete_profile" className="button-login" onClick={() => {
-                if(window.confirm('Are you sure you want to delete your profile?') === true) {
+                if (window.confirm('Are you sure you want to delete your profile?') === true) {
                     this.deleteProfile(window.sessionStorage.getItem('currentUserId'));
                 } else {
-                     window.location.reload();
+                    window.location.reload();
                 }
             }} style={{right: '1610px'}}>Delete profile
             </button>
             <div className="login-form">
                 <div className="login-subtitle-edit">Edit your data:</div>
                 <div className="input-container ic2">
-                    <input id="username" className="input" type="text" placeholder=" " value={this.state.username} onChange={e => this.setState({ username: e.target.value })}/>
+                    <input id="username" className="input" type="text" placeholder=" " value={this.state.username}
+                           onChange={e => this.setState({username: e.target.value})}/>
                     <div className="cut"></div>
                     <label form="email" className="placeholder">Username</label>
                 </div>
                 <div className="input-container ic2">
-                    <input id="email" className="input" type="text" placeholder=" " value={this.state.email} onChange={e => this.setState({ email: e.target.value })}/>
+                    <input id="email" className="input" type="text" placeholder=" " value={this.state.email}
+                           onChange={e => this.setState({email: e.target.value})}/>
                     <div className="cut cut-short"></div>
                     <label form="email" className="placeholder">Email</label>
                 </div>
@@ -116,6 +136,7 @@ class UpdateUserComponent extends React.Component {
                     <div className="cut"></div>
                     <label form="password" className="placeholder">Password</label>
                 </div>
+                <div id="errorList" className="error-list" style={{display: 'none', marginTop: '80px', marginLeft: '-33px', marginBottom: '-20px'}}/>
                 <button type="text" className="login-submit" onClick={this.sendData}>Submit</button>
             </div>
         </div>
