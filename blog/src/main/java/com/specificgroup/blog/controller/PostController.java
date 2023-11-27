@@ -29,7 +29,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @Operation(summary = "Creation post", description = "Creation post")
+    @Operation(summary = "Create post", description = "Creation post")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successful request",
                     content = @Content),
@@ -48,7 +48,7 @@ public class PostController {
         return new ResponseEntity<>(postService.createPost(postRequest, userId), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Getting posts(by specification)", description = "Getting posts")
+    @Operation(summary = "Get all posts(by specification)", description = "Getting all posts")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
@@ -67,7 +67,7 @@ public class PostController {
                 .findAll(PostSpecification.getSpecification(userId, title, creationDate, modificationDate));
     }
 
-    @Operation(summary = "Getting posts of the user and his subscriptions", description = "Getting posts of the user and his subscriptions")
+    @Operation(summary = "Get all posts of the user and his subscriptions", description = "Getting posts of the user and his subscriptions")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
@@ -84,7 +84,7 @@ public class PostController {
         return postService.findSubscriptionsPostsByUserId(requestUserId);
     }
 
-    @Operation(summary = "Getting post by id", description = "Getting post by id")
+    @Operation(summary = "Get post by id", description = "Getting post by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
@@ -97,7 +97,7 @@ public class PostController {
         return postService.findById(postId);
     }
 
-    @Operation(summary = "Updating post", description = "Updating post")
+    @Operation(summary = "Update post", description = "Updating post")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
@@ -119,7 +119,7 @@ public class PostController {
         return postService.updatePost(postRequest, postId, userId);
     }
 
-    @Operation(summary = "Deletion post", description = "Deletion post")
+    @Operation(summary = "Delete post", description = "Deletion post")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Successful request",
                     content = @Content),

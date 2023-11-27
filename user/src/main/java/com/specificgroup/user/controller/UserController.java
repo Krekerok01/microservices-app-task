@@ -34,7 +34,7 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
 
-    @Operation(summary = "Getting all users or getting one user by email", description = "Getting all users(or one user by email) from the database")
+    @Operation(summary = "Get all users or get one user by email", description = "Getting all users(or one user by email) from the database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
@@ -53,7 +53,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Getting user by id", description = "Getting user info by id")
+    @Operation(summary = "Get user by id", description = "Getting user info by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
@@ -70,7 +70,7 @@ public class UserController {
         );
     }
 
-    @Operation(summary = "Registering a new user", description = "Registering a new user")
+    @Operation(summary = "Register a new user", description = "Registering a new user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
@@ -101,7 +101,7 @@ public class UserController {
         return ResponseEntity.of(userService.jwtTokenOf(userAuthDto));
     }
 
-    @Operation(summary = "Getting UserAuthDtoResponse", description = "Used for user authentication")
+    @Operation(summary = "Get UserAuthDtoResponse", description = "Used for user authentication")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
@@ -119,7 +119,7 @@ public class UserController {
         );
     }
 
-    @Operation(summary = "Deletion user by id", description = "Deletion user by id")
+    @Operation(summary = "Delete user by id", description = "Deletion user by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Successful request",
                     content = @Content),
@@ -137,7 +137,7 @@ public class UserController {
                 );
     }
 
-    @Operation(summary = "Updating user", description = "Updating user")
+    @Operation(summary = "Update user", description = "Updating user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Successful request",
                     content = @Content),
@@ -158,7 +158,7 @@ public class UserController {
                 );
     }
 
-    @Operation(summary = "Checking for the existence of a user", description = "Checking for the existence of a user")
+    @Operation(summary = "Check for the existence of a user", description = "Checking for the existence of a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),

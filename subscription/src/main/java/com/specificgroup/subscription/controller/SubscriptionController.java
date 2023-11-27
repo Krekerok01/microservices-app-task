@@ -24,7 +24,7 @@ public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
-    @Operation(summary = "Creation subscription", description = "Creation subscription")
+    @Operation(summary = "Create a subscription", description = "Creation subscription")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successful request",
                     content = @Content),
@@ -45,11 +45,13 @@ public class SubscriptionController {
                 (userSubscriberId, userPublisherId), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Finding all subscription", description = "Finding all subscription from the database")
+    @Operation(summary = "Find all subscriptions", description = "Finding all subscriptions from the database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Error: Only admin has access to this method",
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping
@@ -57,7 +59,7 @@ public class SubscriptionController {
         return subscriptionService.getAllSubscriptions();
     }
 
-    @Operation(summary = "Finding all subscription for a specific user", description = "Finding all subscription for a specific user")
+    @Operation(summary = "Find all subscriptions for a specific user", description = "Finding all subscriptions for a specific user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
@@ -65,11 +67,11 @@ public class SubscriptionController {
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/subscriber")
-    public List<Long> findAllSubscriptions(@RequestParam Long userSubscriberId){
+    public List<Long> findAllSubscriptionsForSpecificUser(@RequestParam Long userSubscriberId){
         return subscriptionService.getSubscriptionsBySubscriberId(userSubscriberId);
     }
 
-    @Operation(summary = "Creation subscription", description = "Creation subscription")
+    @Operation(summary = "Delete subscription", description = "Deletion subscription")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Successful request",
                     content = @Content),
