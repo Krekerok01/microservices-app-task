@@ -47,6 +47,13 @@ body {
     font-weight: 700;
     margin-top: 10px;
 }
+.login-subtitle-edit {
+    color: #000000;
+    font-family: sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    margin-top: 10px;
+}
 
 .input-container {
     height: 50px;

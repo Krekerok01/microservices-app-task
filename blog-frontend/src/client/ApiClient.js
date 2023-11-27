@@ -58,6 +58,19 @@ class ApiClient {
             }
         );
     }
+
+    static oneUser(id): Promise<Response> {
+        const token = window.sessionStorage.getItem('token');
+        return fetch(
+            this.SERVER_URL + this.GET_USERS + '/' + id,
+            {
+                headers: {
+                    "Content-type": "Application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+    }
 }
 
 

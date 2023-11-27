@@ -19,7 +19,7 @@ class UsersComponent extends React.Component {
 
     checkBackButton() {
         const username = window.sessionStorage.getItem('username');
-        if(username != null || username !== 'null') {
+        if (username != null || username !== 'null') {
             document.getElementById('button_back').style.top = '300px';
         }
     }
@@ -35,25 +35,24 @@ class UsersComponent extends React.Component {
 
     getUsersData(): Promise {
         return ApiClient.users().then(
-             response => {
+            response => {
                 if (response.ok) {
                     return response.json();
                 } else {
                     return Promise.reject("User-service: error response");
                 }
-             }
+            }
         )
     }
 
     render() {
-
         return <div className="card-grid">
             <button id="button_back" className="button-login" onClick={() => {
                 window.history.back();
             }} style={{right: '1870px'}}>Back
             </button>
             {this.state.data.map(user => {
-                return <UserCard key={user.id} username={user.username} email={user.email}/>
+                return <UserCard key={user.id} username={user.username} email={user.email} userId={user.id} role={user.role}/>
             })}
         </div>
     }

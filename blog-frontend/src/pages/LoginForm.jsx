@@ -42,6 +42,8 @@ const sendData = () => {
             response.json().then(responseJson => {
                 window.sessionStorage.setItem('token', responseJson['token']);
                 window.sessionStorage.setItem('username', responseJson['username']);
+                window.sessionStorage.setItem('currentUserId', responseJson['userId']);
+                window.sessionStorage.setItem('isAdmin', responseJson['admin']);
             });
             console.log(window.sessionStorage.getItem('token'));
             window.location.href = '/myPage';

@@ -6,6 +6,7 @@ import LoginForm from "../pages/LoginForm";
 import UserPage from "../pages/UserPage";
 import OneUser from "../pages/OneUser";
 import UpdateFormPost from "../pages/UpdateFormPost";
+import UserEditPage from "../pages/UserEditPage";
 
 const Home = () => {
     return <BrowserRouter>
@@ -17,6 +18,7 @@ const Home = () => {
             <Route element={<UserPage/>} path='/users'/>
             <Route element={<OneUser/>} path='/myPage'/>
             <Route element={<UpdateFormPost/>} path='/updatePost'/>
+            <Route element={<UserEditPage/>} path='/myPage/edit'/>
 
 
             <Route path="*" element={<div>Error!</div>}/>
