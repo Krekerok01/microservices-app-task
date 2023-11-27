@@ -10,10 +10,11 @@ body {
     background-color: #ffffff;
     border-radius: 20px;
     box-sizing: border-box;
-    height: 500px;
+    height: 1000px;
     padding: 20px;
-    width: 500px;
+    width: 1000px;
 }
+
 .login-form {
     background-color: #ffffff;
     border-radius: 20px;
@@ -38,10 +39,18 @@ body {
     font-weight: 600;
     margin-top: 10px;
 }
+
 .login-subtitle {
     color: #000000;
     font-family: sans-serif;
     font-size: 20px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+.login-subtitle-edit {
+    color: #000000;
+    font-family: sans-serif;
+    font-size: 25px;
     font-weight: 700;
     margin-top: 10px;
 }
@@ -133,6 +142,7 @@ body {
     text-align: center;
     width: 100%;
 }
+
 .submit:hover {
     background: #0f8fec;
 }
@@ -155,6 +165,7 @@ body {
     text-align: center;
     width: 100%;
 }
+
 .login-submit:hover {
     background: #0f8fec;
 }
@@ -170,9 +181,19 @@ body {
     max-width: 600px;
     margin-left: -17px;
 }
+
+.error-list-add-outer {
+    font-family: sans-serif;
+    font-size: 1.1em;
+    width: 1000px;
+    margin-left: -17px;
+    padding-top: 20px;
+}
+
 .error-list:focus {
     outline: none;
 }
+
 .error-list div {
     position: relative;
     background-color: #fff;
@@ -187,10 +208,8 @@ body {
 
 .error-list-login {
     font-family: sans-serif;
-    /*text-indent: 1.5em;*/
     font-size: 25px;
     width: 400px;
-    /*max-width: 600px;*/
     margin-left: -17px;
     position: relative;
     background-color: #fff;
@@ -202,4 +221,21 @@ body {
     rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
     overflow: auto;
     text-align: left;
+}
+
+.error-list-add {
+    font-family: sans-serif;
+    font-size: 25px;
+    width: 1000px;
+    position: relative;
+    background-color: #fff;
+    color: #d00d0d;
+    border-radius: 10px;
+    line-height: 3em;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    overflow: auto;
+    text-align: left;
+    margin-top: 15px;
 }

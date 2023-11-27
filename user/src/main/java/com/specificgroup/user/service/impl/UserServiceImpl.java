@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -41,6 +42,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> get(long id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public String getUsername(long id) {
+        User user = userRepository
+                .findById(id)
+                .orElseThrow(NoSuchUserException::new);
+
+        return user.getUsername();
     }
 
     @Override
@@ -69,8 +79,18 @@ public class UserServiceImpl implements UserService {
     public void update(final long id, final User user) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
+        String email = user.getEmail();
 
-        if (!checkUserEmailDuplicate(user.getEmail())) {
+        if (
+                Objects.equals(email, existingUser.getEmail())
+                        ||
+                        (
+                                !Objects.equals(
+                                        email, existingUser.getEmail())
+                                        &&
+                                        !checkUserEmailDuplicate(email)
+                        )
+        ) {
             existingUser.setEmail(user.getEmail());
             existingUser.setUsername(user.getUsername());
             existingUser.setPassword(PasswordEncoder.encode(user.getPassword()));
@@ -79,6 +99,18 @@ public class UserServiceImpl implements UserService {
             userRepository.save(existingUser);
         } else {
             throw new DuplicateEmailException("User with such email already exists! Please change your email!");
+        }
+
+    }
+
+    @Override
+    public void changePrivilege(final long userId) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(NoSuchUserException::new);
+
+        if (!existingUser.getRole().equals(User.Role.ADMIN)) {
+            existingUser.setRole(User.Role.ADMIN);
+            userRepository.save(existingUser);
         }
     }
 
@@ -97,10 +129,13 @@ public class UserServiceImpl implements UserService {
                         )
         ) {
             User user = existingUser.get();
+            boolean isAdmin = user.getRole().equals(User.Role.ADMIN);
             return Optional.of(
                     new TokenResponse(
+                            user.getId(),
                             jwtGenerator.generate(user),
-                            user.getUsername()
+                            user.getUsername(),
+                            isAdmin
                     )
             );
         } else if (existingUser.isEmpty()) {
@@ -121,6 +156,7 @@ public class UserServiceImpl implements UserService {
     public Boolean existsByUserId(long userId) {
         return userRepository.existsById(userId);
     }
+
 
     private boolean checkUserEmailDuplicate(String email) {
         return userRepository.findByEmail(email).isPresent();

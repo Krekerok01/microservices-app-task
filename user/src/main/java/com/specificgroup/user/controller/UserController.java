@@ -1,12 +1,11 @@
 package com.specificgroup.user.controller;
 
+import com.specificgroup.user.exception.NoPrivilegesException;
 import com.specificgroup.user.model.User;
-import com.specificgroup.user.model.dto.TokenResponse;
-import com.specificgroup.user.model.dto.UserAuthDtoRequest;
-import com.specificgroup.user.model.dto.UserAuthDtoResponse;
-import com.specificgroup.user.model.dto.UserDto;
+import com.specificgroup.user.model.dto.*;
 import com.specificgroup.user.service.UserService;
 import com.specificgroup.user.util.DtoMapper;
+import com.specificgroup.user.util.JwtParser;
 import com.specificgroup.user.util.UtilStrings;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,6 +22,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.security.auth.message.AuthException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.util.List;
@@ -63,11 +65,19 @@ public class UserController {
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}")
-    public UserDto get(@PathVariable(name = "id") long userId) {
-        return DtoMapper.mapToUserDto(
-                userService.get(userId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
-        );
+    public User get(@PathVariable(name = "id") long userId,
+                    HttpServletRequest request) {
+        if (getUserIdFromToken(request) == userId) {
+            return userService.get(userId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        } else {
+            throw new NoPrivilegesException();
+        }
+    }
+
+    @GetMapping("/{id}/username")
+    public UsernameResponse getUsername(@PathVariable(name = "id") long userId) {
+        return new UsernameResponse(userService.getUsername(userId));
     }
 
     @Operation(summary = "Register a new user", description = "Registering a new user")
@@ -127,14 +137,17 @@ public class UserController {
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable(name = "id") long userId) {
-        userService.delete(userId);
-        return ResponseEntity
-                .status(204)
-                .body(UtilStrings.userWasSuccessfullyModified(
-                                userId, UtilStrings.Action.DELETED
-                        )
-                );
+    public ResponseEntity<String> deleteUser(@PathVariable(name = "id") long userId, HttpServletRequest request) {
+        if (getUserIdFromToken(request) == userId || getRoleFromToken(request).equals(User.Role.ADMIN)) {
+            userService.delete(userId);
+            return ResponseEntity
+                    .status(204)
+                    .body(UtilStrings.userWasSuccessfullyModified(
+                                    userId, UtilStrings.Action.DELETED
+                            )
+                    );
+        }
+        throw new NoPrivilegesException();
     }
 
     @Operation(summary = "Update user", description = "Updating user")
@@ -148,14 +161,28 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable(name = "id") long userId,
-                                             @RequestBody User user) {
-        userService.update(userId, user);
-        return ResponseEntity
-                .status(204)
-                .body(UtilStrings.userWasSuccessfullyModified(
-                                user.getId(), UtilStrings.Action.UPDATED
-                        )
-                );
+                                             @RequestBody User user,
+                                             HttpServletRequest request) {
+        if (getUserIdFromToken(request) == userId) {
+            userService.update(userId, user);
+            return ResponseEntity
+                    .status(204)
+                    .body(UtilStrings.userWasSuccessfullyModified(
+                                    user.getId(), UtilStrings.Action.UPDATED
+                            )
+                    );
+        } else {
+            throw new NoPrivilegesException();
+        }
+    }
+
+    @PutMapping("/privilege/{userId}")
+    public void changePrivilege(@PathVariable(name = "userId") long userId, HttpServletRequest request) {
+        if (getRoleFromToken(request).equals(User.Role.ADMIN)) {
+            userService.changePrivilege(userId);
+        } else {
+            throw new NoPrivilegesException();
+        }
     }
 
     @Operation(summary = "Check for the existence of a user", description = "Checking for the existence of a user")
@@ -168,5 +195,13 @@ public class UserController {
     @GetMapping("/exists/{id}")
     public Boolean existsByUserId(@PathVariable(name = "id") long userId) {
         return userService.existsByUserId(userId);
+    }
+
+    private long getUserIdFromToken(HttpServletRequest request) {
+        return JwtParser.getUserIdFromToken(request.getHeader(HttpHeaders.AUTHORIZATION));
+    }
+
+    private User.Role getRoleFromToken(HttpServletRequest request) {
+        return User.Role.valueOf(JwtParser.getRoleFromToken(request.getHeader(HttpHeaders.AUTHORIZATION)));
     }
 }

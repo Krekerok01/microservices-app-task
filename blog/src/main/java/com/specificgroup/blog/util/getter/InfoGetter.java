@@ -21,7 +21,7 @@ public class InfoGetter {
     private final WebClient webClient;
 
     public UserInfoResponse getUserById(Long userId) {
-        String uri = getUserUrlFromEureka() + "/users/" + userId;
+        String uri = getUserUrlFromEureka() + "/users/" + userId + "/username";
         return webClient.get().uri(uri)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response -> handleServiceError(response))

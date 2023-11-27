@@ -6,14 +6,21 @@ import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.entity.Post;
 import org.springframework.data.jpa.domain.Specification;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface PostService {
     PostResponse createPost(PostRequest postRequest, Long userId);
+
     List<PostResponse> findAll(Specification<Post> specification);
+
     PostResponse findById(Long id);
+
     Long updatePost(PostRequest postRequest, Long postId, Long userId);
+
     void deletePost(Long id, Long userId);
+
     void deletePostsByUserId(UserServiceMessage message);
+
     List<PostResponse> findSubscriptionsPostsByUserId(Long requestUserId);
 }

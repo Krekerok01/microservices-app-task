@@ -42,9 +42,11 @@ const sendData = () => {
             response.json().then(responseJson => {
                 window.sessionStorage.setItem('token', responseJson['token']);
                 window.sessionStorage.setItem('username', responseJson['username']);
+                window.sessionStorage.setItem('currentUserId', responseJson['userId']);
+                window.sessionStorage.setItem('isAdmin', responseJson['admin']);
             });
             console.log(window.sessionStorage.getItem('token'));
-            window.location.href = '/users';
+            window.location.href = '/myPage';
         } else if (response.status === 400) {
             response.json().then(responseJson => {
                 showError(responseJson['message']);

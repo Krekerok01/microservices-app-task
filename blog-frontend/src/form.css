@@ -1,11 +1,12 @@
-input{
+.form-input{
     outline: none;
     height: 80px;
     font-size: 36px;
+
 }
-textarea {
+.form-textarea {
     outline: none;
-    height: 700px;
+    height: 660px;
     font-size: 22px;
 }
 .div-form {
@@ -14,7 +15,7 @@ textarea {
     align-items: center;
     padding: 20px;
 }
-h1 {
+.form-h1 {
     margin-top: 0;
     font-weight: 500;
     font-size: 50px;
@@ -24,7 +25,7 @@ form {
     width: 80%;
     border-radius: 30px;
     background: #fff;
-    min-height: 1000px;
+    min-height: 1300px;
     min-width: 1000px;
 }
 .form-left-decoration,
@@ -38,11 +39,11 @@ form {
 }
 .form-left-decoration {
     bottom: 60px;
-    left: -30px;
+    left: 470px;
 }
 .form-right-decoration {
     top: 60px;
-    right: -30px;
+    right: 470px;
 }
 .form-left-decoration:before,
 .form-left-decoration:after,
@@ -80,7 +81,7 @@ form {
     background: #fff;
 }
 .form-inner {
-    padding: 40px;
+    padding: 15px;
 }
 .form-inner input,
 .form-inner textarea {

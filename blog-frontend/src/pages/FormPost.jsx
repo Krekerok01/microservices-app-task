@@ -17,34 +17,56 @@ const FormPost = () => {
                 "Authorization": `Bearer ${token}`
             }
         }).then(response => {
+            console.log('Response status after adding:' + response.status);
             if (response.ok) {
                 window.location.href = '/myPage';
             } else if (response.status === 400) {
-            //     add error handling here
+                response.json().then(responseJson => {
+                    showError(responseJson['message']);
+                });
             }
         });
     }
+
+    const showError = (message) => {
+        const errors = message.split(";");
+        console.log(message);
+        const errorList = document.getElementById('errorList');
+        while (errorList.firstChild) {
+            errorList.removeChild(errorList.firstChild);
+        }
+        for (const str of errors) {
+            console.log(str);
+            const li = document.createElement('div');
+            li.className = 'error-list-add';
+            li.innerText = str;
+            errorList.appendChild(li);
+        }
+        errorList.style.display = 'block';
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+
     return <div className="div-form">
         <UserInfoComponent/>
         <button id="button_back" className="button-login" onClick={() => {
             window.history.back();
         }} style={{right: '1810px'}}>Back
         </button>
-        <form id="div-form" action="/" className="decor">
+        <div className="form">
             <div className="form-left-decoration"></div>
             <div className="form-right-decoration"></div>
             <div className="circle"></div>
             <div className="form-inner">
-                <h1>Creating a post</h1>
-                <input id="title" type="text" placeholder="Title"/>
-                <textarea id="content" placeholder="Content..." rows="5"></textarea>
-                <button className="button-submit" type="submit" onClick={sendData}>Submit
-                </button>
+                <h1 className="form-h1">Creating a post</h1>
+                <input id="title" type="text" placeholder="Title" className="form-input"/>
+                <textarea id="content" placeholder="Content..." rows="5" className="form-textarea"></textarea>
+                <button className="button-submit" type="submit" onClick={sendData}>Submit</button>
             </div>
-        </form>
+            <div id="errorList" className="error-list-add-outer" style={{display: 'none'}}/>
+        </div>
     </div>
 }
-
 
 
 export default FormPost

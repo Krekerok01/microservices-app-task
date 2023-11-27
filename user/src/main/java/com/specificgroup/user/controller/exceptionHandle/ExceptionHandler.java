@@ -1,6 +1,7 @@
 package com.specificgroup.user.controller.exceptionHandle;
 
 import com.specificgroup.user.exception.DuplicateEmailException;
+import com.specificgroup.user.exception.NoPrivilegesException;
 import com.specificgroup.user.exception.NoSuchUserException;
 import com.specificgroup.user.exception.WrongPasswordException;
 import com.specificgroup.user.exception.dto.ExceptionResponse;
@@ -28,7 +29,12 @@ public class ExceptionHandler {
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(WrongPasswordException.class)
-    public ResponseEntity<ExceptionResponse> handleNoSuchEmailException(WrongPasswordException wpe) {
+    public ResponseEntity<ExceptionResponse> handleWrongPasswordException(WrongPasswordException wpe) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(wpe.getMessage()));
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(NoPrivilegesException.class)
+    public ResponseEntity<ExceptionResponse> handleNoPrivilegesException(NoPrivilegesException npe) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(npe.getMessage()));
     }
 }
