@@ -84,7 +84,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable(name = "id") long userId, HttpServletRequest request) throws AuthException {
+    public ResponseEntity<String> deleteUser(@PathVariable(name = "id") long userId, HttpServletRequest request) {
         if (getUserIdFromToken(request) == userId || getRoleFromToken(request).equals(User.Role.ADMIN)) {
             userService.delete(userId);
             return ResponseEntity

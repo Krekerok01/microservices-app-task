@@ -34,6 +34,24 @@ class UpdateUserComponent extends React.Component {
         )
     }
 
+    deleteProfile(userId) {
+        const token = window.sessionStorage.getItem('token');
+        fetch(`http://localhost:8080/users/${userId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Authorization": `Bearer ${token}`
+            }
+        }).then(response => {
+            if (response.ok) {
+                window.sessionStorage.setItem('username', null);
+                window.location.href = '/';
+            } else if (response.status === 400) {
+                //     add error handling here
+            }
+        });
+    }
+
 
     sendData = () => {
         const username = document.getElementById("username").value;
@@ -72,6 +90,14 @@ class UpdateUserComponent extends React.Component {
             <button id="button_back" className="button-login" onClick={() => {
                 window.history.back();
             }} style={{right: '1810px'}}>Back
+            </button>
+            <button id="button_delete_profile" className="button-login" onClick={() => {
+                if(window.confirm('Are you sure you want to delete your profile?') === true) {
+                    this.deleteProfile(window.sessionStorage.getItem('currentUserId'));
+                } else {
+                     window.location.reload();
+                }
+            }} style={{right: '1610px'}}>Delete profile
             </button>
             <div className="login-form">
                 <div className="login-subtitle-edit">Edit your data:</div>
