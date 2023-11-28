@@ -46,13 +46,14 @@ class UsersComponent extends React.Component {
     }
 
     render() {
+        const currentUserId = window.sessionStorage.getItem('currentUserId');
         return <div className="card-grid">
             <button id="button_back" className="button-login" onClick={() => {
                 window.history.back();
             }} style={{right: '1870px'}}>Back
             </button>
             {this.state.data.map(user => {
-                return <UserCard key={user.id} username={user.username} email={user.email} userId={user.id} role={user.role}/>
+                return <UserCard key={user.id} username={user.username} email={user.email} userId={user.id} role={user.role} currentUserId={currentUserId}/>
             })}
         </div>
     }

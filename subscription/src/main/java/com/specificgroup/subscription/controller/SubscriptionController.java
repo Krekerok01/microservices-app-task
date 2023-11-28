@@ -67,7 +67,7 @@ public class SubscriptionController {
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/subscriber")
-    public List<Long> findAllSubscriptionsForSpecificUser(@RequestParam Long userSubscriberId){
+    public List<Long> findAllSubscriptionsForSpecificUser(@RequestParam Long userSubscriberId) {
         return subscriptionService.getSubscriptionsBySubscriberId(userSubscriberId);
     }
 
