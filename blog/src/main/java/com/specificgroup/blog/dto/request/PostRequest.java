@@ -14,7 +14,7 @@ public class PostRequest {
     @Size(min = 5, max = 100, message = "Title min size is 5 symbols and max size is 100 symbols.")
     String title;
 
-    @NotBlank(message = "Title cannot be blank.")
+    @NotBlank(message = "Text cannot be blank.")
     @Size(min = 5, max = 2000, message = "Text min size is 5 symbols and max size is 2000 symbols.")
     String text;
 }

@@ -63,10 +63,12 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
     @Override
     @Transactional
-    public void deleteSubscription(Long subscriptionId, Long userSubscriberId) {
-        log.info("Deleting subscription with id={}", subscriptionId);
+    public void deleteSubscription(Long userPublisherId, Long userSubscriberId) {
+        log.info("User with id={} unsubscribing from the user with id={}", userSubscriberId, userPublisherId);
 
-        Subscription subscription = getSubscriptionById(subscriptionId);
+        Subscription subscription = subscriptionRepository
+                .findByUserSubscriberIdAndUserPublisherId(userSubscriberId, userPublisherId)
+                .orElseThrow(() -> new EntityNotFoundException("Subscription not found"));
         if (!subscription.getUserSubscriberId().equals(userSubscriberId))
             throw new AccessDeniedException("Access denied");
 
