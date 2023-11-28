@@ -9,6 +9,6 @@ public interface SubscriptionService {
     Long createSubscription(Long userSubscriberId, Long userPublisherId);
     List<Subscription> getAllSubscriptions();
     List<Long> getSubscriptionsBySubscriberId(Long userSubscriberId);
-    void deleteSubscription(Long subscriptionId, Long userSubscriberId);
+    void deleteSubscription(Long userPublisherId, Long userSubscriberId);
     void deleteSubscriptionsByUserId(UserServiceMessage message);
 }

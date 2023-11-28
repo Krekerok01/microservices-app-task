@@ -82,10 +82,11 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "404", description = "Error: There is no such subscription in the database",
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
-    @DeleteMapping("/{subscriptionId}")
-    public ResponseEntity<?> deleteSubscription(@PathVariable Long subscriptionId, HttpServletRequest httpRequest) {
+    @DeleteMapping("/{userPublisherId}")
+    public ResponseEntity<?> deleteSubscription(@PathVariable("userPublisherId") Long userPublisherId,
+                                                HttpServletRequest httpRequest) {
         Long userSubscriberId = getUserIdFromTheTokenInTheHttpRequest(httpRequest);
-        subscriptionService.deleteSubscription(subscriptionId, userSubscriberId);
+        subscriptionService.deleteSubscription(userPublisherId, userSubscriberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
