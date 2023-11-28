@@ -156,18 +156,18 @@ public class SubscriptionServiceImplTest {
     @Test
     @DisplayName("Delete subscription. Successful request")
     void deleteSubscriptionTest_SuccessfulRequest(){
-        Long subscriptionId = 1L;
+        Long userPublisherId = 2L;
         Long userSubscriberId = 1L;
         Subscription subscription =buildSubscription(1L, 1L, 2L);
 
-        doReturn(Optional.of(subscription)).when(subscriptionRepository).findById(subscriptionId);
+        doReturn(Optional.of(subscription)).when(subscriptionRepository).findByUserSubscriberIdAndUserPublisherId(userSubscriberId, userPublisherId);
 
         boolean result = assertDoesNotThrow(() -> {
-            subscriptionService.deleteSubscription(subscriptionId, userSubscriberId);
+            subscriptionService.deleteSubscription(userPublisherId, userSubscriberId);
             return true;});
 
         assertTrue(result);
-        verify(subscriptionRepository, times(1)).findById(subscriptionId);
+        verify(subscriptionRepository, times(1)).findByUserSubscriberIdAndUserPublisherId(userSubscriberId, userPublisherId);
         verify(subscriptionRepository, times(1)).delete(subscription);
         verifyNoMoreInteractions(subscriptionRepository);
     }
@@ -175,20 +175,20 @@ public class SubscriptionServiceImplTest {
     @Test
     @DisplayName("Delete subscription. Throw AccessDeniedException")
     void deleteSubscriptionTest_ThrowAccessDeniedException(){
-        Long subscriptionId = 1L;
+        Long userPublisherId = 2L;
         Long userSubscriberId = 1L;
         String expectedMessage = "Access denied";
         Subscription subscription =buildSubscription(1L, 2L, 2L);
 
-        doReturn(Optional.of(subscription)).when(subscriptionRepository).findById(subscriptionId);
+        doReturn(Optional.of(subscription)).when(subscriptionRepository).findByUserSubscriberIdAndUserPublisherId(userSubscriberId, userPublisherId);
 
         AccessDeniedException resultException = assertThrowsExactly(AccessDeniedException.class, () -> {
-            subscriptionService.deleteSubscription(subscriptionId, userSubscriberId);
+            subscriptionService.deleteSubscription(userPublisherId, userSubscriberId);
         });
 
         assertNotNull(resultException);
         assertEquals(expectedMessage, resultException.getLocalizedMessage());
-        verify(subscriptionRepository, times(1)).findById(subscriptionId);
+        verify(subscriptionRepository, times(1)).findByUserSubscriberIdAndUserPublisherId(userSubscriberId, userPublisherId);
         verifyNoMoreInteractions(subscriptionRepository);
         verifyNoInteractions(userInfoGetter);
     }
