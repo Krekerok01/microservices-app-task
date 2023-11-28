@@ -53,6 +53,10 @@ const FormPost = () => {
             window.history.back();
         }} style={{right: '1810px'}}>Back
         </button>
+        <button id="button_home" className="button-login" onClick={() => {
+            window.location.href = '/';
+        }} style={{right: '1710px'}}>Home
+        </button>
         <div className="form">
             <div className="form-left-decoration"></div>
             <div className="form-right-decoration"></div>

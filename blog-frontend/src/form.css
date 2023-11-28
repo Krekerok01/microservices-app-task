@@ -107,8 +107,27 @@ form {
     font-size: 22px;
     font-weight: 400;
     color: #fff;
+    cursor: pointer;
 }
 .button-submit:hover {
+    background: #0f8fec;
+}
+
+.button-submit-update {
+    width: 97%;
+    padding: 10px;
+    margin-top: 20px;
+    margin-left: 15px;
+    border-radius: 20px;
+    border: none;
+    border-bottom: 4px solid #0f2e80;
+    background: #142bc6;
+    font-size: 22px;
+    font-weight: 400;
+    color: #fff;
+    cursor: pointer;
+}
+.button-submit-update:hover {
     background: #0f8fec;
 }
 @media (min-width: 568px) {

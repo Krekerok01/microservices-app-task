@@ -43,6 +43,10 @@ class OneUserPostsComponent extends React.Component {
                 window.history.back();
             }} style={{top: '300px', right: '1930px'}}>Back
             </button>
+            <button id="button_home" className="button-login" onClick={() => {
+                window.location.href = '/';
+            }} style={{top: '370px', right: '1930px'}}>Home
+            </button>
             <button id="button_edit_profile" className="button-login" onClick={() => {
                 window.location.href = '/myPage/edit';
             }} style={{right: '1730px'}}>Edit profile

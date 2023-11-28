@@ -7,7 +7,11 @@ const SignUpForm = () => {
             window.history.back();
         }} style={{right: '1900px'}}>Back
         </button>
-        <div className="form">
+        <button id="button_home" className="button-login" onClick={() => {
+            window.location.href = '/';
+        }} style={{right: '1800px'}}>Home
+        </button>
+        <div className="form-create">
             <div className="title">Welcome</div>
             <div className="subtitle">Let's create your account!</div>
             <div className="input-container ic1">

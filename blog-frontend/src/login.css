@@ -15,6 +15,15 @@ body {
     width: 1000px;
 }
 
+.form-create {
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-sizing: border-box;
+    height: 500px;
+    padding: 20px;
+    width: 500px;
+}
+
 .login-form {
     background-color: #ffffff;
     border-radius: 20px;
