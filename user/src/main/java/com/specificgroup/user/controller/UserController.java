@@ -160,13 +160,17 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable(name = "id") long userId, HttpServletRequest request) {
         if (getUserIdFromToken(request) == userId || getRoleFromToken(request).equals(User.Role.ADMIN)) {
-            userService.delete(userId);
-            return ResponseEntity
-                    .status(204)
-                    .body(UtilStrings.userWasSuccessfullyModified(
-                                    userId, UtilStrings.Action.DELETED
-                            )
-                    );
+            if (userService.existsByUserId(userId)) {
+                userService.delete(userId);
+                return ResponseEntity
+                        .status(204)
+                        .body(UtilStrings.userWasSuccessfullyModified(
+                                        userId, UtilStrings.Action.DELETED
+                                )
+                        );
+            } else {
+                throw new NoSuchUserException();
+            }
         }
         throw new NoPrivilegesException();
     }
