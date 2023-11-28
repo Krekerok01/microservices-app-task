@@ -323,6 +323,10 @@ body {
     transition: 0.15s ease;
 }
 
+.user-header h2:hover {
+    cursor: pointer;
+}
+
 .user-header button:hover {
     background: #0f8fec;
 }

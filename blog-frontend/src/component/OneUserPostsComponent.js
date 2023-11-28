@@ -51,6 +51,10 @@ class OneUserPostsComponent extends React.Component {
                 window.location.href = '/myPage/edit';
             }} style={{right: '1730px'}}>Edit profile
             </button>
+            <button id="button_all_users" className="button-login" onClick={() => {
+                window.location.href = '/users';
+            }} style={{right: '1600px'}}>All users
+            </button>
             <button id="btn_create" className="button-login" onClick={() => {
                 window.location.href='/addPost';
             }}>Create post
