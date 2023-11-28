@@ -101,6 +101,10 @@ class UpdateUserComponent extends React.Component {
         errorList.removeChild(errorList.lastChild);
     }
 
+    toPasswordChange() {
+        window.location.href = '/myPage/password';
+    }
+
 
     render() {
         return <div className="div-form">
@@ -131,11 +135,7 @@ class UpdateUserComponent extends React.Component {
                     <div className="cut cut-short"></div>
                     <label form="email" className="placeholder">Email</label>
                 </div>
-                <div className="input-container ic2">
-                    <input id="password" className="input" type="password" placeholder=" "/>
-                    <div className="cut"></div>
-                    <label form="password" className="placeholder">Password</label>
-                </div>
+                <button type="text" className="login-submit" onClick={this.toPasswordChange}>Change password</button>
                 <div id="errorList" className="error-list" style={{display: 'none', marginTop: '80px', marginLeft: '-33px', marginBottom: '-20px'}}/>
                 <button type="text" className="login-submit" onClick={this.sendData}>Submit</button>
             </div>

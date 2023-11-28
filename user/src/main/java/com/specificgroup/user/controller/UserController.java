@@ -1,11 +1,14 @@
 package com.specificgroup.user.controller;
 
 import com.specificgroup.user.exception.NoPrivilegesException;
+import com.specificgroup.user.exception.NoSuchUserException;
+import com.specificgroup.user.exception.WrongPasswordException;
 import com.specificgroup.user.model.User;
 import com.specificgroup.user.model.dto.*;
 import com.specificgroup.user.service.UserService;
 import com.specificgroup.user.util.DtoMapper;
 import com.specificgroup.user.util.JwtParser;
+import com.specificgroup.user.util.PasswordEncoder;
 import com.specificgroup.user.util.UtilStrings;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,7 +25,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -78,6 +80,25 @@ public class UserController {
     @GetMapping("/{id}/username")
     public UsernameResponse getUsername(@PathVariable(name = "id") long userId) {
         return new UsernameResponse(userService.getUsername(userId));
+    }
+
+    @PostMapping("/passwordValidation")
+    public ResponseEntity<String> checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
+                                                HttpServletRequest request) {
+        Optional<User> existingUser = userService.get(getUserIdFromToken(request));
+
+        if (existingUser.isEmpty()) {
+            throw new NoSuchUserException();
+        } else {
+            if (PasswordEncoder.encode(
+                    passwordRequestDto.getPassword()
+            ).equals(
+                    existingUser.get().getPassword()
+            )
+            ) {
+                return ResponseEntity.ok().body("Check successful!");
+            } else throw new WrongPasswordException("Wrong password!;");
+        }
     }
 
     @Operation(summary = "Register a new user", description = "Registering a new user")
@@ -164,7 +185,7 @@ public class UserController {
                                              @RequestBody @Valid User user,
                                              BindingResult bindingResult,
                                              HttpServletRequest request
-                                             ) {
+    ) {
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             for (ObjectError error : bindingResult.getFieldErrors()) {

@@ -97,6 +97,13 @@ body {
 .cut-short {
     width: 50px;
 }
+.cut-recent {
+    width: 57px;
+}
+
+.cut-new {
+    width: 40px;
+}
 
 .input:focus ~ .cut,
 .input:not(:placeholder-shown) ~ .cut {
