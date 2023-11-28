@@ -86,7 +86,7 @@ class UserCard extends React.Component {
             <button id="unfollow_btn" className={props.className} style={props.style} onClick={() => {
                 const token = window.sessionStorage.getItem('token');
                 fetch(`http://localhost:8080/subscriptions/${props.userId}`, {
-                    method: "POST",
+                    method: "DELETE",
                     headers: {
                         "Content-type": "application/json; charset=UTF-8",
                         "Authorization": `Bearer ${token}`
