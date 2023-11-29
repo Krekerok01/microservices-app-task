@@ -8,6 +8,7 @@ import OneUser from "../pages/OneUser";
 import UpdateFormPost from "../pages/UpdateFormPost";
 import UserEditPage from "../pages/UserEditPage";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
+import ErrorPage from "../pages/ErrorPage";
 
 const Home = () => {
     return <BrowserRouter>
@@ -23,7 +24,7 @@ const Home = () => {
             <Route element={<ChangePasswordPage/>} path='/myPage/password'/>
 
 
-            <Route path="*" element={<div>Error!</div>}/>
+            <Route path="*" element={<ErrorPage/>}/>
         </Routes>
     </BrowserRouter>
 }
