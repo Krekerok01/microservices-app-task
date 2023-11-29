@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -78,7 +77,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(final long id, final User user) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchUserException::new);
         String email = user.getEmail();
 
         if (
@@ -148,7 +147,7 @@ public class UserServiceImpl implements UserService {
     public UserAuthDtoResponse checkUserEmail(final String email) {
         return DtoMapper.mapToUserAuthDto(
                 userRepository.findByEmail(email)
-                        .orElseThrow(NoSuchElementException::new)
+                        .orElseThrow(NoSuchUserException::new)
         );
     }
 
