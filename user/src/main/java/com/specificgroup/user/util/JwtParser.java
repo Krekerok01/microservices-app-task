@@ -3,8 +3,13 @@ package com.specificgroup.user.util;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 
+import javax.security.auth.message.AuthException;
+
 public class JwtParser {
-    public static Long getUserIdFromToken(String token) {
+    public static Long getUserIdFromToken(String token) throws AuthException {
+        if (token == null || token.isEmpty()) {
+            throw new AuthException();
+        }
         try {
             String jwt = token.replace("Bearer ", "");
             String jwtWithoutSignature = jwt.substring(0, jwt.lastIndexOf('.') + 1);
@@ -19,7 +24,10 @@ public class JwtParser {
         }
     }
 
-    public static String getRoleFromToken(String token) {
+    public static String getRoleFromToken(String token) throws AuthException {
+        if (token == null || token.isEmpty()) {
+            throw new AuthException();
+        }
         try {
             String jwt = token.replace("Bearer ", "");
             String jwtWithoutSignature = jwt.substring(0, jwt.lastIndexOf('.') + 1);

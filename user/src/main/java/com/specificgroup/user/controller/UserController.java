@@ -25,6 +25,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -68,7 +69,7 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}")
     public User get(@PathVariable(name = "id") long userId,
-                    HttpServletRequest request) {
+                    HttpServletRequest request) throws AuthException {
         if (getUserIdFromToken(request) == userId) {
             return userService.get(userId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -84,7 +85,7 @@ public class UserController {
 
     @PostMapping("/passwordValidation")
     public ResponseEntity<String> checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
-                                                HttpServletRequest request) {
+                                                HttpServletRequest request) throws AuthException {
         Optional<User> existingUser = userService.get(getUserIdFromToken(request));
 
         if (existingUser.isEmpty()) {
@@ -158,7 +159,7 @@ public class UserController {
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable(name = "id") long userId, HttpServletRequest request) {
+    public ResponseEntity<String> deleteUser(@PathVariable(name = "id") long userId, HttpServletRequest request) throws AuthException {
         if (getUserIdFromToken(request) == userId || getRoleFromToken(request).equals(User.Role.ADMIN)) {
             if (userService.existsByUserId(userId)) {
                 userService.delete(userId);
@@ -189,7 +190,7 @@ public class UserController {
                                              @RequestBody @Valid User user,
                                              BindingResult bindingResult,
                                              HttpServletRequest request
-    ) {
+    ) throws AuthException {
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             for (ObjectError error : bindingResult.getFieldErrors()) {
@@ -211,7 +212,7 @@ public class UserController {
     }
 
     @PutMapping("/privilege/{userId}")
-    public void changePrivilege(@PathVariable(name = "userId") long userId, HttpServletRequest request) {
+    public void changePrivilege(@PathVariable(name = "userId") long userId, HttpServletRequest request) throws AuthException {
         if (getRoleFromToken(request).equals(User.Role.ADMIN)) {
             userService.changePrivilege(userId);
         } else {
@@ -231,11 +232,11 @@ public class UserController {
         return userService.existsByUserId(userId);
     }
 
-    private long getUserIdFromToken(HttpServletRequest request) {
+    private long getUserIdFromToken(HttpServletRequest request) throws AuthException {
         return JwtParser.getUserIdFromToken(request.getHeader(HttpHeaders.AUTHORIZATION));
     }
 
-    private User.Role getRoleFromToken(HttpServletRequest request) {
+    private User.Role getRoleFromToken(HttpServletRequest request) throws AuthException {
         return User.Role.valueOf(JwtParser.getRoleFromToken(request.getHeader(HttpHeaders.AUTHORIZATION)));
     }
 }
