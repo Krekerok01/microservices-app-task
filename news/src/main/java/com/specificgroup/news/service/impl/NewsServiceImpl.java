@@ -27,6 +27,9 @@ import java.util.List;
 @Slf4j
 public class NewsServiceImpl implements NewsService {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<NewsResponse> findCurrentNews() {
         log.info("Receiving news...");
