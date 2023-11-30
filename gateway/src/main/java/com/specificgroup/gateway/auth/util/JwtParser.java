@@ -11,6 +11,9 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.function.Function;
 
+/**
+ * Util class for JWT parsing
+ */
 @Slf4j
 @Component
 public class JwtParser {
