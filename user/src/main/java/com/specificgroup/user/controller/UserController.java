@@ -155,6 +155,8 @@ public class UserController {
             @ApiResponse(responseCode = "204", description = "Successful request",
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Error: This action can be performed by the user himself or the admin",
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/{id}")
@@ -182,6 +184,8 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
                     content = @Content),
             @ApiResponse(responseCode = "400", description = "Error: There is no such user in the database or Error: Existing email",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Error: User can only manage his own information",
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
@@ -210,6 +214,17 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Change user role to admin", description = "Changing user role to admin")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Error: Only the administrator has the right to perform this action",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Error: There is no such user in the database",
+                    content = @Content)})
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/privilege/{userId}")
     public void changePrivilege(@PathVariable(name = "userId") long userId, HttpServletRequest request) {
         if (getRoleFromToken(request).equals(User.Role.ADMIN)) {
