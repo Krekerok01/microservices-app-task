@@ -20,6 +20,9 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -31,6 +34,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     @Value("${spring.kafka.topics.user.service.response.successful}")
     private String successfulResponseTopic;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public Long createSubscription(Long userSubscriberId, Long userPublisherId) {
@@ -46,12 +52,18 @@ public class SubscriptionServiceImpl implements SubscriptionService{
                 .getSubscriptionId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Subscription> getAllSubscriptions() {
         log.info("Getting all subscriptions");
         return subscriptionRepository.findAll();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Long> getSubscriptionsBySubscriberId(Long userSubscriberId) {
         log.info("Getting subscriptions for user with id={}", userSubscriberId);
@@ -61,6 +73,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
                 .collect(Collectors.toList());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void deleteSubscription(Long userPublisherId, Long userSubscriberId) {
@@ -75,6 +90,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
         subscriptionRepository.delete(subscription);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void deleteSubscriptionsByUserId(UserServiceMessage message) {

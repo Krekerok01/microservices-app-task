@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.EntityExistsException;
 
+/**
+ * Provides methods for error handling
+ */
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
 

@@ -19,7 +19,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * Provides global security configuration
+ */
 @Configuration
 @RequiredArgsConstructor
 @EnableWebFluxSecurity

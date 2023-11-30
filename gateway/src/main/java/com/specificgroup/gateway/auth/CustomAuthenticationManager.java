@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+/**
+ * Provides method for user authentication
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j

@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+/**
+ * Provides methods for error handling
+ */
 public class ApplicationExceptionHandler {
 
     @ExceptionHandler(ReceiveDataException.class)

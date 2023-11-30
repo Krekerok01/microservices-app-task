@@ -4,6 +4,9 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import liquibase.pro.packaged.S;
 
+/**
+ * Util class for JWT parsing
+ */
 public class JwtUtil {
 
     public static Long getUserIdFromToken(String token) {

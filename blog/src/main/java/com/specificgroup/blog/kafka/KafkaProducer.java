@@ -7,6 +7,9 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+/**
+ * Provides methods for sending data to the Kafka.
+ */
 @Slf4j
 @EnableKafka
 @Component

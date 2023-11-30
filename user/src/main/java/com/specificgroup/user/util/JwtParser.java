@@ -2,8 +2,12 @@ package com.specificgroup.user.util;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-
 import javax.security.auth.message.AuthException;
+
+/**
+ * Util class for JWT parsing
+ */
+
 
 public class JwtParser {
     public static Long getUserIdFromToken(String token) throws AuthException {

@@ -13,6 +13,9 @@ import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Util class for JWT generating
+ */
 @Component
 @Slf4j
 public class JwtGenerator {

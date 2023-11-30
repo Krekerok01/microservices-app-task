@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -32,17 +35,26 @@ public class UserServiceImpl implements UserService {
     private final String TOPIC_BLOG_USER = "blog-user";
     private final String TOPIC_SUBSCRIPTION_USER = "subscription-user";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getAll() {
         log.info("Getting all users.");
         return userRepository.findAll();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> get(long id) {
         return userRepository.findById(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getUsername(long id) {
         User user = userRepository
@@ -52,11 +64,17 @@ public class UserServiceImpl implements UserService {
         return user.getUsername();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> getByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User add(@Valid User user) {
         if (!checkUserEmailDuplicate(user.getEmail())) {
@@ -66,7 +84,9 @@ public class UserServiceImpl implements UserService {
         throw new DuplicateEmailException("User with such email already exists!;");
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(long id) {
         userRepository.deleteById(id);
@@ -74,6 +94,9 @@ public class UserServiceImpl implements UserService {
         kafkaService.notify(TOPIC_SUBSCRIPTION_USER, id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(final long id, final User user) {
         User existingUser = userRepository.findById(id)
@@ -102,6 +125,9 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void changePrivilege(final long userId) {
         User existingUser = userRepository.findById(userId)
@@ -113,6 +139,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<TokenResponse> jwtTokenOf(final UserAuthDtoRequest userAuthDto) {
         Optional<User> existingUser = userRepository.findByEmail(userAuthDto.getEmail());
@@ -143,6 +172,9 @@ public class UserServiceImpl implements UserService {
         throw new WrongPasswordException(String.format("Wrong password for user %s;", userAuthDto.getEmail()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserAuthDtoResponse checkUserEmail(final String email) {
         return DtoMapper.mapToUserAuthDto(
@@ -151,6 +183,9 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean existsByUserId(long userId) {
         return userRepository.existsById(userId);
