@@ -30,7 +30,7 @@ public interface UserService {
     Optional<User> get(final long id);
 
     /**
-     * Find username by user id
+     * Get username by user id
      *
      * @param id an id of the user
      * @return a username
