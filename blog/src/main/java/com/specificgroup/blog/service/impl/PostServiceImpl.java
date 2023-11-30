@@ -26,6 +26,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -39,6 +42,9 @@ public class PostServiceImpl implements PostService {
     private String successfulResponseTopic;
     private final InfoGetter infoGetter;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public PostResponse createPost(PostRequest postRequest, Long userId) {
@@ -58,6 +64,9 @@ public class PostServiceImpl implements PostService {
         return postResponse;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<PostResponse> findAll(Specification<Post> specification) {
         log.info("Finding all posts");
@@ -71,6 +80,9 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<PostResponse> findSubscriptionsPostsByUserId(Long requestUserId) {
         log.info("Finding all posts for userId=" + requestUserId);
@@ -86,6 +98,9 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PostResponse findById(Long id) {
         log.info("Finding post by id={}", id);
@@ -95,6 +110,9 @@ public class PostServiceImpl implements PostService {
         return postResponse;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public Long updatePost(PostRequest postRequest, Long postId, Long userId) {
@@ -112,6 +130,9 @@ public class PostServiceImpl implements PostService {
         return postId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deletePost(Long id, Long userId) {
         log.info("Deleting the post with id={}", id);
@@ -120,6 +141,9 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(post);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void deletePostsByUserId(UserServiceMessage message) {

@@ -7,6 +7,9 @@ import com.specificgroup.user.model.dto.UserDto;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Util class for mapping entities and DTO objects
+ */
 public class DtoMapper {
     public static UserDto mapToUserDto(User user) {
         return new UserDto(

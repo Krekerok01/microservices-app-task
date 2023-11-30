@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Objects;
 
+/**
+ * Provides swagger configuration
+ */
 @Configuration
 public class SwaggerConfig {
 

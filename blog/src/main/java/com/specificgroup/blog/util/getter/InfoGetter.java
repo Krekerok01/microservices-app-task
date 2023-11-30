@@ -13,6 +13,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+/**
+ * Util class for getting information from third-party services
+ */
 @Component
 @RequiredArgsConstructor
 public class InfoGetter {
@@ -20,21 +23,28 @@ public class InfoGetter {
     private final EurekaClient eurekaClient;
     private final WebClient webClient;
 
-    public UserInfoResponse getUserById(Long userId) {
+    /**
+     * Get username for a user by user id
+     *
+     * @return a username of the user
+     */
+    public String getUsernameByUserId(Long userId){
         String uri = getUserUrlFromEureka() + "/users/" + userId + "/username";
-        return webClient.get().uri(uri)
+        UserInfoResponse userInfoResponse = webClient.get().uri(uri)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response -> handleServiceError(response))
                 .onStatus(HttpStatus::is5xxServerError, error -> Mono.error(new ServiceUnavailableException("User service is unavailable. Try again later.")))
                 .bodyToMono(UserInfoResponse.class)
                 .block();
-    }
 
-    public String getUsernameByUserId(Long userId){
-        UserInfoResponse userInfoResponse = getUserById(userId);
         return userInfoResponse.getUsername();
     }
 
+    /**
+     * Get list of subscription ids for a user by user id
+     *
+     * @return a list of subscription ids
+     */
     public List<Long> getSubscriptionIdsListBySubscriberId(Long requestUserId) {
         String uri = getSubscriptionUrlFromEureka() + "/api/v1/subscriptions/subscriber?userSubscriberId=" + requestUserId;
         return webClient.get().uri(uri)

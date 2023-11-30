@@ -77,11 +77,31 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Get username by user id", description = "Getting username by user id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Error: There is no such user in the database",
+                    content = @Content)})
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}/username")
     public UsernameResponse getUsername(@PathVariable(name = "id") long userId) {
         return new UsernameResponse(userService.getUsername(userId));
     }
 
+    @Operation(summary = "Check the password for validity", description = "Checking the password for validity")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "400", description = "Error: Invalid password",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Error: There is no such user in the database",
+                    content = @Content)})
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/passwordValidation")
     public ResponseEntity<String> checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
                                                 HttpServletRequest request) {

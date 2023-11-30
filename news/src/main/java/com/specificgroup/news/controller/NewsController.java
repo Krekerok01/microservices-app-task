@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Provides  and support methods for processing http request and response.
+ */
 @RestController
 @RequestMapping("/api/v1/news")
 @RequiredArgsConstructor

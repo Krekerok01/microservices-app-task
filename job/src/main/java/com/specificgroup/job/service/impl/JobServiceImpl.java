@@ -26,6 +26,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class JobServiceImpl implements JobService {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<VacancyResponse> findVacancies() {
         log.info("Receiving vacancies...");

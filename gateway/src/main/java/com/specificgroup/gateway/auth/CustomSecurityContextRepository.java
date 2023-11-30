@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+/**
+ * Provides methods for the correct security working
+ */
 @Component
 @RequiredArgsConstructor
 public class CustomSecurityContextRepository implements ServerSecurityContextRepository {

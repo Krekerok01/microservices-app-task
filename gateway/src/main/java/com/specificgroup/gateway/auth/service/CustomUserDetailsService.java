@@ -14,6 +14,9 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+/**
+ * Provides method for getting the user to further security checks
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements ReactiveUserDetailsService {
