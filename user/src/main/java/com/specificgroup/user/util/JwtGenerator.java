@@ -17,7 +17,6 @@ import java.util.Map;
  * Util class for JWT generating
  */
 @Component
-@Slf4j
 public class JwtGenerator {
 
     @Value("${security.jwt.secret}")

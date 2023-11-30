@@ -35,7 +35,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("users")
 @RequiredArgsConstructor
-@Slf4j
 public class UserController {
     private final UserService userService;
 

@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Optional<User> get(long id) {
+        log.info("Getting a user with id {}", id);
         return userRepository.findById(id);
     }
 
@@ -69,6 +70,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Optional<User> getByEmail(String email) {
+        log.info("Getting a user with email {}", email);
         return userRepository.findByEmail(email);
     }
 
@@ -79,6 +81,7 @@ public class UserServiceImpl implements UserService {
     public User add(@Valid User user) {
         if (!checkUserEmailDuplicate(user.getEmail())) {
             user.setPassword(PasswordEncoder.encode(user.getPassword()));
+            log.info("Saving a new user with email {} to the database", user.getEmail());
             return userRepository.save(user);
         }
         throw new DuplicateEmailException("User with such email already exists!;");
@@ -92,6 +95,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
         kafkaService.notify(TOPIC_BLOG_USER, id);
         kafkaService.notify(TOPIC_SUBSCRIPTION_USER, id);
+        log.info("Deleting a user with id {}", id);
     }
 
     /**
@@ -118,6 +122,7 @@ public class UserServiceImpl implements UserService {
             existingUser.setPassword(PasswordEncoder.encode(user.getPassword()));
             existingUser.setRole(user.getRole());
 
+            log.info("Updating a user with id {}", id);
             userRepository.save(existingUser);
         } else {
             throw new DuplicateEmailException("User with such email already exists! Please change your email!");
@@ -135,6 +140,7 @@ public class UserServiceImpl implements UserService {
 
         if (!existingUser.getRole().equals(User.Role.ADMIN)) {
             existingUser.setRole(User.Role.ADMIN);
+            log.info("Changed role of user with id {} to ADMIN", userId);
             userRepository.save(existingUser);
         }
     }
