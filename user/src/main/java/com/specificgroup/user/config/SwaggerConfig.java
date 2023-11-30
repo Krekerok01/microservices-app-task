@@ -13,6 +13,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * Provides swagger configuration
+ */
 @Configuration
 @SecurityScheme(
         description = "Generate your JWT when you log in",
