@@ -10,6 +10,9 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+/**
+ * Util class for getting information from third-party services
+ */
 @Component
 @RequiredArgsConstructor
 public class UserInfoGetter {
@@ -17,6 +20,11 @@ public class UserInfoGetter {
     private final EurekaClient eurekaClient;
     private final WebClient webClient;
 
+    /**
+     * Check for a user existence
+     *
+     * @return a boolean variable with information about the user's existence
+     */
     public Boolean existsUserById(Long userId) {
         String uri = getUserUrlFromEureka() + "/users/exists/" + userId;
         return webClient.get().uri(uri)
