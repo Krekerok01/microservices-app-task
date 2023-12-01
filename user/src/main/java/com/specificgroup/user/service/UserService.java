@@ -64,19 +64,20 @@ public interface UserService {
     /**
      * Update a user by user id
      *
-     * @param id an id of the user being updated
+     * @param id                an id of the user being updated
      * @param userUpdateRequest an object containing new user information
      */
     void update(final long id, final UserUpdateRequest userUpdateRequest);
 
-    void updateUserPassword(final long id, final String currentPassword, final String newPassword);
     /**
      * Update a user password by user id
      *
-     * @param id an id of the user being updated
-     * @param password an object containing new user password information
+     * @param id              an id of the user being updated
+     * @param currentPassword an object containing user current password information
+     * @param newPassword     an object containing user new password information
      */
-    void updateUserPassword(final long id, final String password);
+    void updateUserPassword(final long id, final String currentPassword, final String newPassword);
+
 
     /**
      * Check for the user existence for authentication
