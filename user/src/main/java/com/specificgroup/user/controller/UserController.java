@@ -246,12 +246,8 @@ public class UserController {
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/privilege/{userId}")
-    public void changePrivilege(@PathVariable(name = "userId") long userId, HttpServletRequest request) throws AuthException {
-        if (getRoleFromToken(request).equals(User.Role.ADMIN)) {
+    public void changePrivilege(@PathVariable(name = "userId") long userId) {
             userService.changePrivilege(userId);
-        } else {
-            throw new NoPrivilegesException();
-        }
     }
 
     @Operation(summary = "Check for the existence of a user", description = "Checking for the existence of a user")
