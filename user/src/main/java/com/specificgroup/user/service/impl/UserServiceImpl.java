@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
             log.info("Updating a user with id {}", id);
             userRepository.save(existingUser);
         } else {
-            throw new DuplicateEmailException("User with such email already exists! Please change your email!");
+            throw new DuplicateEmailException("User with such email already exists! Please change your email!;");
         }
 
     }
