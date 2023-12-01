@@ -203,3 +203,17 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: subscription-db
+
+  logs-service:
+    image: microservices-logs:latest
+    build: logs
+    container_name: logs-service
+    environment:
+      EUREKA_URL: http://eureka-service:8761/eureka/
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: test
+    depends_on:
+      eureka-service:
+        condition: service_healthy
+      kafka:
+        condition: service_started

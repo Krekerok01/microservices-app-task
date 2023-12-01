@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Kafka name="KafkaAppender" topic="logs" bootstrapServers="kafka:9092">
+            <PatternLayout pattern="%logger{40} %d %-5p [%t] %c: %m%n"/>
+        </Kafka>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="KafkaAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>
