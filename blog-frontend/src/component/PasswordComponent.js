@@ -43,46 +43,25 @@ class UpdateUserComponent extends React.Component {
         const newPassword = document.getElementById("new_password").value;
         const userId = window.sessionStorage.getItem('currentUserId');
         const token = window.sessionStorage.getItem('token');
-        fetch('http://localhost:8080/users/passwordValidation', {
-            method: "POST",
+        fetch(`http://localhost:8080/users/password/${userId}`, {
+            method: "PUT",
             body: JSON.stringify({
-                password: oldPassword
+                currentPassword: oldPassword,
+                newPassword: newPassword
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization": `Bearer ${token}`
             }
         }).then(response => {
-                if (response.ok) {
-                    fetch(`http://localhost:8080/users/${userId}`, {
-                        method: "PUT",
-                        body: JSON.stringify({
-                            username: this.state.username,
-                            email: this.state.email,
-                            password: newPassword,
-                            role: this.state.role
-                        }),
-                        headers: {
-                            "Content-type": "application/json; charset=UTF-8",
-                            "Authorization": `Bearer ${token}`
-                        }
-                    }).then(response => {
-                        if (response.ok) {
-                            window.location.href = '/myPage';
-                        } else if (response.status === 400) {
-                            response.json().then(responseJson => {
-                                this.showErrors(responseJson['message']);
-                            });
-                        }
-                    });
-                } else if (response.status === 400) {
-                    response.json().then(responseJson => {
-                        this.showErrors(responseJson['message']);
-                    });
-                }
+            if (response.ok) {
+                window.location.href = '/myPage';
+            } else if (response.status === 400) {
+                response.json().then(responseJson => {
+                    this.showErrors(responseJson['message']);
+                });
             }
-        )
-        ;
+        });
     }
 
     showErrors = (message) => {
