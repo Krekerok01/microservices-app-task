@@ -5,6 +5,7 @@ import com.specificgroup.user.exception.NoSuchUserException;
 import com.specificgroup.user.model.User;
 import com.specificgroup.user.model.dto.TokenResponse;
 import com.specificgroup.user.model.dto.UserAuthDtoRequest;
+import com.specificgroup.user.model.dto.UserUpdateRequest;
 import com.specificgroup.user.repos.UserRepository;
 import com.specificgroup.user.service.KafkaService;
 import com.specificgroup.user.service.impl.UserServiceImpl;
@@ -234,7 +235,7 @@ public class UserServiceTest {
     @DisplayName("Test updating a user successfully")
     void testUpdatingAUserSuccessfully() {
         long id = 100L;
-        User userToUpdate = new User(id, "Test username 1", "Test password 1", "Test email 1", User.Role.DEFAULT);
+        UserUpdateRequest userToUpdate = new UserUpdateRequest("Test username 1", "Test email 1");
 
         doReturn(
                 Optional.of(new User(id, "Test username 2", "Test password 2", "Test email 2", User.Role.DEFAULT))
@@ -251,7 +252,7 @@ public class UserServiceTest {
     @DisplayName("Test updating by setting existing email")
     void testUpdatingAUserBySettingExistingEmail() {
         long id = 100L;
-        User userToUpdate = new User(id, "Test username 1", "Test password 1", "Test email 1", User.Role.DEFAULT);
+        UserUpdateRequest userToUpdate = new UserUpdateRequest("Test username 1", "Test email 1");
 
         doReturn(
                 Optional.of(new User(id, "Test username 2", "Test password 2", "Test email 2", User.Role.DEFAULT))
@@ -270,7 +271,7 @@ public class UserServiceTest {
     @DisplayName("Test updating non-existing user")
     void testUpdatingNonExistingUser() {
         long id = 100L;
-        User userToUpdate = new User(id, "Test username 1", "Test password 1", "Test email 1", User.Role.DEFAULT);
+        UserUpdateRequest userToUpdate = new UserUpdateRequest("Test username 1", "Test email 1");
 
         doReturn(
                 Optional.empty()

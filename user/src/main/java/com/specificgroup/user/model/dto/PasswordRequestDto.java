@@ -11,6 +11,9 @@ import javax.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 public class PasswordRequestDto {
 
-    @NotBlank
-    private String password;
+    @NotBlank(message = "Password must not be blank;")
+    private String currentPassword;
+
+    @NotBlank(message = "Password must not be blank;")
+    private String newPassword;
 }

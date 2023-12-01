@@ -7,6 +7,7 @@ import com.specificgroup.user.model.User;
 import com.specificgroup.user.model.dto.TokenResponse;
 import com.specificgroup.user.model.dto.UserAuthDtoRequest;
 import com.specificgroup.user.model.dto.UserAuthDtoResponse;
+import com.specificgroup.user.model.dto.UserUpdateRequest;
 import com.specificgroup.user.repos.UserRepository;
 import com.specificgroup.user.service.KafkaService;
 import com.specificgroup.user.service.UserService;
@@ -102,10 +103,10 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public void update(final long id, final User user) {
+    public void update(final long id, final UserUpdateRequest userUpdateRequest) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(NoSuchUserException::new);
-        String email = user.getEmail();
+        String email = userUpdateRequest.getEmail();
 
         if (
                 Objects.equals(email, existingUser.getEmail())
@@ -117,25 +118,25 @@ public class UserServiceImpl implements UserService {
                                         !checkUserEmailDuplicate(email)
                         )
         ) {
-            existingUser.setEmail(user.getEmail());
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(PasswordEncoder.encode(user.getPassword()));
-            existingUser.setRole(user.getRole());
-
+            existingUser.setEmail(userUpdateRequest.getEmail());
+            existingUser.setUsername(userUpdateRequest.getUsername());
             log.info("Updating a user with id {}", id);
             userRepository.save(existingUser);
         } else {
-            throw new DuplicateEmailException("User with such email already exists! Please change your email!");
+            throw new DuplicateEmailException("User with such email already exists! Please change your email!;");
         }
 
     }
 
     @Override
-    public void updateUserPassword(long id, String password) {
+    public void updateUserPassword(long id, String currentPassword, String newPassword) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(NoSuchUserException::new);
 
-        existingUser.setPassword(PasswordEncoder.encode(password));
+        if (!PasswordEncoder.encode(currentPassword).equals(existingUser.getPassword()))
+            throw new WrongPasswordException("Wrong password!;");
+
+        existingUser.setPassword(PasswordEncoder.encode(newPassword));
 
         log.info("Updating a password of user with id {}", id);
         userRepository.save(existingUser);
