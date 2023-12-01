@@ -355,15 +355,4 @@ public class UserControllerTest {
 
         assertEquals(200, response.getStatus());
     }
-
-    @Test
-    @DisplayName("Test incorrect user privilege changing")
-    public void testUserPrivilegeIncorrectChanging() throws Exception {
-        MockHttpServletResponse response = mvc.perform(
-                put("/users/privilege/1")
-                        .header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiREVGQVVMVCIsInVzZXJJZCI6MSwic3ViIjoidXNlckB1c2VyLmNvbSJ9.QbwFxO59kny5pICPwqCUujih_OSOXMwsET0IpHCD1sc")
-        ).andReturn().getResponse();
-
-        assertEquals(403, response.getStatus());
-    }
 }

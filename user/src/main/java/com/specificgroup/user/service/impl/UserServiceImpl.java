@@ -130,6 +130,17 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public void updateUserPassword(long id, String password) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(NoSuchUserException::new);
+
+        existingUser.setPassword(PasswordEncoder.encode(password));
+
+        log.info("Updating a password of user with id {}", id);
+        userRepository.save(existingUser);
+    }
+
     /**
      * {@inheritDoc}
      */

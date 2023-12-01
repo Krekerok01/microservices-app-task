@@ -3,7 +3,7 @@ ENV APP_HOME=/app/
 WORKDIR $APP_HOME
 COPY build.gradle settings.gradle $APP_HOME
 COPY src $APP_HOME/src/
-RUN gradle build --exclude-task test
+RUN gradle build
 
 FROM openjdk:17-oracle
 ENV APP_HOME=/app/

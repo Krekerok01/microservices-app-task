@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -129,13 +128,7 @@ public class UserController {
                     content = @Content)})
     @PostMapping
     public ResponseEntity<UserDto> newUser(@RequestBody @Valid User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            StringBuilder sb = new StringBuilder();
-            for (ObjectError error : bindingResult.getFieldErrors()) {
-                sb.append(String.format("%s; ", error.getDefaultMessage()));
-            }
-            throw new ValidationException(sb.toString());
-        }
+        validateEntity(bindingResult);
         return ResponseEntity.ok(DtoMapper.mapToUserDto(userService.add(user)));
     }
 
@@ -214,19 +207,32 @@ public class UserController {
                                              BindingResult bindingResult,
                                              HttpServletRequest request
     ) throws AuthException {
-        if (bindingResult.hasErrors()) {
-            StringBuilder sb = new StringBuilder();
-            for (ObjectError error : bindingResult.getFieldErrors()) {
-                sb.append(String.format("%s; ", error.getDefaultMessage()));
-            }
-            throw new ValidationException(sb.toString());
-        }
+        validateEntity(bindingResult);
         if (getUserIdFromToken(request) == userId) {
             userService.update(userId, user);
             return ResponseEntity
                     .status(200)
                     .body(UtilStrings.userWasSuccessfullyModified(
                                     user.getId(), UtilStrings.Action.UPDATED
+                            )
+                    );
+        } else {
+            throw new NoPrivilegesException();
+        }
+    }
+
+    @PutMapping("/password/{id}")
+    public ResponseEntity<String> updateUserPassword(@PathVariable(name = "id") long userId,
+                                                     @RequestBody @Valid PasswordRequestDto password,
+                                                     BindingResult bindingResult,
+                                                     HttpServletRequest request) throws AuthException {
+        validateEntity(bindingResult);
+        if (getUserIdFromToken(request) == userId) {
+            userService.updateUserPassword(userId, password.getPassword());
+            return ResponseEntity
+                    .status(200)
+                    .body(UtilStrings.userWasSuccessfullyModified(
+                                    userId, UtilStrings.Action.UPDATED
                             )
                     );
         } else {
@@ -247,7 +253,7 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/privilege/{userId}")
     public void changePrivilege(@PathVariable(name = "userId") long userId) {
-            userService.changePrivilege(userId);
+        userService.changePrivilege(userId);
     }
 
     @Operation(summary = "Check for the existence of a user", description = "Checking for the existence of a user")
@@ -268,5 +274,15 @@ public class UserController {
 
     private User.Role getRoleFromToken(HttpServletRequest request) throws AuthException {
         return User.Role.valueOf(JwtParser.getRoleFromToken(request.getHeader(HttpHeaders.AUTHORIZATION)));
+    }
+
+    private void validateEntity(BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder sb = new StringBuilder();
+            for (ObjectError error : bindingResult.getFieldErrors()) {
+                sb.append(String.format("%s; ", error.getDefaultMessage()));
+            }
+            throw new ValidationException(sb.toString());
+        }
     }
 }

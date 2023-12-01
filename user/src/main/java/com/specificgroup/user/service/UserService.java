@@ -68,6 +68,8 @@ public interface UserService {
      */
     void update(final long id, final User user);
 
+    void updateUserPassword(final long id, final String password);
+
     /**
      * Check for the user existence for authentication
      *
