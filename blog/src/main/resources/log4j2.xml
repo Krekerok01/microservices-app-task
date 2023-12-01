@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration status="info" packages="com.specificgroup.blog">
     <Appenders>
         <Kafka name="KafkaAppender" topic="logs" bootstrapServers="kafka:9092">
             <PatternLayout pattern="%logger{40} %d %-5p [%t] %c: %m%n"/>
         </Kafka>
     </Appenders>
     <Loggers>
-        <Root level="info">
+        <Root level="INFO">
             <AppenderRef ref="KafkaAppender"/>
         </Root>
     </Loggers>
