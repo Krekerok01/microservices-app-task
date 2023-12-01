@@ -68,6 +68,12 @@ public interface UserService {
      */
     void update(final long id, final User user);
 
+    /**
+     * Update a user password by user id
+     *
+     * @param id an id of the user being updated
+     * @param password an object containing new user password information
+     */
     void updateUserPassword(final long id, final String password);
 
     /**

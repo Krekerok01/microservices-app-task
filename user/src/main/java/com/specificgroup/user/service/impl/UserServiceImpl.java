@@ -130,6 +130,9 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateUserPassword(long id, String password) {
         User existingUser = userRepository.findById(id)
