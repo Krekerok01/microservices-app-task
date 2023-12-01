@@ -12,5 +12,7 @@ import javax.validation.constraints.NotBlank;
 public class PasswordRequestDto {
 
     @NotBlank
-    private String password;
+    private String currentPassword;
+    @NotBlank
+    private String newPassword;
 }

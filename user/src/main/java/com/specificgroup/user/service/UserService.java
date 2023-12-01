@@ -4,6 +4,7 @@ import com.specificgroup.user.model.User;
 import com.specificgroup.user.model.dto.TokenResponse;
 import com.specificgroup.user.model.dto.UserAuthDtoRequest;
 import com.specificgroup.user.model.dto.UserAuthDtoResponse;
+import com.specificgroup.user.model.dto.UserUpdateRequest;
 
 import javax.security.auth.message.AuthException;
 import java.util.List;
@@ -64,11 +65,11 @@ public interface UserService {
      * Update a user by user id
      *
      * @param id an id of the user being updated
-     * @param user an object containing new user information
+     * @param userUpdateRequest an object containing new user information
      */
-    void update(final long id, final User user);
+    void update(final long id, final UserUpdateRequest userUpdateRequest);
 
-    void updateUserPassword(final long id, final String password);
+    void updateUserPassword(final long id, final String currentPassword, final String newPassword);
 
     /**
      * Check for the user existence for authentication
