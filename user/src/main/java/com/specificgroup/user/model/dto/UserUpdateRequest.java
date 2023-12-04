@@ -11,10 +11,10 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserUpdateRequest {
-    @NotBlank(message = "Username cannot be blank!")
+    @NotBlank(message = "Username cannot be blank!;")
     private String username;
 
-    @Email(message = "Email pattern should be: *@*.*")
-    @NotBlank(message = "Email cannot be empty!")
+    @Email(message = "Email pattern should be: *@*.*;")
+    @NotBlank(message = "Email cannot be empty!;")
     private String email;
 }
