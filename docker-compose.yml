@@ -68,6 +68,8 @@ services:
         condition: service_healthy
       subscription-service:
         condition: service_healthy
+      notification-service:
+        condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-I", "http://localhost:8080" ]
       interval: 5s
@@ -193,6 +195,26 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
+
+  notification-service:
+    image: microservices-notifications-service:latest
+    build: notification
+    container_name: notifications-service
+    environment:
+      EUREKA_URL: http://eureka-service:8761/eureka/
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: test
+    depends_on:
+      eureka-service:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://eureka-service:8761/eureka/apps/notifications-service" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
 
   subscription-database:
     container_name: subscription-database

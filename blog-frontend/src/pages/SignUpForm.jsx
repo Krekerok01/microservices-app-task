@@ -39,7 +39,7 @@ const sendData = () => {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     const email = document.getElementById("email").value;
-    fetch("http://localhost:8081/users", {
+    fetch("http://localhost:8080/users", {
         method: "POST",
         body: JSON.stringify({
             username: username,
