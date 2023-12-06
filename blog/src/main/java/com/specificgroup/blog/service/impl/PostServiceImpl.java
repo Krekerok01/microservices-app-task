@@ -17,10 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,6 +46,8 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostResponse createPost(PostRequest postRequest, Long userId) {
+
+
         log.info("Creating a new post using the following information: {}", postRequest);
 
         LocalDateTime minskCurrentTime = DateTimeUtil.getMinskCurrentTime();
@@ -69,6 +69,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public List<PostResponse> findAll(Specification<Post> specification) {
+        System.out.println(log.getClass().getName());
         log.info("Finding all posts");
         return postRepository.findAll(specification)
                 .stream()
