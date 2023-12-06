@@ -11,6 +11,7 @@ import com.specificgroup.blog.repository.PostSpecification;
 import com.specificgroup.blog.service.impl.PostServiceImpl;
 import com.specificgroup.blog.util.DateTimeUtil;
 import com.specificgroup.blog.util.getter.InfoGetter;
+import com.specificgroup.blog.util.logger.Logger;
 import com.specificgroup.blog.util.mapper.PostMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,8 @@ public class PostServiceImplTest {
     private InfoGetter infoGetter;
     @Mock
     private KafkaProducer kafkaProducer;
+    @Mock
+    private Logger logger;
     @InjectMocks
     private PostServiceImpl postService;
 

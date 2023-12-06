@@ -3,7 +3,8 @@ package com.specificgroup.news.service.impl;
 import com.specificgroup.news.dto.NewsResponse;
 import com.specificgroup.news.exception.ReceiveDataException;
 import com.specificgroup.news.service.NewsService;
-import lombok.extern.slf4j.Slf4j;
+import com.specificgroup.news.util.logger.Logger;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.json.Json;
@@ -24,15 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService {
+
+    private final Logger logger;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public List<NewsResponse> findCurrentNews() {
-        log.info("Receiving news...");
+        logger.info("Receiving news...");
         List<NewsResponse> responseList = null;
         try {
 

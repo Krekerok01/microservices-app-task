@@ -11,6 +11,7 @@ import com.specificgroup.user.repos.UserRepository;
 import com.specificgroup.user.service.KafkaService;
 import com.specificgroup.user.service.impl.UserServiceImpl;
 import com.specificgroup.user.util.JwtGenerator;
+import com.specificgroup.user.util.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,9 +40,12 @@ public class UserServiceTest {
     @Mock
     private JwtGenerator jwtGenerator;
 
+    @Mock
+    private Logger logger;
+
     @BeforeEach
     public void init() {
-        this.userService = new UserServiceImpl(userRepository, kafkaService, jwtGenerator);
+        this.userService = new UserServiceImpl(userRepository, kafkaService, jwtGenerator, logger);
     }
 
     @Test

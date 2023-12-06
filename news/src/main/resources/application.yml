@@ -8,6 +8,9 @@ spring:
   config:
     import: optional:file:./news/.env[.properties]
 
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVERS}
+
 
 eureka:
   instance:

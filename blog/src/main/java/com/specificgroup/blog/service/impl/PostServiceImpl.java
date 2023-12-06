@@ -12,15 +12,14 @@ import com.specificgroup.blog.repository.PostRepository;
 import com.specificgroup.blog.service.PostService;
 import com.specificgroup.blog.util.DateTimeUtil;
 import com.specificgroup.blog.util.getter.InfoGetter;
+import com.specificgroup.blog.util.logger.Logger;
 import com.specificgroup.blog.util.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,13 +29,13 @@ import java.util.stream.Collectors;
  * {@inheritDoc}
  */
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final PostMapper mapper;
     private final KafkaProducer kafkaProducer;
+    private final Logger logger;
 
     @Value("${spring.kafka.topics.user.service.response.successful}")
     private String successfulResponseTopic;
@@ -48,7 +47,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostResponse createPost(PostRequest postRequest, Long userId) {
-        log.info("Creating a new post using the following information: {}", postRequest);
+        logger.info("Creating a new post using the following information: " + postRequest);
 
         LocalDateTime minskCurrentTime = DateTimeUtil.getMinskCurrentTime();
         Post post = Post.builder()
@@ -69,7 +68,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public List<PostResponse> findAll(Specification<Post> specification) {
-        log.info("Finding all posts");
+        logger.info("Finding all posts");
         return postRepository.findAll(specification)
                 .stream()
                 .map(post -> {
@@ -85,7 +84,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public List<PostResponse> findSubscriptionsPostsByUserId(Long requestUserId) {
-        log.info("Finding all posts for userId=" + requestUserId);
+        logger.info("Finding all posts for userId=" + requestUserId);
         List<Long> subscriptionIds = infoGetter.getSubscriptionIdsListBySubscriberId(requestUserId);
         subscriptionIds.add(requestUserId);
         return postRepository.findAllByUserIdIn(subscriptionIds)
@@ -103,7 +102,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public PostResponse findById(Long id) {
-        log.info("Finding post by id={}", id);
+        logger.info("Finding post by id=" + id);
         Post post = findByIdOrThrowNoyFoundException(id);
         PostResponse postResponse = mapper.postToPostResponse(post);
         postResponse.setUsername(infoGetter.getUsernameByUserId(postResponse.getUserId()));
@@ -116,7 +115,8 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Long updatePost(PostRequest postRequest, Long postId, Long userId) {
-        log.info("Updating the post with id={} using following information: {}", postId, postRequest);
+        logger.info("Updating the post with id=" + postId
+                + " using following information: " + postRequest);
 
         Post post = findByIdOrThrowNoyFoundException(postId);
 
@@ -135,7 +135,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public void deletePost(Long id, Long userId) {
-        log.info("Deleting the post with id={}", id);
+        logger.info("Deleting the post with id=" + id);
         Post post = findByIdOrThrowNoyFoundException(id);
         accessVerification(post.getUserId(), userId);
         postRepository.delete(post);
@@ -147,7 +147,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void deletePostsByUserId(UserServiceMessage message) {
-        log.info("Deleting posts with userId={}", message.getUserId());
+        logger.info("Deleting posts with userId=" + message.getUserId());
         postRepository.deleteAllByUserId(message.getUserId());
         BlogServiceResponseMessage responseMessage = BlogServiceResponseMessage.builder()
                 .deletedUserId(message.getUserId())
