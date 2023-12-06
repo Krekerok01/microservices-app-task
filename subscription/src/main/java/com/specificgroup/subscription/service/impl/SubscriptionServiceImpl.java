@@ -9,6 +9,7 @@ import com.specificgroup.subscription.kafka.KafkaProducer;
 import com.specificgroup.subscription.repository.SubscriptionRepository;
 import com.specificgroup.subscription.service.SubscriptionService;
 import com.specificgroup.subscription.util.getter.UserInfoGetter;
+import com.specificgroup.subscription.util.logger.Logger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,12 +26,12 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class SubscriptionServiceImpl implements SubscriptionService{
 
     private final SubscriptionRepository subscriptionRepository;
     private final UserInfoGetter userInfoGetter;
     private final KafkaProducer kafkaProducer;
+    private final Logger logger;
     @Value("${spring.kafka.topics.user.service.response.successful}")
     private String successfulResponseTopic;
 
@@ -40,7 +41,8 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     @Override
     @Transactional
     public Long createSubscription(Long userSubscriberId, Long userPublisherId) {
-        log.info("User with id={} subscribing to user with id={}", userSubscriberId, userPublisherId);
+        logger.info("User with id=" + userSubscriberId +
+                " subscribing to user with id=" + userPublisherId);
 
         checkThePossibilityOfCreatingASubscription(userSubscriberId, userPublisherId);
 
@@ -57,7 +59,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
      */
     @Override
     public List<Subscription> getAllSubscriptions() {
-        log.info("Getting all subscriptions");
+        logger.info("Getting all subscriptions");
         return subscriptionRepository.findAll();
     }
 
@@ -66,7 +68,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
      */
     @Override
     public List<Long> getSubscriptionsBySubscriberId(Long userSubscriberId) {
-        log.info("Getting subscriptions for user with id={}", userSubscriberId);
+        logger.info("Getting subscriptions for user with id=" + userSubscriberId);
         return subscriptionRepository.findAllByUserSubscriberId(userSubscriberId)
                 .stream()
                 .map(Subscription::getUserPublisherId)
@@ -79,7 +81,8 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     @Override
     @Transactional
     public void deleteSubscription(Long userPublisherId, Long userSubscriberId) {
-        log.info("User with id={} unsubscribing from the user with id={}", userSubscriberId, userPublisherId);
+        logger.info("User with id=" + userSubscriberId +
+                " unsubscribing from the user with id=" + userPublisherId);
 
         Subscription subscription = subscriptionRepository
                 .findByUserSubscriberIdAndUserPublisherId(userSubscriberId, userPublisherId)
@@ -96,7 +99,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     @Override
     @Transactional
     public void deleteSubscriptionsByUserId(UserServiceMessage message) {
-        log.info("Deleting subscriptions with userId={}", message.getUserId());
+        logger.info("Deleting subscriptions with userId=" + message.getUserId());
         subscriptionRepository.deleteAllByUserSubscriberId(message.getUserId());
 
         SubscriptionServiceResponseMessage responseMessage = SubscriptionServiceResponseMessage.builder()
