@@ -148,6 +148,7 @@ services:
     container_name: news-service
     environment:
       EUREKA_URL: http://eureka-service:8761/eureka/
+      BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
       eureka-service:
         condition: service_healthy
@@ -163,6 +164,7 @@ services:
     container_name: job-service
     environment:
       EUREKA_URL: http://eureka-service:8761/eureka/
+      BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
       eureka-service:
         condition: service_healthy
