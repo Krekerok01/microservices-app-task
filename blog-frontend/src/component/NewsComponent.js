@@ -1,7 +1,6 @@
 import React from "react";
 import NewsCard from "./NewsCard";
 import ApiClient from "../client/ApiClient";
-import JobCard from "./JobCard";
 
 class NewsComponent extends React.Component {
     constructor(props) {

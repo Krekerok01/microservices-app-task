@@ -8,17 +8,23 @@ class ApiClient {
 
     static posts(): Promise<Response> {
         return fetch(ApiClient.SERVER_URL + ApiClient.GET_POSTS)
-            .catch(() => {throw new DOMException()});
+            .catch(() => {
+                throw new DOMException()
+            });
     }
 
     static news(): Promise<Response> {
         return fetch(ApiClient.SERVER_URL + ApiClient.GET_NEWS)
-            .catch(() => {throw new DOMException()});
+            .catch(() => {
+                throw new DOMException()
+            });
     }
 
     static jobs(): Promise<Response> {
         return fetch(ApiClient.SERVER_URL + ApiClient.GET_JOBS)
-            .catch(() => {throw new DOMException()});
+            .catch(() => {
+                throw new DOMException()
+            });
     }
 
     static users(): Promise<Response> {
@@ -33,7 +39,13 @@ class ApiClient {
                     "Authorization": `Bearer ${token}`
                 }
             }
-        ).catch(() => {throw new DOMException()});
+        ).then(r => {
+            if (r.status === 401) {
+                window.location.href = '/login';
+            }
+        }).catch(() => {
+            throw new DOMException();
+        })
     }
 
     static userPosts(): Promise<Response> {
@@ -48,10 +60,14 @@ class ApiClient {
                     "Authorization": `Bearer ${token}`,
                 }
             }
-        ).catch(() => {throw new DOMException()});
+        ).catch(() => {
+            throw new DOMException()
+        });
     }
 
-    static onePost(id): Promise<Response> {
+    static onePost(id)
+        :
+        Promise<Response> {
         return fetch(
             this.SERVER_URL + this.GET_POSTS + '/' + id,
             {
@@ -62,7 +78,9 @@ class ApiClient {
         );
     }
 
-    static oneUser(id): Promise<Response> {
+    static oneUser(id)
+        :
+        Promise<Response> {
         const token = window.sessionStorage.getItem('token');
         return fetch(
             this.SERVER_URL + this.GET_USERS + '/' + id,
