@@ -2,9 +2,11 @@ package com.specificgroup.user;
 
 import com.specificgroup.user.exception.DuplicateEmailException;
 import com.specificgroup.user.exception.NoSuchUserException;
+import com.specificgroup.user.exception.WrongPasswordException;
 import com.specificgroup.user.model.User;
 import com.specificgroup.user.model.dto.TokenResponse;
 import com.specificgroup.user.model.dto.UserAuthDtoRequest;
+import com.specificgroup.user.model.dto.UserUpdateRequest;
 import com.specificgroup.user.repos.UserRepository;
 import com.specificgroup.user.service.KafkaService;
 import com.specificgroup.user.service.impl.UserServiceImpl;
@@ -234,7 +236,7 @@ public class UserServiceTest {
     @DisplayName("Test updating a user successfully")
     void testUpdatingAUserSuccessfully() {
         long id = 100L;
-        User userToUpdate = new User(id, "Test username 1", "Test password 1", "Test email 1", User.Role.DEFAULT);
+        UserUpdateRequest userToUpdate = new UserUpdateRequest("Test username 1", "Test email 1");
 
         doReturn(
                 Optional.of(new User(id, "Test username 2", "Test password 2", "Test email 2", User.Role.DEFAULT))
@@ -251,7 +253,7 @@ public class UserServiceTest {
     @DisplayName("Test updating by setting existing email")
     void testUpdatingAUserBySettingExistingEmail() {
         long id = 100L;
-        User userToUpdate = new User(id, "Test username 1", "Test password 1", "Test email 1", User.Role.DEFAULT);
+        UserUpdateRequest userToUpdate = new UserUpdateRequest("Test username 1", "Test email 1");
 
         doReturn(
                 Optional.of(new User(id, "Test username 2", "Test password 2", "Test email 2", User.Role.DEFAULT))
@@ -270,13 +272,67 @@ public class UserServiceTest {
     @DisplayName("Test updating non-existing user")
     void testUpdatingNonExistingUser() {
         long id = 100L;
-        User userToUpdate = new User(id, "Test username 1", "Test password 1", "Test email 1", User.Role.DEFAULT);
+        UserUpdateRequest userToUpdate = new UserUpdateRequest("Test username 1", "Test email 1");
 
         doReturn(
                 Optional.empty()
         ).when(userRepository).findById(id);
 
         assertThrows(NoSuchUserException.class, () -> userService.update(id, userToUpdate));
+
+        verify(userRepository, times(0)).save(any(User.class));
+        verifyNoMoreInteractions(userRepository);
+    }
+
+    @Test
+    @DisplayName("Test updating user password correctly")
+    void testUpdatingUserPasswordCorrectly() {
+        long id = 100L;
+        doReturn(
+                Optional.of(
+                        new User(
+                                id,
+                                "Test username 1",
+                                "581f92d364a5613d69e9bbd7f8ddc815d62108f00f05299c8606d5592c736f94",
+                                "Test email 1",
+                                User.Role.DEFAULT)
+                )
+        ).when(userRepository).findById(id);
+
+        userService.updateUserPassword(id, "Test password 1", "new password");
+
+        verify(userRepository, times(1)).save(any(User.class));
+        verifyNoMoreInteractions(userRepository);
+    }
+
+    @Test
+    @DisplayName("Test updating user password incorrectly")
+    void testUpdatingUserPasswordIncorrectly() {
+        long id = 100L;
+        doReturn(
+                Optional.of(
+                        new User(
+                                id,
+                                "Test username 1",
+                                "some password",
+                                "Test email 1",
+                                User.Role.DEFAULT)
+                )
+        ).when(userRepository).findById(id);
+
+        assertThrows(WrongPasswordException.class, () -> userService.updateUserPassword(id, "Test password 1", "new password"));
+
+        verify(userRepository, times(0)).save(any(User.class));
+        verifyNoMoreInteractions(userRepository);
+    }
+
+    @Test
+    @DisplayName("Test updating password of a non-existing user")
+    void testUpdatingPasswordOfANonExistingUser() {
+        long id = 100L;
+        doReturn(Optional.empty()).when(userRepository).findById(id);
+
+        assertThrows(NoSuchUserException.class, () -> userService.updateUserPassword(id, "Test password 1", "new password"));
 
         verify(userRepository, times(0)).save(any(User.class));
         verifyNoMoreInteractions(userRepository);

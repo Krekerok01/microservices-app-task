@@ -29,6 +29,8 @@ spring:
       bootstrap-servers: ${BOOTSTRAP_SERVERS}
     topics:
       blog-user: blog-user
+      user-registration: registration
+      user-password-change: password_change
 
   liquibase:
     enabled: true

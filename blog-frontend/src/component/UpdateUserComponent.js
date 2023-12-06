@@ -56,17 +56,13 @@ class UpdateUserComponent extends React.Component {
     sendData = () => {
         const username = document.getElementById("username").value;
         const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
         const userId = window.sessionStorage.getItem('currentUserId');
-        const role = (window.sessionStorage.getItem('isAdmin') == null || window.sessionStorage.getItem('isAdmin') === 'false') ? 'DEFAULT' : 'ADMIN';
         const token = window.sessionStorage.getItem('token');
         fetch(`http://localhost:8080/users/${userId}`, {
             method: "PUT",
             body: JSON.stringify({
                 username: username,
-                email: email,
-                password: password,
-                role: role
+                email: email
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",

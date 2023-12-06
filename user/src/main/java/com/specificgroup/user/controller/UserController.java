@@ -90,36 +90,6 @@ public class UserController {
         return new UsernameResponse(userService.getUsername(userId));
     }
 
-    @Operation(summary = "Check the password for validity", description = "Checking the password for validity")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful request",
-                    content = @Content),
-            @ApiResponse(responseCode = "400", description = "Error: Invalid password",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Error: There is no such user in the database",
-                    content = @Content)})
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PostMapping("/passwordValidation")
-    public ResponseEntity<String> checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
-                                                HttpServletRequest request) throws AuthException {
-        Optional<User> existingUser = userService.get(getUserIdFromToken(request));
-
-        if (existingUser.isEmpty()) {
-            throw new NoSuchUserException();
-        } else {
-            if (PasswordEncoder.encode(
-                    passwordRequestDto.getPassword()
-            ).equals(
-                    existingUser.get().getPassword()
-            )
-            ) {
-                return ResponseEntity.ok().body("Check successful!");
-            } else throw new WrongPasswordException("Wrong password!;");
-        }
-    }
-
     @Operation(summary = "Register a new user", description = "Registering a new user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful request",
@@ -203,17 +173,17 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable(name = "id") long userId,
-                                             @RequestBody @Valid User user,
+                                             @RequestBody @Valid UserUpdateRequest userUpdateRequest,
                                              BindingResult bindingResult,
                                              HttpServletRequest request
     ) throws AuthException {
         validateEntity(bindingResult);
         if (getUserIdFromToken(request) == userId) {
-            userService.update(userId, user);
+            userService.update(userId, userUpdateRequest);
             return ResponseEntity
                     .status(200)
                     .body(UtilStrings.userWasSuccessfullyModified(
-                                    user.getId(), UtilStrings.Action.UPDATED
+                                    userId, UtilStrings.Action.UPDATED
                             )
                     );
         } else {
@@ -228,7 +198,7 @@ public class UserController {
                                                      HttpServletRequest request) throws AuthException {
         validateEntity(bindingResult);
         if (getUserIdFromToken(request) == userId) {
-            userService.updateUserPassword(userId, password.getPassword());
+            userService.updateUserPassword(userId, password.getCurrentPassword(), password.getNewPassword());
             return ResponseEntity
                     .status(200)
                     .body(UtilStrings.userWasSuccessfullyModified(
