@@ -38,12 +38,7 @@ class ApiClient {
                     "Content-type": "Application/json",
                     "Authorization": `Bearer ${token}`
                 }
-            }
-        ).then(r => {
-            if (r.status === 401) {
-                window.location.href = '/login';
-            }
-        }).catch(() => {
+            }).catch(() => {
             throw new DOMException();
         })
     }

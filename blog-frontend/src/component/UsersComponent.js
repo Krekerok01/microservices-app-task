@@ -44,6 +44,8 @@ class UsersComponent extends React.Component {
             response => {
                 if (response.ok) {
                     return response.json();
+                } else if (response.status === 401) {
+                    window.location.href = '/login';
                 } else {
                     throw new DOMException()
                 }

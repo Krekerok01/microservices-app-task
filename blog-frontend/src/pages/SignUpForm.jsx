@@ -52,7 +52,31 @@ const sendData = () => {
         }
     }).then(response => {
         if (response.ok) {
-            window.location.href = '/';
+            fetch(`http://localhost:8080/users/auth`, {
+                method: "POST",
+                body: JSON.stringify({
+                    password: password,
+                    email: email
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    response.json().then(responseJson => {
+                        window.sessionStorage.setItem('token', responseJson['token']);
+                        window.sessionStorage.setItem('username', responseJson['username']);
+                        window.sessionStorage.setItem('currentUserId', responseJson['userId']);
+                        window.sessionStorage.setItem('isAdmin', responseJson['admin']);
+                    });
+                    console.log(window.sessionStorage.getItem('token'));
+                    window.location.href = '/';
+                } else if (response.status === 400) {
+                    response.json().then(responseJson => {
+                        showError(responseJson['message']);
+                    });
+                }
+            });
         } else if (response.status === 400) {
             response.json().then(responseJson => {
                 showError(responseJson['message']);
