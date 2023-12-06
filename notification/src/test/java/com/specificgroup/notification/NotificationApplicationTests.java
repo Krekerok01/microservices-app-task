@@ -6,6 +6,7 @@ import com.specificgroup.notification.dto.message.MessageContent;
 import com.specificgroup.notification.service.MailService;
 import com.specificgroup.notification.service.impl.KafkaServiceImpl;
 import com.specificgroup.notification.service.impl.MailServiceImpl;
+import com.specificgroup.notification.util.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +30,9 @@ class NotificationApplicationTests {
     @Mock
     private MailService mailService;
 
+    @Mock
+    private Logger logger;
+
     private static MessageDto messageDto;
 
     @BeforeAll
@@ -45,7 +49,7 @@ class NotificationApplicationTests {
     @Test
     @DisplayName("Mail service test")
     void mailServiceTest() {
-        MailServiceImpl mailService = new MailServiceImpl(javaMailSender);
+        MailServiceImpl mailService = new MailServiceImpl(javaMailSender, logger);
         mailService.sendMessage(messageDto);
 
         Mockito.verify(javaMailSender, Mockito.times(1)).send(Mockito.any(SimpleMailMessage.class));
@@ -55,7 +59,7 @@ class NotificationApplicationTests {
     @Test
     @DisplayName("User registration message test")
     void userRegistrationMessageTest() {
-        KafkaServiceImpl kafkaService = new KafkaServiceImpl(mailService);
+        KafkaServiceImpl kafkaService = new KafkaServiceImpl(mailService, logger);
         kafkaService.consumeUserRegistration(messageDto);
 
         Assertions.assertDoesNotThrow(() -> Mockito.verify(
@@ -68,7 +72,7 @@ class NotificationApplicationTests {
     @Test
     @DisplayName("Password changing message test")
     void userPasswordChangingMessageTest() {
-        KafkaServiceImpl kafkaService = new KafkaServiceImpl(mailService);
+        KafkaServiceImpl kafkaService = new KafkaServiceImpl(mailService, logger);
         kafkaService.consumePasswordChanging(messageDto);
 
         Assertions.assertDoesNotThrow(() -> Mockito.verify(
