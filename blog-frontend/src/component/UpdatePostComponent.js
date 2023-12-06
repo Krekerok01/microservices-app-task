@@ -55,9 +55,29 @@ class UpdatePostComponent extends React.Component {
             if (response.ok) {
                 window.location.href = '/myPage';
             } else if (response.status === 400) {
-                //     add error handling here
+                response.json().then(responseJson => {
+                    this.showError(responseJson['message']);
+                });
             }
         });
+    }
+
+    showError = (message) => {
+        const errors = message.split(";");
+        console.log(message);
+        const errorList = document.getElementById('errorList');
+        while (errorList.firstChild) {
+            errorList.removeChild(errorList.firstChild);
+        }
+        for (const str of errors) {
+            console.log(str);
+            const li = document.createElement('div');
+            li.className = 'error-list-add';
+            li.innerText = str;
+            errorList.appendChild(li);
+        }
+        errorList.style.display = 'block';
+        window.scrollTo(0, document.body.scrollHeight);
     }
 
 
@@ -83,6 +103,7 @@ class UpdatePostComponent extends React.Component {
                     <button className="button-submit-update" type="submit" onClick={this.sendData}>Submit
                     </button>
                 </div>
+                <div id="errorList" className="error-list-add-outer" style={{display: 'none'}}/>
             </div>
         </div>
     }
