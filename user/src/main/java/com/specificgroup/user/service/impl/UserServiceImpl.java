@@ -14,6 +14,7 @@ import com.specificgroup.user.service.KafkaService;
 import com.specificgroup.user.service.UserService;
 import com.specificgroup.user.util.DtoMapper;
 import com.specificgroup.user.util.JwtGenerator;
+import com.specificgroup.user.util.Logger;
 import com.specificgroup.user.util.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +29,12 @@ import java.util.Optional;
  * {@inheritDoc}
  */
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final KafkaService kafkaService;
     private final JwtGenerator jwtGenerator;
+    private final Logger logger;
     private final String TOPIC_BLOG_USER = "blog-user";
     private final String TOPIC_SUBSCRIPTION_USER = "subscription-user";
     private final String TOPIC_USER_REGISTRATION = "registration";
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> getAll() {
-        log.info("Getting all users.");
+        logger.info("Getting all users.");
         return userRepository.findAll();
     }
 
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Optional<User> get(long id) {
-        log.info("Getting a user with id {}", id);
+        logger.info("Getting a user with id " + id);
         return userRepository.findById(id);
     }
 
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Optional<User> getByEmail(String email) {
-        log.info("Getting a user with email {}", email);
+        logger.info("Getting a user with email " + email);
         return userRepository.findByEmail(email);
     }
 
@@ -86,7 +87,7 @@ public class UserServiceImpl implements UserService {
     public User add(@Valid User user) {
         if (!checkUserEmailDuplicate(user.getEmail())) {
             user.setPassword(PasswordEncoder.encode(user.getPassword()));
-            log.info("Saving a new user with email {} to the database", user.getEmail());
+            logger.info("Saving a new user with email " + user.getEmail() + " to the database");
             kafkaService.notify(TOPIC_USER_REGISTRATION, user.getUsername(), TEMP_DESTINATION_EMAIL, MessageType.REGISTRATION);
             return userRepository.save(user);
         }
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
         kafkaService.notify(TOPIC_BLOG_USER, id);
         kafkaService.notify(TOPIC_SUBSCRIPTION_USER, id);
-        log.info("Deleting a user with id {}", id);
+        logger.info("Deleting a user with id " + id);
     }
 
     /**
@@ -125,7 +126,7 @@ public class UserServiceImpl implements UserService {
         ) {
             existingUser.setEmail(userUpdateRequest.getEmail());
             existingUser.setUsername(userUpdateRequest.getUsername());
-            log.info("Updating a user with id {}", id);
+            logger.info("Updating a user with id " + id);
             userRepository.save(existingUser);
         } else {
             throw new DuplicateEmailException("User with such email already exists! Please change your email!;");
@@ -146,7 +147,7 @@ public class UserServiceImpl implements UserService {
 
         existingUser.setPassword(PasswordEncoder.encode(newPassword));
 
-        log.info("Updating a password of user with id {}", id);
+        logger.info("Updating a password of user with id " + id);
         kafkaService.notify(TOPIC_USER_PASSWORD_CHANGE, existingUser.getUsername(), TEMP_DESTINATION_EMAIL, MessageType.PASSWORD_CHANGE);
         userRepository.save(existingUser);
     }
@@ -161,7 +162,7 @@ public class UserServiceImpl implements UserService {
 
         if (!existingUser.getRole().equals(User.Role.ADMIN)) {
             existingUser.setRole(User.Role.ADMIN);
-            log.info("Changed role of user with id {} to ADMIN", userId);
+            logger.info("Changed role of user with id " + userId + " to ADMIN");
             userRepository.save(existingUser);
         }
     }
