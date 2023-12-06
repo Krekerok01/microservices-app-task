@@ -7,15 +7,18 @@ class ApiClient {
     static GET_POSTS_FOR_USER = '/subscriptions'
 
     static posts(): Promise<Response> {
-        return fetch(ApiClient.SERVER_URL + ApiClient.GET_POSTS);
+        return fetch(ApiClient.SERVER_URL + ApiClient.GET_POSTS)
+            .catch(() => {throw new DOMException()});
     }
 
     static news(): Promise<Response> {
-        return fetch(ApiClient.SERVER_URL + ApiClient.GET_NEWS);
+        return fetch(ApiClient.SERVER_URL + ApiClient.GET_NEWS)
+            .catch(() => {throw new DOMException()});
     }
 
     static jobs(): Promise<Response> {
-        return fetch(ApiClient.SERVER_URL + ApiClient.GET_JOBS);
+        return fetch(ApiClient.SERVER_URL + ApiClient.GET_JOBS)
+            .catch(() => {throw new DOMException()});
     }
 
     static users(): Promise<Response> {
@@ -30,7 +33,7 @@ class ApiClient {
                     "Authorization": `Bearer ${token}`
                 }
             }
-        )
+        ).catch(() => {throw new DOMException()});
     }
 
     static userPosts(): Promise<Response> {
@@ -45,7 +48,7 @@ class ApiClient {
                     "Authorization": `Bearer ${token}`,
                 }
             }
-        )
+        ).catch(() => {throw new DOMException()});
     }
 
     static onePost(id): Promise<Response> {

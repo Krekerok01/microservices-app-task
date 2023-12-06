@@ -1,12 +1,14 @@
 import React from "react";
 import JobCard from "./JobCard";
+import '../form.css'
 import ApiClient from "../client/ApiClient";
 
 class JobsComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            show: true
         }
     }
 
@@ -18,10 +20,15 @@ class JobsComponent extends React.Component {
     refreshJobCards() {
         this.getJobData().then(json => {
                 this.setState({
-                    data: json
+                    data: json,
+                    show: true
                 });
             }
-        )
+        ).catch(() => {
+            this.setState({
+                show: false
+            });
+        })
     }
 
     getJobData(): Promise {
@@ -30,17 +37,43 @@ class JobsComponent extends React.Component {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    return Promise.reject("Job-service: error response");
+                    throw new DOMException()
                 }
             }
-        )
+        ).catch(() => {
+            throw new DOMException()
+        });
     }
 
     render() {
-        return <div className="jobs-container">
-            {this.state.data.map(job => {
+        let jobs;
+        if(this.state.show === true) {
+            jobs = this.state.data.map(job => {
                 return <JobCard key={job.url} title={job.title} url={job.url} companyName={job.companyName} jobSource={job.jobSource}/>
-            })}
+            });
+        } else {
+            jobs = <div className="loading-container-j" style={{paddingTop: '800px'}}>
+                <div className="loading-text-j">
+                    <span>L</span>
+                    <span>O</span>
+                    <span>A</span>
+                    <span>D</span>
+                    <span>I</span>
+                    <span>N</span>
+                    <span>G</span>
+                    <span style={{paddingLeft: '30px'}}></span>
+                    <span>J</span>
+                    <span>O</span>
+                    <span>B</span>
+                    <span>S</span>
+                </div>
+            </div>
+        }
+        return <div id="main_jobs_container" className="jobs-container">
+            {/*{this.state.data.map(job => {*/}
+            {/*    return <JobCard key={job.url} title={job.title} url={job.url} companyName={job.companyName} jobSource={job.jobSource}/>*/}
+            {/*})}*/}
+            {jobs}
         </div>
     }
 }
