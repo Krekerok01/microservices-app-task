@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaConsumer {
 
-    @KafkaListener(topics = "${spring.kafka.topics.blog}")
-    public void consumeLogs(String message)  {
+    @KafkaListener(topics = "${spring.kafka.topics.logging.info}")
+    public void consumeInfoLogs(LogMessage message)  {
         System.out.println(message);
     }
 }
