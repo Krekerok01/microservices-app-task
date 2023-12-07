@@ -14,29 +14,23 @@ public class Logger {
     private final KafkaTemplate<String, Object> kafka;
 
     public void info(String message) {
-        LogMessage log = LogMessage.builder()
-                .level("info")
-                .loggerName("job-service")
-                .message(message)
-                .build();
-        kafka.send("info", log);
+        sendToKafka( "info", message);
     }
 
     public void warn(String message) {
-        LogMessage log = LogMessage.builder()
-                .level("warn")
-                .loggerName("job-service")
-                .message(message)
-                .build();
-        kafka.send("warn", log);
+        sendToKafka("warn", message);
     }
 
     public void error(String message) {
+        sendToKafka("error", message);
+    }
+
+    private void sendToKafka(String level, String message) {
         LogMessage log = LogMessage.builder()
-                .level("error")
-                .loggerName("job-service")
+                .level(level)
+                .loggerName("blog-service")
                 .message(message)
                 .build();
-        kafka.send("error", log);
+        kafka.send("logs", log);
     }
 }

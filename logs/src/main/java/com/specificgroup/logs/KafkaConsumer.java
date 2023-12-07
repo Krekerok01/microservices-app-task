@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class KafkaConsumer {
 
-    @KafkaListener(topics = "${spring.kafka.topics.logging.info}")
+    @KafkaListener(topics = "${spring.kafka.topics.logging}")
     public void consumeInfoLogs(LogMessage message)  {
         Marker marker = MarkerFactory.getMarker(message.loggerName);
         switch (message.level) {
