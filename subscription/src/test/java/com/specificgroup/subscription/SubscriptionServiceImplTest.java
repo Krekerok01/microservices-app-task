@@ -8,6 +8,7 @@ import com.specificgroup.subscription.kafka.KafkaProducer;
 import com.specificgroup.subscription.repository.SubscriptionRepository;
 import com.specificgroup.subscription.service.impl.SubscriptionServiceImpl;
 import com.specificgroup.subscription.util.getter.UserInfoGetter;
+import com.specificgroup.subscription.util.logger.Logger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,8 @@ public class SubscriptionServiceImplTest {
     private UserInfoGetter userInfoGetter;
     @Mock
     private KafkaProducer kafkaProducer;
+    @Mock
+    private Logger logger;
     @InjectMocks
     private SubscriptionServiceImpl subscriptionService;
 

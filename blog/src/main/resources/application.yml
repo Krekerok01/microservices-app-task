@@ -36,6 +36,8 @@ spring:
           request: blog-user
           response:
             successful: successful-response
+      logging:
+        info: info
 
 
 

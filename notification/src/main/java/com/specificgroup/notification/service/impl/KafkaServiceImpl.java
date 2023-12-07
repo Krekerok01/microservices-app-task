@@ -4,21 +4,21 @@ import com.specificgroup.notification.dto.MessageDto;
 import com.specificgroup.notification.exception.MailSendingException;
 import com.specificgroup.notification.service.KafkaService;
 import com.specificgroup.notification.service.MailService;
-import jakarta.mail.MessagingException;
-import lombok.extern.slf4j.Slf4j;
+import com.specificgroup.notification.util.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
 public class KafkaServiceImpl implements KafkaService {
 
     private final MailService mailService;
+    private final Logger logger;
 
     @Autowired
-    public KafkaServiceImpl(MailService mailService) {
+    public KafkaServiceImpl(MailService mailService, Logger logger) {
         this.mailService = mailService;
+        this.logger = logger;
     }
 
     @KafkaListener(topics = "${spring.kafka.topics.notifications.registry}")
@@ -29,7 +29,7 @@ public class KafkaServiceImpl implements KafkaService {
         } catch (javax.mail.MessagingException e) {
             throw new MailSendingException(e.getMessage());
         }
-        log.info("User {} was successfully registered", message.getDestinationEmail());
+        logger.info("User " + message.getDestinationEmail() + " was successfully registered");
     }
 
     @KafkaListener(topics = "${spring.kafka.topics.notifications.password_change}")
@@ -40,6 +40,6 @@ public class KafkaServiceImpl implements KafkaService {
         } catch (javax.mail.MessagingException e) {
             throw new MailSendingException(e.getMessage());
         }
-        log.info("User {} changed password successfully", message.getDestinationEmail());
+        logger.info("User " + message.getDestinationEmail() + " changed password successfully");
     }
 }
