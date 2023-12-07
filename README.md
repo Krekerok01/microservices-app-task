@@ -99,7 +99,7 @@ From this step you can:
 ## Blog-service
 #### Add a post
 
-```http
+```javascript
   POST http://localhost:8080/posts
 ```
 
@@ -119,7 +119,7 @@ From this step you can:
 
 #### Get all posts by specification
 
-```http
+```javascript
   GET http://localhost:8080/posts
 ```
 
@@ -157,7 +157,7 @@ Returns a JSON-format of needed posts
 ###### **HTTP Response Code:** 200 (OK)
 #### Get post by id
 
-```http
+```javascript
   GET http://localhost:8080/posts/{id}
 ```
 
@@ -181,7 +181,7 @@ Returns a JSON-format of post
  ###### **HTTP Response Code:** 200 (OK)
  #### Update a post
 
-```http
+```javascript
   PATCH http://localhost:8080/posts/{id}
 ```
 
@@ -199,7 +199,7 @@ Returns a JSON-format of post
 **Requires:** Authorization header with bearer token ([See](#authenticate-user))
 ###### **HTTP Response Code:** 200 (OK)
  #### Delete a post by id
-```http
+```javascript
   DELETE http://localhost:8080/posts{id}
 ```
 
@@ -225,7 +225,7 @@ Returns a JSON-format of post
 ## User-service
 #### Get all users
 
-```http
+```javascript
   GET http://localhost:8080/users
 ```
 
@@ -261,7 +261,7 @@ Returns a JSON-format of post
 
 #### Get one user
 
-```http
+```javascript
   GET http://localhost:8080/users/${id}
 ```
 
@@ -284,7 +284,7 @@ Returns a JSON-format of one user by its id
 ###### **HTTP Response Code:** 200 (OK)
 #### Authenticate user
 
-```http
+```javascript
   POST http://localhost:8080/users/auth
 ```
 
@@ -311,7 +311,7 @@ Returns a JSON-format of one user by its id
  ###### **HTTP Response Code:** 200 (OK)
  #### Add a user
 
-```http
+```javascript
   POST http://localhost:8080/users
 ```
 
@@ -339,7 +339,7 @@ Returns a JSON-format of one user by its id
 ```
 ###### **HTTP Response Code:** 201 (Created)
  #### Delete a user by id
-```http
+```javascript
   DELETE http://localhost:8080/users/{id}
 ```
 
@@ -352,7 +352,7 @@ Returns a JSON-format of one user by its id
 **Requires:** Authorization header with bearer token ([See](#authenticate-user))
 ###### **HTTP Response Code:** 204 (No content)
 #### Update a user by id
-```http
+```javascript
   PUT http://localhost:8080/users/{id}
 ```
 
@@ -371,7 +371,7 @@ Returns a JSON-format of one user by its id
 ###### **HTTP Response Code:** 200 (OK)
 
 #### Get user's username by id
-```http
+```javascript
   GET http://localhost:8080/users/{id}/username
 ```
 
@@ -390,7 +390,7 @@ Returns a JSON-format of one user by its id
 
 
 #### Update user's password
-```http
+```javascript
   PUT http://localhost:8080/users/password/{id}
 ```
 
@@ -409,7 +409,7 @@ Returns a JSON-format of one user by its id
 ###### **HTTP Response Code:** 200 (OK)
 
 #### Change user's privilege
-```http
+```javascript
   PUT http://localhost:8080/users/privilege/{id}
 ```
 
@@ -426,7 +426,7 @@ Returns a JSON-format of one user by its id
 ## Subscription-service
 #### Create a subscription
 
-```http
+```javascript
   POST http://localhost:8080/subscriptions/{userId}
 ```
 
@@ -439,7 +439,7 @@ Returns a JSON-format of one user by its id
 
 #### Get subscriptions
 
-```http
+```javascript
   GET http://localhost:8080/subscriptions
 ```
 
@@ -478,7 +478,7 @@ Returns a JSON-format of needed subscriptions
 
 #### Delete a subscription
 
-```http
+```javascript
   DELETE http://localhost:8080/subscriptions/{id}
 ```
 
