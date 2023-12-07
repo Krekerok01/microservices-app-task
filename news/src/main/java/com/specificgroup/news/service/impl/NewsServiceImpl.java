@@ -49,6 +49,7 @@ public class NewsServiceImpl implements NewsService {
 
             responseList = processNewsApiServiceResponse(response.body());
         } catch (IOException | InterruptedException e) {
+            logger.error("Server error: " + e.getMessage());
             throw new ReceiveDataException("Data receiving problems.");
         }
         return responseList;

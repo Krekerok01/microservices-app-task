@@ -1,6 +1,7 @@
 package com.specificgroup.job.service.impl;
 
 import com.specificgroup.job.dto.VacancyResponse;
+import com.specificgroup.job.exception.ReceiveDataException;
 import com.specificgroup.job.service.JobService;
 import com.specificgroup.job.util.logger.Logger;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +45,8 @@ public class JobServiceImpl implements JobService {
 
             responseList = processJobSearchServiceResponse(response.body());
         } catch (IOException | InterruptedException e) {
-            //replace !!!!!!!
-            throw new RuntimeException("Data receiving problems.");
+            logger.error("Server error: " + e.getMessage());
+            throw new ReceiveDataException("Data receiving problems.");
         }
         return responseList;
     }

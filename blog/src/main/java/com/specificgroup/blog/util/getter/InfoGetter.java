@@ -4,6 +4,7 @@ import com.netflix.discovery.EurekaClient;
 import com.specificgroup.blog.dto.user_service.UserInfoResponse;
 import com.specificgroup.blog.exception.ServiceClientException;
 import com.specificgroup.blog.exception.ServiceUnavailableException;
+import com.specificgroup.blog.util.logger.Logger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.net.ConnectException;
 import java.util.List;
 
 /**
@@ -22,6 +24,7 @@ public class InfoGetter {
 
     private final EurekaClient eurekaClient;
     private final WebClient webClient;
+    private final Logger logger;
 
     /**
      * Get username for a user by user id
@@ -60,6 +63,7 @@ public class InfoGetter {
         try {
             return eurekaClient.getNextServerFromEureka("user", false).getHomePageUrl();
         } catch (RuntimeException e) {
+            logger.error("User service is unavailable. Try again later.");
             throw new ServiceUnavailableException("User service is unavailable. Try again later.");
         }
     }
@@ -68,12 +72,14 @@ public class InfoGetter {
         try {
             return eurekaClient.getNextServerFromEureka("subscription-service", false).getHomePageUrl();
         } catch (RuntimeException e) {
+            logger.error("Subscription service is unavailable. Try again later.");
             throw new ServiceUnavailableException("Subscription service is unavailable. Try again later.");
         }
     }
 
     private Mono<? extends Throwable> handleServiceError(ClientResponse response) {
         if (response.statusCode() == HttpStatus.NOT_FOUND) {
+            logger.error("Page not found.");
             return Mono.error(new ServiceClientException("Page not found."));
         } else {
             return response.bodyToMono(String.class)
