@@ -1,7 +1,7 @@
 package com.specificgroup.notification.service.impl;
 
 
-import com.specificgroup.notification.dto.MessageDto;
+import com.specificgroup.notification.dto.NotifyEvent;
 import com.specificgroup.notification.service.EmailDecorator;
 import com.specificgroup.notification.service.MailService;
 import com.specificgroup.notification.util.Logger;
@@ -21,7 +21,7 @@ public class MailServiceImpl implements MailService {
     private final Logger logger;
 
     @Override
-    public void sendMessage(MessageDto message) throws MessagingException {
+    public void sendMessage(NotifyEvent message) throws MessagingException {
         var mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
         helper.setTo("vladislavsavko2003@gmail.com");

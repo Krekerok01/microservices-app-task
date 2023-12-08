@@ -1,6 +1,6 @@
 package com.specificgroup.notification.util;
 
-import com.specificgroup.notification.dto.kafka.LogEvent;
+import com.specificgroup.notification.dto.LogEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaTemplate;

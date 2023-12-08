@@ -1,4 +1,4 @@
-package com.specificgroup.notification.dto.kafka;
+package com.specificgroup.notification.dto;
 
 import lombok.Builder;
 import lombok.Value;

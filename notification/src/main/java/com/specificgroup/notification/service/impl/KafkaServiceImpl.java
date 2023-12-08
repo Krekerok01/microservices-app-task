@@ -1,6 +1,6 @@
 package com.specificgroup.notification.service.impl;
 
-import com.specificgroup.notification.dto.MessageDto;
+import com.specificgroup.notification.dto.NotifyEvent;
 import com.specificgroup.notification.exception.MailSendingException;
 import com.specificgroup.notification.service.KafkaService;
 import com.specificgroup.notification.service.MailService;
@@ -23,19 +23,19 @@ public class KafkaServiceImpl implements KafkaService {
 
     @KafkaListener(topics = "${spring.kafka.topics.notifications.registry}")
     @Override
-    public void consumeUserRegistration(MessageDto message) {
+    public void consumeUserRegistration(NotifyEvent event) {
         try {
-            mailService.sendMessage(message);
+            mailService.sendMessage(event);
         } catch (javax.mail.MessagingException e) {
             logger.error("Message sending error: " + e.getMessage());
             throw new MailSendingException(e.getMessage());
         }
-        logger.info("User " + message.getDestinationEmail() + " was successfully registered");
+        logger.info("User " + event.getDestinationEmail() + " was successfully registered");
     }
 
     @KafkaListener(topics = "${spring.kafka.topics.notifications.password_change}")
     @Override
-    public void consumePasswordChanging(MessageDto message) {
+    public void consumePasswordChanging(NotifyEvent message) {
         try {
             mailService.sendMessage(message);
         } catch (javax.mail.MessagingException e) {

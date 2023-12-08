@@ -1,6 +1,6 @@
 package com.specificgroup.notification;
 
-import com.specificgroup.notification.dto.MessageDto;
+import com.specificgroup.notification.dto.NotifyEvent;
 import com.specificgroup.notification.dto.MessageType;
 import com.specificgroup.notification.service.MailService;
 import com.specificgroup.notification.service.impl.KafkaServiceImpl;
@@ -26,11 +26,11 @@ class NotificationApplicationTests {
     @Mock
     private Logger logger;
 
-    private static MessageDto messageDto;
+    private static NotifyEvent notifyEvent;
 
     @BeforeAll
     static void init() {
-        messageDto = new MessageDto(
+        notifyEvent = new NotifyEvent(
                 "test",
                 MessageType.REGISTRATION,
                 "test"
@@ -41,12 +41,12 @@ class NotificationApplicationTests {
     @DisplayName("User registration message test")
     void userRegistrationMessageTest() {
         KafkaServiceImpl kafkaService = new KafkaServiceImpl(mailService, logger);
-        kafkaService.consumeUserRegistration(messageDto);
+        kafkaService.consumeUserRegistration(notifyEvent);
 
         Assertions.assertDoesNotThrow(() -> Mockito.verify(
                         mailService,
                         Mockito.times(1))
-                .sendMessage(any(MessageDto.class)));
+                .sendMessage(any(NotifyEvent.class)));
         verifyNoMoreInteractions(mailService);
     }
 
@@ -54,12 +54,12 @@ class NotificationApplicationTests {
     @DisplayName("Password changing message test")
     void userPasswordChangingMessageTest() {
         KafkaServiceImpl kafkaService = new KafkaServiceImpl(mailService, logger);
-        kafkaService.consumePasswordChanging(messageDto);
+        kafkaService.consumePasswordChanging(notifyEvent);
 
         Assertions.assertDoesNotThrow(() -> Mockito.verify(
                         mailService,
                         Mockito.times(1))
-                .sendMessage(any(MessageDto.class)));
+                .sendMessage(any(NotifyEvent.class)));
         verifyNoMoreInteractions(mailService);
     }
 }

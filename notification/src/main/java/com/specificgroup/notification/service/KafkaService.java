@@ -1,8 +1,8 @@
 package com.specificgroup.notification.service;
 
-import com.specificgroup.notification.dto.MessageDto;
+import com.specificgroup.notification.dto.NotifyEvent;
 
 public interface KafkaService {
-    void consumeUserRegistration(MessageDto message);
-    void consumePasswordChanging(MessageDto message);
+    void consumeUserRegistration(NotifyEvent message);
+    void consumePasswordChanging(NotifyEvent message);
 }

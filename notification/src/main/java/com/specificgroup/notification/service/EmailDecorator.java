@@ -1,9 +1,9 @@
 package com.specificgroup.notification.service;
 
-import com.specificgroup.notification.dto.MessageDto;
+import com.specificgroup.notification.dto.NotifyEvent;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface EmailDecorator {
-    String modifyEmailContent(MessageDto message);
+    String modifyEmailContent(NotifyEvent message);
 }

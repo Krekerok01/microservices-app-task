@@ -1,6 +1,6 @@
 package com.specificgroup.notification.service.impl;
 
-import com.specificgroup.notification.dto.MessageDto;
+import com.specificgroup.notification.dto.NotifyEvent;
 import com.specificgroup.notification.exception.TemplateProcessingException;
 import com.specificgroup.notification.service.EmailDecorator;
 import com.specificgroup.notification.util.FilePathUtil;
@@ -21,7 +21,7 @@ public class ConcreteEmailDecorator implements EmailDecorator {
     private final Configuration configuration;
 
     @Override
-    public String modifyEmailContent(MessageDto message) {
+    public String modifyEmailContent(NotifyEvent message) {
         try {
             StringWriter stringWriter = new StringWriter();
             Map<String, Object> model = new HashMap<>();
