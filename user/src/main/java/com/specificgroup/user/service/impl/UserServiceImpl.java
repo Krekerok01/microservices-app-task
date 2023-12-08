@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
     private final String TOPIC_SUBSCRIPTION_USER = "subscription-user";
     private final String TOPIC_USER_REGISTRATION = "registration";
     private final String TOPIC_USER_PASSWORD_CHANGE = "password_change";
-    private final String TEMP_DESTINATION_EMAIL = "vladislavsavko2003@gmail.com";
 
     /**
      * {@inheritDoc}
@@ -88,7 +87,7 @@ public class UserServiceImpl implements UserService {
         if (!checkUserEmailDuplicate(user.getEmail())) {
             user.setPassword(PasswordEncoder.encode(user.getPassword()));
             logger.info("Saving a new user with email " + user.getEmail() + " to the database");
-            kafkaService.notify(TOPIC_USER_REGISTRATION, user.getUsername(), TEMP_DESTINATION_EMAIL, MessageType.REGISTRATION);
+            kafkaService.notify(TOPIC_USER_REGISTRATION, user.getUsername(), user.getEmail(), MessageType.REGISTRATION);
             return userRepository.save(user);
         }
         throw new DuplicateEmailException("User with such email already exists!;");
@@ -148,7 +147,7 @@ public class UserServiceImpl implements UserService {
         existingUser.setPassword(PasswordEncoder.encode(newPassword));
 
         logger.info("Updating a password of user with id " + id);
-        kafkaService.notify(TOPIC_USER_PASSWORD_CHANGE, existingUser.getUsername(), TEMP_DESTINATION_EMAIL, MessageType.PASSWORD_CHANGE);
+        kafkaService.notify(TOPIC_USER_PASSWORD_CHANGE, existingUser.getUsername(), existingUser.getEmail(), MessageType.PASSWORD_CHANGE);
         userRepository.save(existingUser);
     }
 
