@@ -26,9 +26,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'jakarta.mail:jakarta.mail-api:2.1.1'
     implementation 'org.freemarker:freemarker:2.3.31'
-    implementation 'dev.failsafe:failsafe:3.3.1'
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.github.kirviq:dumbster:1.7.1'
     annotationProcessor 'org.projectlombok:lombok'
 }
 
