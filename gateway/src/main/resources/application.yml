@@ -4,6 +4,8 @@ server:
 security:
   jwt:
     secret: MTA1NDQ2NDYyMjkxODQ3NjI0NjM4NjUxNTYxZGZnMTU2MTQ4ZGY5NDE4MTk0OTg=
+  authentication:
+    url: users/auth
 
 eureka:
   client:
