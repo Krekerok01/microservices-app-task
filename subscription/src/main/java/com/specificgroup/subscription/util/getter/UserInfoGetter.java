@@ -3,6 +3,7 @@ package com.specificgroup.subscription.util.getter;
 import com.netflix.discovery.EurekaClient;
 import com.specificgroup.subscription.exception.ServiceClientException;
 import com.specificgroup.subscription.exception.ServiceUnavailableException;
+import com.specificgroup.subscription.util.logger.Logger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ public class UserInfoGetter {
 
     private final EurekaClient eurekaClient;
     private final WebClient webClient;
+    private final Logger logger;
 
     /**
      * Check for a user existence
@@ -39,12 +41,14 @@ public class UserInfoGetter {
         try {
             return eurekaClient.getNextServerFromEureka("user", false).getHomePageUrl();
         } catch (RuntimeException e) {
+            logger.error("User service is unavailable. Try again later.");
             throw new ServiceUnavailableException("User service is unavailable. Try again later.");
         }
     }
 
     private Mono<? extends Throwable> handleUserServiceError(ClientResponse response) {
         if (response.statusCode() == HttpStatus.NOT_FOUND) {
+            logger.error("User(s) not found.");
             return Mono.error(new ServiceClientException("User(s) not found."));
         } else {
             return response.bodyToMono(String.class)

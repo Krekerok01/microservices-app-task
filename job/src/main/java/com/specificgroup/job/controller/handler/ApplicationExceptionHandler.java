@@ -1,7 +1,7 @@
-package com.specificgroup.news.controller.handler;
+package com.specificgroup.job.controller.handler;
 
-import com.specificgroup.news.dto.ExceptionResponse;
-import com.specificgroup.news.exception.ReceiveDataException;
+import com.specificgroup.job.dto.ExceptionResponse;
+import com.specificgroup.job.exception.ReceiveDataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -27,6 +27,7 @@ public class KafkaServiceImpl implements KafkaService {
         try {
             mailService.sendMessage(message);
         } catch (javax.mail.MessagingException e) {
+            logger.error("Message sending error: " + e.getMessage());
             throw new MailSendingException(e.getMessage());
         }
         logger.info("User " + message.getDestinationEmail() + " was successfully registered");
@@ -38,6 +39,7 @@ public class KafkaServiceImpl implements KafkaService {
         try {
             mailService.sendMessage(message);
         } catch (javax.mail.MessagingException e) {
+            logger.error("Message sending error: " + e.getMessage());
             throw new MailSendingException(e.getMessage());
         }
         logger.info("User " + message.getDestinationEmail() + " changed password successfully");

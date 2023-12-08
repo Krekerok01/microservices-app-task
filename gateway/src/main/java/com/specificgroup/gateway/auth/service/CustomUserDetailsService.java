@@ -3,6 +3,7 @@ package com.specificgroup.gateway.auth.service;
 import com.netflix.discovery.EurekaClient;
 import com.specificgroup.gateway.auth.JwtUser;
 import com.specificgroup.gateway.dto.UserAuthDto;
+import com.specificgroup.gateway.exception.ServiceClientException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.support.ServiceUnavailableException;
 import org.springframework.http.HttpStatus;
@@ -45,11 +46,11 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
 
     private Mono<? extends Throwable> handleTicketServiceError(ClientResponse response) {
         if (response.statusCode() == HttpStatus.NOT_FOUND) {
-            return Mono.error(new RuntimeException("Recourse not found."));
+            return Mono.error(new ServiceClientException("Recourse not found."));
         } else {
             return response.bodyToMono(String.class)
                     .flatMap(errorBody -> Mono.error(
-                            new RuntimeException("Bad request. Error: " + errorBody)));
+                            new ServiceClientException("Bad request. Error: " + errorBody)));
         }
     }
 
