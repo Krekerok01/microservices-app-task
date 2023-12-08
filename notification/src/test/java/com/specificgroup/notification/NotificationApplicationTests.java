@@ -1,7 +1,7 @@
 package com.specificgroup.notification;
 
-import com.specificgroup.notification.dto.NotifyEvent;
 import com.specificgroup.notification.dto.MessageType;
+import com.specificgroup.notification.dto.NotifyEvent;
 import com.specificgroup.notification.service.MailService;
 import com.specificgroup.notification.service.impl.KafkaServiceImpl;
 import com.specificgroup.notification.util.Logger;
