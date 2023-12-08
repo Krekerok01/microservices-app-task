@@ -13,7 +13,7 @@ This application offers the following features:
 
 ## Project architecture
 
-![Architecture](microservices.png)
+![Architecture](microservices.gif)
 
 
 ## Non-functional requirements
