@@ -6,6 +6,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserServiceMessage {
+public class UserDeletedEvent {
     private Long userId;
 }
