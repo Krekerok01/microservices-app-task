@@ -15,12 +15,12 @@ import org.springframework.stereotype.Component;
 public class KafkaConsumer {
 
     @KafkaListener(topics = "${spring.kafka.topics.logging}")
-    public void consumeInfoLogs(LogMessage message)  {
-        Marker marker = MarkerFactory.getMarker(message.loggerName);
-        switch (message.level) {
-            case "info" -> log.info(marker, message.message);
-            case "error" -> log.error(marker, message.message);
-            case "warn" -> log.warn(marker, message.message);
+    public void consumeInfoLogs(LogEvent event)  {
+        Marker marker = MarkerFactory.getMarker(event.loggerName);
+        switch (event.level) {
+            case "info" -> log.info(marker, event.message);
+            case "error" -> log.error(marker, event.message);
+            case "warn" -> log.warn(marker, event.message);
         }
     }
 }

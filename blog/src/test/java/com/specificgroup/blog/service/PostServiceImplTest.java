@@ -1,6 +1,6 @@
 package com.specificgroup.blog.service;
 
-import com.specificgroup.blog.dto.kafka.UserServiceMessage;
+import com.specificgroup.blog.dto.kafka.UserDeletedEvent;
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.entity.Post;
@@ -217,10 +217,10 @@ public class PostServiceImplTest {
     @DisplayName("Delete post by user id. Successful request")
     void deletePostByUserId_SuccessfulRequest(){
         Long userId = 1L;
-        UserServiceMessage userServiceMessage = UserServiceMessage.builder().userId(userId).build();
+        UserDeletedEvent userDeletedEvent = UserDeletedEvent.builder().userId(userId).build();
 
         boolean result = assertDoesNotThrow(() -> {
-            postService.deletePostsByUserId(userServiceMessage);
+            postService.deletePostsByUserId(userDeletedEvent);
             return true;});
         assertTrue(result);
         verify(postRepository, times(1)).deleteAllByUserId(userId);

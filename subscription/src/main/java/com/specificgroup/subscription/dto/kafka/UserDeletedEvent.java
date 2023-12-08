@@ -1,4 +1,4 @@
-package com.specificgroup.subscription.dto;
+package com.specificgroup.subscription.dto.kafka;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserServiceMessage {
+public class UserDeletedEvent {
     private Long userId;
 }

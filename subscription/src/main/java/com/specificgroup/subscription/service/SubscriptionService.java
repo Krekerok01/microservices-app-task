@@ -1,6 +1,6 @@
 package com.specificgroup.subscription.service;
 
-import com.specificgroup.subscription.dto.UserServiceMessage;
+import com.specificgroup.subscription.dto.kafka.UserDeletedEvent;
 import com.specificgroup.subscription.entity.Subscription;
 
 import java.util.List;
@@ -45,5 +45,5 @@ public interface SubscriptionService {
      *
      * @param message a request from kafka the user service
      */
-    void deleteSubscriptionsByUserId(UserServiceMessage message);
+    void deleteSubscriptionsByUserId(UserDeletedEvent message);
 }

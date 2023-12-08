@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LogMessage {
+public class LogEvent {
     String level;
     String loggerName;
     String message;

@@ -1,12 +1,11 @@
 package com.specificgroup.blog.service;
 
-import com.specificgroup.blog.dto.kafka.UserServiceMessage;
+import com.specificgroup.blog.dto.kafka.UserDeletedEvent;
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.entity.Post;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -60,7 +59,7 @@ public interface PostService {
      *
      * @param message a request from kafka the user service
      */
-    void deletePostsByUserId(UserServiceMessage message);
+    void deletePostsByUserId(UserDeletedEvent message);
 
     /**
      * Find all posts for a specific user by his subscriptions

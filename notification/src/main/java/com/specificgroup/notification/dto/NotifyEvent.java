@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageDto {
+public class NotifyEvent {
     private String destinationEmail;
     private MessageType messageType;
     private String username;

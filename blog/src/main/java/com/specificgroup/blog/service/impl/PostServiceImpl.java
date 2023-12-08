@@ -1,7 +1,7 @@
 package com.specificgroup.blog.service.impl;
 
-import com.specificgroup.blog.dto.kafka.BlogServiceResponseMessage;
-import com.specificgroup.blog.dto.kafka.UserServiceMessage;
+import com.specificgroup.blog.dto.kafka.SuccessfullyDeletedPostsEvent;
+import com.specificgroup.blog.dto.kafka.UserDeletedEvent;
 import com.specificgroup.blog.dto.request.PostRequest;
 import com.specificgroup.blog.dto.response.PostResponse;
 import com.specificgroup.blog.entity.Post;
@@ -15,7 +15,6 @@ import com.specificgroup.blog.util.getter.InfoGetter;
 import com.specificgroup.blog.util.logger.Logger;
 import com.specificgroup.blog.util.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -146,14 +145,14 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     @Transactional
-    public void deletePostsByUserId(UserServiceMessage message) {
+    public void deletePostsByUserId(UserDeletedEvent message) {
         logger.info("Deleting posts with userId=" + message.getUserId());
         postRepository.deleteAllByUserId(message.getUserId());
-        BlogServiceResponseMessage responseMessage = BlogServiceResponseMessage.builder()
+        SuccessfullyDeletedPostsEvent event = SuccessfullyDeletedPostsEvent.builder()
                 .deletedUserId(message.getUserId())
                 .message("Request successfully processed.")
                 .build();
-        kafkaProducer.notify(successfulResponseTopic, responseMessage);
+        kafkaProducer.notify(successfulResponseTopic, event);
     }
 
     private Post findByIdOrThrowNoyFoundException(Long id) {

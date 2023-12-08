@@ -1,7 +1,7 @@
 package com.specificgroup.subscription.service.impl;
 
-import com.specificgroup.subscription.dto.SubscriptionServiceResponseMessage;
-import com.specificgroup.subscription.dto.UserServiceMessage;
+import com.specificgroup.subscription.dto.kafka.SuccessfullyDeletedSubscriptionEvent;
+import com.specificgroup.subscription.dto.kafka.UserDeletedEvent;
 import com.specificgroup.subscription.entity.Subscription;
 import com.specificgroup.subscription.exception.AccessDeniedException;
 import com.specificgroup.subscription.exception.EntityNotFoundException;
@@ -11,7 +11,6 @@ import com.specificgroup.subscription.service.SubscriptionService;
 import com.specificgroup.subscription.util.getter.UserInfoGetter;
 import com.specificgroup.subscription.util.logger.Logger;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -98,15 +97,15 @@ public class SubscriptionServiceImpl implements SubscriptionService{
      */
     @Override
     @Transactional
-    public void deleteSubscriptionsByUserId(UserServiceMessage message) {
+    public void deleteSubscriptionsByUserId(UserDeletedEvent message) {
         logger.info("Deleting subscriptions with userId=" + message.getUserId());
         subscriptionRepository.deleteAllByUserSubscriberId(message.getUserId());
 
-        SubscriptionServiceResponseMessage responseMessage = SubscriptionServiceResponseMessage.builder()
+        SuccessfullyDeletedSubscriptionEvent subscriptionEvent = SuccessfullyDeletedSubscriptionEvent.builder()
                 .deletedUserId(message.getUserId())
                 .message("Request successfully processed.")
                 .build();
-        kafkaProducer.notify(successfulResponseTopic, responseMessage);
+        kafkaProducer.notify(successfulResponseTopic, subscriptionEvent);
     }
 
     private void checkThePossibilityOfCreatingASubscription(Long userSubscriberId, Long userPublisherId) {

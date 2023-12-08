@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class BlogServiceResponseMessage {
+public class SuccessfullyDeletedPostsEvent {
     Long deletedUserId;
     String message;
 }
