@@ -1,4 +1,4 @@
-package com.specificgroup.user.model.dto;
+package com.specificgroup.user.model.dto.kafka;
 
 import lombok.*;
 
@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class BlogServiceMessage {
+public class UserDeletedEvent {
     private Long userId;
 }

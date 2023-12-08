@@ -1,6 +1,6 @@
 package com.specificgroup.subscription;
 
-import com.specificgroup.subscription.dto.UserServiceMessage;
+import com.specificgroup.subscription.dto.kafka.UserDeletedEvent;
 import com.specificgroup.subscription.entity.Subscription;
 import com.specificgroup.subscription.exception.AccessDeniedException;
 import com.specificgroup.subscription.exception.EntityNotFoundException;
@@ -200,10 +200,10 @@ public class SubscriptionServiceImplTest {
     @DisplayName("Delete subscriptions by user id. Successful request")
     void deleteSubscriptionsByUserId_SuccessfulRequest(){
         Long userId = 1L;
-        UserServiceMessage userServiceMessage = UserServiceMessage.builder().userId(userId).build();
+        UserDeletedEvent userDeletedEvent = UserDeletedEvent.builder().userId(userId).build();
 
         boolean result = assertDoesNotThrow(() -> {
-            subscriptionService.deleteSubscriptionsByUserId(userServiceMessage);
+            subscriptionService.deleteSubscriptionsByUserId(userDeletedEvent);
             return true;});
 
         assertTrue(result);

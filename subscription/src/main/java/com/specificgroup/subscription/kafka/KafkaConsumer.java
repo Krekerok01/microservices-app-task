@@ -1,7 +1,7 @@
 package com.specificgroup.subscription.kafka;
 
 
-import com.specificgroup.subscription.dto.UserServiceMessage;
+import com.specificgroup.subscription.dto.kafka.UserDeletedEvent;
 import com.specificgroup.subscription.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,8 @@ public class KafkaConsumer {
     private final SubscriptionService subscriptionService;
 
     @KafkaListener(topics = "${spring.kafka.topics.user.service.request}")
-    public void consumeUserPostsDeleting(UserServiceMessage message)  {
-        log.info("Received a request to delete subscriptions for user {}", message);
-        subscriptionService.deleteSubscriptionsByUserId(message);
+    public void consumeUserPostsDeleting(UserDeletedEvent event)  {
+        log.info("Received a request to delete subscriptions for user {}", event);
+        subscriptionService.deleteSubscriptionsByUserId(event);
     }
 }

@@ -1,6 +1,6 @@
 package com.specificgroup.user.util;
 
-import com.specificgroup.user.model.dto.kafka.LogMessage;
+import com.specificgroup.user.model.dto.kafka.LogEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -27,11 +27,10 @@ public class Logger {
     }
 
     private void sendToKafka(String level, String message) {
-        LogMessage log = LogMessage.builder()
+        kafka.send("logs", LogEvent.builder()
                 .level(level)
                 .loggerName("blog-service")
                 .message(message)
-                .build();
-        kafka.send("logs", log);
+                .build());
     }
 }
