@@ -33,8 +33,10 @@ public class CustomAuthenticationManager implements ReactiveAuthenticationManage
             log.info("Email extracted from token: {}", email);
             return userDetailsService.findByUsername(email)
                     .flatMap(userDetails -> {
-                        var auth = new UsernamePasswordAuthenticationToken(userDetails,
-                                null, userDetails.getAuthorities());
+                        var auth = new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities());
                         return Mono.just(auth);
                     });
         } else {
