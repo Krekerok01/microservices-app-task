@@ -24,7 +24,7 @@ public class MailServiceImpl implements MailService {
     public void sendMessage(NotifyEvent message) throws MessagingException {
         var mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
-        helper.setTo("vladislavsavko2003@gmail.com");
+        helper.setTo(message.getDestinationEmail());
         helper.setSubject(message.getMessageType().getName());
         helper.setText(emailDecorator.modifyEmailContent(message), true);
 
