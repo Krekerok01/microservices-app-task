@@ -2,29 +2,33 @@ package com.specificgroup.notification.service.impl;
 
 
 import com.specificgroup.notification.dto.MessageDto;
+import com.specificgroup.notification.service.EmailDecorator;
 import com.specificgroup.notification.service.MailService;
 import com.specificgroup.notification.util.Logger;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
 
 @Service
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
 
     private final JavaMailSender javaMailSender;
+    private final EmailDecorator emailDecorator;
     private final Logger logger;
 
     @Override
-    public void sendMessage(MessageDto message) {
-        SimpleMailMessage m = new SimpleMailMessage();
-        m.setTo("vladislavsavko2003@gmail.com");
-        m.setSubject(message.getContent().getHeader());
-        m.setText(message.getContent().getText());
+    public void sendMessage(MessageDto message) throws MessagingException {
+        var mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        helper.setTo("vladislavsavko2003@gmail.com");
+        helper.setSubject(message.getMessageType().getName());
+        helper.setText(emailDecorator.modifyEmailContent(message), true);
 
-        javaMailSender.send(m);
+        javaMailSender.send(mimeMessage);
 
         logger.info("Message: " + message + " successfully sent to " + "...email...");
     }

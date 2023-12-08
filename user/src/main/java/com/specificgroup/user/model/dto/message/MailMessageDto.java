@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class MailMessageDto {
     private String destinationEmail;
     private MessageType messageType;
-    private MessageContent content;
+    private String username;
 }
