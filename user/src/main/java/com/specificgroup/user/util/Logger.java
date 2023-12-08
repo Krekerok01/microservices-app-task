@@ -29,7 +29,7 @@ public class Logger {
     private void sendToKafka(String level, String message) {
         kafka.send("logs", LogEvent.builder()
                 .level(level)
-                .loggerName("blog-service")
+                .loggerName("user-service")
                 .message(message)
                 .build());
     }
