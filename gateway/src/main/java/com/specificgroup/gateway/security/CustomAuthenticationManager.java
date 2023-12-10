@@ -1,7 +1,7 @@
-package com.specificgroup.gateway.auth;
+package com.specificgroup.gateway.security;
 
 
-import com.specificgroup.gateway.auth.util.JwtParser;
+import com.specificgroup.gateway.util.JwtParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;

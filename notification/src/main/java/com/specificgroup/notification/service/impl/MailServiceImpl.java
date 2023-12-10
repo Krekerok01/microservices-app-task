@@ -1,6 +1,5 @@
 package com.specificgroup.notification.service.impl;
 
-
 import com.specificgroup.notification.dto.NotifyEvent;
 import com.specificgroup.notification.service.EmailDecorator;
 import com.specificgroup.notification.service.MailService;
@@ -12,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 
+/**
+ * Provides method for sending email
+ */
 @Service
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
