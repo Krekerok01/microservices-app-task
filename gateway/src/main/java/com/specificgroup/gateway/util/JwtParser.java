@@ -1,4 +1,4 @@
-package com.specificgroup.gateway.auth.util;
+package com.specificgroup.gateway.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

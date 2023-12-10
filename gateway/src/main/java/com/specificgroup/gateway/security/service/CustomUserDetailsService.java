@@ -1,7 +1,7 @@
-package com.specificgroup.gateway.auth.service;
+package com.specificgroup.gateway.security.service;
 
 import com.netflix.discovery.EurekaClient;
-import com.specificgroup.gateway.auth.JwtUser;
+import com.specificgroup.gateway.security.JwtUser;
 import com.specificgroup.gateway.dto.UserAuthDto;
 import com.specificgroup.gateway.exception.ServiceClientException;
 import lombok.RequiredArgsConstructor;
