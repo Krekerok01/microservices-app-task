@@ -39,7 +39,7 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler({ServiceClientException.class,
                        JwtException.class})
-    public ResponseEntity<ExceptionResponse> serviceClientExceptionHandler(RuntimeException e) {
+    public ResponseEntity<ExceptionResponse> clientExceptionHandler(RuntimeException e) {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 

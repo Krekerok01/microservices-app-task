@@ -1,10 +1,7 @@
 package com.specificgroup.subscription.controller.handler;
 
 import com.specificgroup.subscription.dto.ExceptionResponse;
-import com.specificgroup.subscription.exception.AccessDeniedException;
-import com.specificgroup.subscription.exception.EntityNotFoundException;
-import com.specificgroup.subscription.exception.ServiceClientException;
-import com.specificgroup.subscription.exception.ServiceUnavailableException;
+import com.specificgroup.subscription.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,11 +20,6 @@ public class ApplicationExceptionHandler {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(EntityExistsException.class)
-    public ResponseEntity<ExceptionResponse> entityExistsExceptionHandler(EntityExistsException e) {
-        return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ExceptionResponse> accessDeniedExceptionHandler(AccessDeniedException e) {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.FORBIDDEN);
@@ -38,8 +30,10 @@ public class ApplicationExceptionHandler {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
-    @ExceptionHandler(ServiceClientException.class)
-    public ResponseEntity<ExceptionResponse> serviceClientExceptionHandler(ServiceClientException e) {
+    @ExceptionHandler({ServiceClientException.class,
+                       JwtException.class,
+                       EntityExistsException.class})
+    public ResponseEntity<ExceptionResponse> clientExceptionHandler(RuntimeException e) {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 

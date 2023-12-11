@@ -20,6 +20,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.specificgroup.subscription.util.Constants.Message.*;
+
 /**
  * {@inheritDoc}
  */
@@ -85,9 +87,10 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
         Subscription subscription = subscriptionRepository
                 .findByUserSubscriberIdAndUserPublisherId(userSubscriberId, userPublisherId)
-                .orElseThrow(() -> new EntityNotFoundException("Subscription not found"));
+                .orElseThrow(() -> new EntityNotFoundException
+                        (String.format(RESOURCE_NOT_FOUND, "Subscription")));
         if (!subscription.getUserSubscriberId().equals(userSubscriberId))
-            throw new AccessDeniedException("Access denied");
+            throw new AccessDeniedException(ACCESS_DENIED);
 
         subscriptionRepository.delete(subscription);
     }
@@ -103,24 +106,26 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
         SuccessfullyDeletedSubscriptionEvent subscriptionEvent = SuccessfullyDeletedSubscriptionEvent.builder()
                 .deletedUserId(message.getUserId())
-                .message("Request successfully processed.")
+                .message(SERVICE_REQUEST_SUCCESSFULLY_PROCESSED)
                 .build();
         kafkaProducer.notify(successfulResponseTopic, subscriptionEvent);
     }
 
     private void checkThePossibilityOfCreatingASubscription(Long userSubscriberId, Long userPublisherId) {
         if (userSubscriberId.equals(userPublisherId))
-            throw new AccessDeniedException("Impossible to subscribe to yourself");
+            throw new AccessDeniedException(SELF_SUBSCRIBE);
 
         if (subscriptionRepository.existsByUserSubscriberIdAndUserPublisherId(userSubscriberId, userPublisherId))
-            throw new EntityExistsException("This subscription already exists");
+            throw new EntityExistsException(String.format(RESOURCE_EXISTS, "subscription"));
 
         if (!userInfoGetter.existsUserById(userPublisherId))
-            throw new EntityNotFoundException("Publisher with id=" + userPublisherId + " not found");
+            throw new EntityNotFoundException(String.format(RESOURCE_NOT_FOUND, "Publisher")
+                    + " Wrong publisher id=" + userPublisherId);
     }
 
     private Subscription getSubscriptionById(Long subscriptionId) {
         return subscriptionRepository.findById(subscriptionId)
-                .orElseThrow(() -> new EntityNotFoundException("Subscription with id=" + subscriptionId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(RESOURCE_NOT_FOUND, "Subscription")
+                        + " Wrong subscription id=" + subscriptionId));
     }
 }
