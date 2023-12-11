@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.specificgroup.blog.util.Constants.Message.*;
+
 /**
  * {@inheritDoc}
  */
@@ -150,19 +152,20 @@ public class PostServiceImpl implements PostService {
         postRepository.deleteAllByUserId(message.getUserId());
         SuccessfullyDeletedPostsEvent event = SuccessfullyDeletedPostsEvent.builder()
                 .deletedUserId(message.getUserId())
-                .message("Request successfully processed.")
+                .message(SERVICE_REQUEST_SUCCESSFULLY_PROCESSED)
                 .build();
         kafkaProducer.notify(successfulResponseTopic, event);
     }
 
     private Post findByIdOrThrowNoyFoundException(Long id) {
         return postRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format
+                        (RESOURCE_NOT_FOUND, "Post")));
     }
 
     private void accessVerification(Long savedUserId, Long currentUserId) {
         if (!savedUserId.equals(currentUserId)) {
-            throw new AccessDeniedException("Access denied.");
+            throw new AccessDeniedException(ACCESS_DENIED);
         }
     }
 }

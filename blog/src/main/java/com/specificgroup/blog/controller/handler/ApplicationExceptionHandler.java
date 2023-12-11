@@ -1,10 +1,7 @@
 package com.specificgroup.blog.controller.handler;
 
 import com.specificgroup.blog.dto.response.ExceptionResponse;
-import com.specificgroup.blog.exception.AccessDeniedException;
-import com.specificgroup.blog.exception.EntityNotFoundException;
-import com.specificgroup.blog.exception.ServiceClientException;
-import com.specificgroup.blog.exception.ServiceUnavailableException;
+import com.specificgroup.blog.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,6 +13,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.specificgroup.blog.util.Constants.Message.ARGUMENT_VALIDATION_FAILED;
 
 /**
  * Provides methods for error handling
@@ -38,8 +37,9 @@ public class ApplicationExceptionHandler {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
-    @ExceptionHandler(ServiceClientException.class)
-    public ResponseEntity<ExceptionResponse> serviceClientExceptionHandler(ServiceClientException e) {
+    @ExceptionHandler({ServiceClientException.class,
+                       JwtException.class})
+    public ResponseEntity<ExceptionResponse> serviceClientExceptionHandler(RuntimeException e) {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
@@ -54,7 +54,7 @@ public class ApplicationExceptionHandler {
 
         String errorMessage = !errors.isEmpty() ?
                 errors.stream().collect(Collectors.joining("; ")):
-                "Argument validation failed";
+                ARGUMENT_VALIDATION_FAILED;
 
         return new ResponseEntity<>(buildExceptionResponse(errorMessage), HttpStatus.BAD_REQUEST);
     }

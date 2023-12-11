@@ -1,8 +1,11 @@
 package com.specificgroup.blog.util.security;
 
+import com.specificgroup.blog.exception.JwtException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import liquibase.pro.packaged.S;
+
+import static com.specificgroup.blog.util.Constants.Message.EXPIRED_TOKEN;
 
 /**
  * Util class for JWT parsing
@@ -20,7 +23,7 @@ public class JwtUtil {
                     .get("userId", Double.class);
             return userId.longValue();
         } catch (ExpiredJwtException ex) {
-            throw new RuntimeException("Token has expired!");
+            throw new JwtException(EXPIRED_TOKEN);
         }
     }
 }
