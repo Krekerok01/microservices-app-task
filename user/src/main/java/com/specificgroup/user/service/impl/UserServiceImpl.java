@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
     public User add(@Valid NewUserDto user) {
         if (!checkUserEmailDuplicate(user.getEmail())) {
             user.setPassword(PasswordEncoder.encode(user.getPassword()));
-            logger.info("Saving a new user with email " + user.getEmail() + " to the database");
+            logger.info(String.format("Saving a new user with email %s to the database", user.getEmail()));
             kafkaService.notify(TOPIC_USER_REGISTRATION, user.getUsername(), user.getEmail(), MessageType.REGISTRATION);
             return userRepository.save(DtoMapper.mapToUser(user));
         }
