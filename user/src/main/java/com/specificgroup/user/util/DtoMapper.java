@@ -1,6 +1,7 @@
 package com.specificgroup.user.util;
 
 import com.specificgroup.user.model.User;
+import com.specificgroup.user.model.dto.NewUserDto;
 import com.specificgroup.user.model.dto.UserAuthDtoResponse;
 import com.specificgroup.user.model.dto.UserDto;
 
@@ -21,7 +22,9 @@ public class DtoMapper {
     }
 
     public static List<UserDto> mapToUserDto(List<User> users) {
-        return users.stream().map(DtoMapper::mapToUserDto).collect(Collectors.toList());
+        return users.stream()
+                .map(DtoMapper::mapToUserDto)
+                .collect(Collectors.toList());
     }
 
     public static UserAuthDtoResponse mapToUserAuthDto(User user) {
@@ -31,5 +34,14 @@ public class DtoMapper {
                 user.getPassword(),
                 user.getRole()
         );
+    }
+
+    public static User mapToUser(NewUserDto dto) {
+        return new User(
+                dto.getId(),
+                dto.getUsername(),
+                dto.getPassword(),
+                dto.getEmail(),
+                User.Role.DEFAULT);
     }
 }

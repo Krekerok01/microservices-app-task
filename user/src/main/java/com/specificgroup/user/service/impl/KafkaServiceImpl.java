@@ -24,8 +24,7 @@ public class KafkaServiceImpl implements KafkaService {
     public void notify(String topicName, Long userId) {
         UserDeletedEvent event = UserDeletedEvent.builder().userId(userId).build();
         kafka.send(topicName, event);
-        logger.info("Request to delete User " + userId +
-                " information has been successfully sent to the topic " + topicName);
+        logger.info(String.format("Request to delete User %d has been successfully sent to the topic %s", userId, topicName));
     }
 
     @Override

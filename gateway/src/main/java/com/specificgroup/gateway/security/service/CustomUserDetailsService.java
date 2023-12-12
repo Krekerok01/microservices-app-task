@@ -5,6 +5,7 @@ import com.specificgroup.gateway.security.JwtUser;
 import com.specificgroup.gateway.dto.UserAuthDto;
 import com.specificgroup.gateway.exception.ServiceClientException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.support.ServiceUnavailableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +25,9 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
 
     private final EurekaClient eurekaClient;
     private final WebClient webClient;
-    private final String AUTH_URL = "users/auth";
+
+    @Value("${security.authentication.url}")
+    private String AUTH_URL;
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
@@ -32,7 +35,7 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
         return webClient.get().uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .onStatus(HttpStatus::is4xxClientError, this::handleTicketServiceError)
+                .onStatus(HttpStatus::is4xxClientError, this::handleClientError)
                 .onStatus(HttpStatus::is5xxServerError, error -> Mono.error(new ServiceUnavailableException("Service is unavailable.")))
                 .bodyToMono(UserAuthDto.class)
                 .flatMap(user -> Mono.just(
@@ -44,9 +47,9 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
                 );
     }
 
-    private Mono<? extends Throwable> handleTicketServiceError(ClientResponse response) {
+    private Mono<? extends Throwable> handleClientError(ClientResponse response) {
         if (response.statusCode() == HttpStatus.NOT_FOUND) {
-            return Mono.error(new ServiceClientException("Recourse not found."));
+            return Mono.error(new ServiceClientException("Resource not found."));
         } else {
             return response.bodyToMono(String.class)
                     .flatMap(errorBody -> Mono.error(

@@ -1,10 +1,7 @@
 package com.specificgroup.user.service;
 
 import com.specificgroup.user.model.User;
-import com.specificgroup.user.model.dto.TokenResponse;
-import com.specificgroup.user.model.dto.UserAuthDtoRequest;
-import com.specificgroup.user.model.dto.UserAuthDtoResponse;
-import com.specificgroup.user.model.dto.UserUpdateRequest;
+import com.specificgroup.user.model.dto.*;
 
 import javax.security.auth.message.AuthException;
 import java.util.List;
@@ -52,7 +49,7 @@ public interface UserService {
      * @param user an object containing user information
      * @return a saved user object
      */
-    User add(final User user);
+    User add(final NewUserDto user);
 
     /**
      * Delete a user by user id
@@ -101,7 +98,7 @@ public interface UserService {
      * @param userId an id of the user for checking
      * @return a boolean variable with information about the user's existence
      */
-    Boolean existsByUserId(long userId);
+    boolean existsByUserId(final long userId);
 
     /**
      * Change user role to admin

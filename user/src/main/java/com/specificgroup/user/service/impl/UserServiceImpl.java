@@ -4,10 +4,7 @@ import com.specificgroup.user.exception.DuplicateEmailException;
 import com.specificgroup.user.exception.NoSuchUserException;
 import com.specificgroup.user.exception.WrongPasswordException;
 import com.specificgroup.user.model.User;
-import com.specificgroup.user.model.dto.TokenResponse;
-import com.specificgroup.user.model.dto.UserAuthDtoRequest;
-import com.specificgroup.user.model.dto.UserAuthDtoResponse;
-import com.specificgroup.user.model.dto.UserUpdateRequest;
+import com.specificgroup.user.model.dto.*;
 import com.specificgroup.user.model.dto.message.MessageType;
 import com.specificgroup.user.repos.UserRepository;
 import com.specificgroup.user.service.KafkaService;
@@ -17,7 +14,7 @@ import com.specificgroup.user.util.JwtGenerator;
 import com.specificgroup.user.util.Logger;
 import com.specificgroup.user.util.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -35,10 +32,18 @@ public class UserServiceImpl implements UserService {
     private final KafkaService kafkaService;
     private final JwtGenerator jwtGenerator;
     private final Logger logger;
-    private final String TOPIC_BLOG_USER = "blog-user";
-    private final String TOPIC_SUBSCRIPTION_USER = "subscription-user";
-    private final String TOPIC_USER_REGISTRATION = "registration";
-    private final String TOPIC_USER_PASSWORD_CHANGE = "password_change";
+
+    @Value("${spring.kafka.topics.blog-user}")
+    private String TOPIC_BLOG_USER;
+
+    @Value("${spring.kafka.topics.subscription-user}")
+    private String TOPIC_SUBSCRIPTION_USER;
+
+    @Value("${spring.kafka.topics.user-registration}")
+    private String TOPIC_USER_REGISTRATION;
+
+    @Value("${spring.kafka.topics.user-password-change}")
+    private String TOPIC_USER_PASSWORD_CHANGE;
 
     /**
      * {@inheritDoc}
@@ -83,12 +88,12 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public User add(@Valid User user) {
+    public User add(@Valid NewUserDto user) {
         if (!checkUserEmailDuplicate(user.getEmail())) {
             user.setPassword(PasswordEncoder.encode(user.getPassword()));
-            logger.info("Saving a new user with email " + user.getEmail() + " to the database");
+            logger.info(String.format("Saving a new user with email %s to the database", user.getEmail()));
             kafkaService.notify(TOPIC_USER_REGISTRATION, user.getUsername(), user.getEmail(), MessageType.REGISTRATION);
-            return userRepository.save(user);
+            return userRepository.save(DtoMapper.mapToUser(user));
         }
         throw new DuplicateEmailException("User with such email already exists!;");
     }
@@ -214,7 +219,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public Boolean existsByUserId(long userId) {
+    public boolean existsByUserId(final long userId) {
         return userRepository.existsById(userId);
     }
 

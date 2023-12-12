@@ -32,6 +32,6 @@ public class MailServiceImpl implements MailService {
 
         javaMailSender.send(mimeMessage);
 
-        logger.info("Message: " + message + " successfully sent to " + "...email...");
+        logger.info(String.format("Message %s was successfully sent to %s", message, message.getDestinationEmail()));
     }
 }
