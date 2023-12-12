@@ -22,7 +22,9 @@ public class DtoMapper {
     }
 
     public static List<UserDto> mapToUserDto(List<User> users) {
-        return users.stream().map(DtoMapper::mapToUserDto).collect(Collectors.toList());
+        return users.stream()
+                .map(DtoMapper::mapToUserDto)
+                .collect(Collectors.toList());
     }
 
     public static UserAuthDtoResponse mapToUserAuthDto(User user) {

@@ -2,6 +2,7 @@ package com.specificgroup.user.util;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+
 import javax.security.auth.message.AuthException;
 
 /**

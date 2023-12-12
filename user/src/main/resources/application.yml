@@ -27,6 +27,7 @@ spring:
       bootstrap-servers: ${BOOTSTRAP_SERVERS}
     topics:
       blog-user: blog-user
+      subscription-user: subscription-user
       user-registration: registration
       user-password-change: password_change
 
