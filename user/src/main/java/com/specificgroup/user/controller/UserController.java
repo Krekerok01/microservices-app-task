@@ -232,7 +232,7 @@ public class UserController {
                     content = @Content)})
     @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/exists/{id}")
-    public Boolean existsByUserId(@PathVariable(name = "id") long userId) {
+    public boolean existsByUserId(@PathVariable(name = "id") long userId) {
         return userService.existsByUserId(userId);
     }
 

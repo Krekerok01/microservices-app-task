@@ -98,7 +98,7 @@ public interface UserService {
      * @param userId an id of the user for checking
      * @return a boolean variable with information about the user's existence
      */
-    Boolean existsByUserId(long userId);
+    boolean existsByUserId(final long userId);
 
     /**
      * Change user role to admin

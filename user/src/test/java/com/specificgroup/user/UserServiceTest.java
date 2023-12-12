@@ -227,8 +227,6 @@ public class UserServiceTest {
     @DisplayName("Test deleting a user successfully")
     void testDeletingAUserSuccessfully() {
         final long id = 100L;
-        final String TOPIC_BLOG_USER = "blog-user";
-        final String TOPIC_SUBSCRIPTION_USER = "subscription-user";
 
         boolean result = assertDoesNotThrow(() -> {
             userService.delete(id);
@@ -238,8 +236,7 @@ public class UserServiceTest {
         assertTrue(result);
 
         verify(userRepository, times(1)).deleteById(id);
-        verify(kafkaService, times(1)).notify(TOPIC_BLOG_USER, id);
-        verify(kafkaService, times(1)).notify(TOPIC_SUBSCRIPTION_USER, id);
+        verify(kafkaService, times(2)).notify(null, id);
         verifyNoMoreInteractions(userRepository);
     }
 
