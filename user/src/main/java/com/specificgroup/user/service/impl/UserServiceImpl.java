@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService {
 
         if (!existingUser.getRole().equals(User.Role.ADMIN)) {
             existingUser.setRole(User.Role.ADMIN);
-            logger.info("Changed role of user with id " + userId + " to ADMIN");
+            logger.info(String.format("Changed role of user with id %d to ADMIN", userId));
             userRepository.save(existingUser);
         }
     }
