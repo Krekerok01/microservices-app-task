@@ -2,6 +2,9 @@ package com.specificgroup.notification.util;
 
 import com.specificgroup.notification.dto.MessageType;
 
+/**
+ * Util class for searching for a file with special content.
+ */
 public class FilePathUtil {
     public static String getTemplatePath(MessageType type) {
         return switch (type) {

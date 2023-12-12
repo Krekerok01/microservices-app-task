@@ -11,6 +11,10 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import static com.specificgroup.subscription.util.Constants.Message.RESOURCE_NOT_FOUND;
+import static com.specificgroup.subscription.util.Constants.Message.UNAVAILABLE_SERVICE;
+import static com.specificgroup.subscription.util.Constants.UrlPath.USER_EXISTENCE_CHECK_URL;
+
 /**
  * Util class for getting information from third-party services
  */
@@ -28,11 +32,12 @@ public class UserInfoGetter {
      * @return a boolean variable with information about the user's existence
      */
     public Boolean existsUserById(Long userId) {
-        String uri = getUserUrlFromEureka() + "/users/exists/" + userId;
+        String uri = getUserUrlFromEureka() + USER_EXISTENCE_CHECK_URL + userId;
         return webClient.get().uri(uri)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response -> handleUserServiceError(response))
-                .onStatus(HttpStatus::is5xxServerError, error -> Mono.error(new ServiceUnavailableException("User service is unavailable. Try again later.")))
+                .onStatus(HttpStatus::is5xxServerError, error -> Mono.error(
+                        new ServiceUnavailableException(String.format(UNAVAILABLE_SERVICE, "User"))))
                 .bodyToMono(Boolean.class)
                 .block();
     }
@@ -41,15 +46,15 @@ public class UserInfoGetter {
         try {
             return eurekaClient.getNextServerFromEureka("user", false).getHomePageUrl();
         } catch (RuntimeException e) {
-            logger.error("User service is unavailable. Try again later.");
-            throw new ServiceUnavailableException("User service is unavailable. Try again later.");
+            logger.error(String.format(UNAVAILABLE_SERVICE, "User"));
+            throw new ServiceUnavailableException(String.format(UNAVAILABLE_SERVICE, "User"));
         }
     }
 
     private Mono<? extends Throwable> handleUserServiceError(ClientResponse response) {
         if (response.statusCode() == HttpStatus.NOT_FOUND) {
-            logger.error("User(s) not found.");
-            return Mono.error(new ServiceClientException("User(s) not found."));
+            logger.error(String.format(RESOURCE_NOT_FOUND, "User(s)"));
+            return Mono.error(new ServiceClientException(String.format(RESOURCE_NOT_FOUND, "User(s)")));
         } else {
             return response.bodyToMono(String.class)
                     .flatMap(errorBody -> Mono.error(new ServiceClientException("Bad request. Error: " + errorBody)));

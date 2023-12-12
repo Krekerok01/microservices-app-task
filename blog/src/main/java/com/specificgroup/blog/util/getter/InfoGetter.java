@@ -12,8 +12,11 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.net.ConnectException;
 import java.util.List;
+
+import static com.specificgroup.blog.util.Constants.Message.RESOURCE_NOT_FOUND;
+import static com.specificgroup.blog.util.Constants.Message.UNAVAILABLE_SERVICE;
+import static com.specificgroup.blog.util.Constants.UrlPath.GET_SUBSCRIPTIONS_IDS_URL;
 
 /**
  * Util class for getting information from third-party services
@@ -36,7 +39,8 @@ public class InfoGetter {
         UserInfoResponse userInfoResponse = webClient.get().uri(uri)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response -> handleServiceError(response))
-                .onStatus(HttpStatus::is5xxServerError, error -> Mono.error(new ServiceUnavailableException("User service is unavailable. Try again later.")))
+                .onStatus(HttpStatus::is5xxServerError, error -> Mono.error(new
+                        ServiceUnavailableException(String.format(UNAVAILABLE_SERVICE, "User"))))
                 .bodyToMono(UserInfoResponse.class)
                 .block();
 
@@ -49,11 +53,12 @@ public class InfoGetter {
      * @return a list of subscription ids
      */
     public List<Long> getSubscriptionIdsListBySubscriberId(Long requestUserId) {
-        String uri = getSubscriptionUrlFromEureka() + "/api/v1/subscriptions/subscriber?userSubscriberId=" + requestUserId;
+        String uri = getSubscriptionUrlFromEureka() + GET_SUBSCRIPTIONS_IDS_URL + requestUserId;
         return webClient.get().uri(uri)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response -> handleServiceError(response))
-                .onStatus(HttpStatus::is5xxServerError, error -> Mono.error(new ServiceUnavailableException("Subscription service is unavailable. Try again later.")))
+                .onStatus(HttpStatus::is5xxServerError, error -> Mono.error(new
+                        ServiceUnavailableException(String.format(UNAVAILABLE_SERVICE, "Subscription"))))
                 .bodyToFlux(Long.class)
                 .collectList()
                 .block();
@@ -63,8 +68,8 @@ public class InfoGetter {
         try {
             return eurekaClient.getNextServerFromEureka("user", false).getHomePageUrl();
         } catch (RuntimeException e) {
-            logger.error("User service is unavailable. Try again later.");
-            throw new ServiceUnavailableException("User service is unavailable. Try again later.");
+            logger.error(String.format(UNAVAILABLE_SERVICE, "User"));
+            throw new ServiceUnavailableException(String.format(UNAVAILABLE_SERVICE, "User"));
         }
     }
 
@@ -72,15 +77,15 @@ public class InfoGetter {
         try {
             return eurekaClient.getNextServerFromEureka("subscription-service", false).getHomePageUrl();
         } catch (RuntimeException e) {
-            logger.error("Subscription service is unavailable. Try again later.");
-            throw new ServiceUnavailableException("Subscription service is unavailable. Try again later.");
+            logger.error(String.format(UNAVAILABLE_SERVICE, "Subscription"));
+            throw new ServiceUnavailableException(String.format(UNAVAILABLE_SERVICE, "Subscription"));
         }
     }
 
     private Mono<? extends Throwable> handleServiceError(ClientResponse response) {
         if (response.statusCode() == HttpStatus.NOT_FOUND) {
-            logger.error("Page not found.");
-            return Mono.error(new ServiceClientException("Page not found."));
+            logger.error(String.format(RESOURCE_NOT_FOUND, "Page"));
+            return Mono.error(new ServiceClientException(String.format(RESOURCE_NOT_FOUND, "Page")));
         } else {
             return response.bodyToMono(String.class)
                     .flatMap(errorBody -> Mono.error(new ServiceClientException("Bad request. Error: " + errorBody)));

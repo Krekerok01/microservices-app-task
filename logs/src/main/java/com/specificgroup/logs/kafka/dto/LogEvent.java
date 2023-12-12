@@ -1,4 +1,4 @@
-package com.specificgroup.logs;
+package com.specificgroup.logs.kafka.dto;
 
 import lombok.*;
 

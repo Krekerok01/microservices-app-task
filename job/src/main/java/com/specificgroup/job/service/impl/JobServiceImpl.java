@@ -1,7 +1,7 @@
 package com.specificgroup.job.service.impl;
 
 import com.specificgroup.job.dto.VacancyResponse;
-import com.specificgroup.job.exception.ReceiveDataException;
+import com.specificgroup.job.exception.ServiceUnavailableException;
 import com.specificgroup.job.service.JobService;
 import com.specificgroup.job.util.logger.Logger;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,8 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.specificgroup.job.util.Constants.Message.DATA_RECEIVING_EXCEPTION;
+import static com.specificgroup.job.util.Constants.UrlPath.RAPID_API_URL;
 
 @Service
 @RequiredArgsConstructor
@@ -33,24 +35,26 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<VacancyResponse> findVacancies() {
         logger.info("Receiving vacancies...");
-        List<VacancyResponse> responseList = null;
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://jobsearch4.p.rapidapi.com/api/v2/Jobs/Latest"))
+            HttpRequest request = buildGetVacanciesRequest();
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 400 && response.statusCode() <= 599) throw new IOException();
+            return processJobSearchServiceResponse(response.body());
+        } catch (IOException | InterruptedException e) {
+            logger.error(DATA_RECEIVING_EXCEPTION);
+            throw new ServiceUnavailableException(DATA_RECEIVING_EXCEPTION);
+        }
+    }
+
+    private static HttpRequest buildGetVacanciesRequest() {
+        return HttpRequest.newBuilder()
+                .uri(URI.create(RAPID_API_URL))
                 .header("X-RapidAPI-Key", "282b39271cmsha8d3e3cae2dc2d1p112500jsnd0941072cd85")
                 .header("X-RapidAPI-Host", "jobsearch4.p.rapidapi.com")
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
-            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-
-            responseList = processJobSearchServiceResponse(response.body());
-        } catch (IOException | InterruptedException e) {
-            logger.error("Server error: " + e.getMessage());
-            throw new ReceiveDataException("Data receiving problems.");
-        }
-        return responseList;
     }
-
 
     private List<VacancyResponse> processJobSearchServiceResponse(String body) {
         JsonObject jsonObject = Json.createReader(new StringReader(body))

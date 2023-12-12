@@ -1,4 +1,4 @@
-package com.specificgroup.gateway.auth;
+package com.specificgroup.gateway.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

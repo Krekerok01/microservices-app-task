@@ -1,6 +1,7 @@
-package com.specificgroup.logs;
+package com.specificgroup.logs.kafka;
 
 
+import com.specificgroup.logs.kafka.dto.LogEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
@@ -16,11 +17,12 @@ public class KafkaConsumer {
 
     @KafkaListener(topics = "${spring.kafka.topics.logging}")
     public void consumeInfoLogs(LogEvent event)  {
-        Marker marker = MarkerFactory.getMarker(event.loggerName);
-        switch (event.level) {
-            case "info" -> log.info(marker, event.message);
-            case "error" -> log.error(marker, event.message);
-            case "warn" -> log.warn(marker, event.message);
+        Marker marker = MarkerFactory.getMarker(event.getLoggerName());
+        String message = event.getMessage();
+        switch (event.getLevel()) {
+            case "info" -> log.info(marker, message);
+            case "error" -> log.error(marker, message);
+            case "warn" -> log.warn(marker, message);
         }
     }
 }

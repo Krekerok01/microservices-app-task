@@ -189,6 +189,17 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Update user password", description = "Updating user password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful request",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "400", description = "Error: There is no such user in the database or Error: Existing email",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Error: User can only manage his own information",
+                    content = @Content)})
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/password/{id}")
     public ResponseEntity<String> updateUserPassword(@PathVariable(name = "id") long userId,
                                                      @RequestBody @Valid PasswordRequestDto password,
