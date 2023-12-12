@@ -85,7 +85,7 @@ class UsersComponent extends React.Component {
         return <div className="card-grid">
             <button id="button_back" className="button-login" onClick={() => {
                 window.history.back();
-            }} style={{top: '100px'}}>Back
+            }} style={{top: '70px'}}>Back
             </button>
             {/*{this.state.data.map(user => {*/}
             {/*    return <UserCard key={user.id} username={user.username} email={user.email} userId={user.id} role={user.role} currentUserId={currentUserId}/>*/}

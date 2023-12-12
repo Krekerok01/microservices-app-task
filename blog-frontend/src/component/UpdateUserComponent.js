@@ -107,7 +107,7 @@ class UpdateUserComponent extends React.Component {
             <UserInfoComponent/>
             <button id="button_back" className="button-login" onClick={() => {
                 window.history.back();
-            }} style={{right: '1810px'}}>Back
+            }} style={{top: '70px'}}>Back
             </button>
             <button id="button_delete_profile" className="button-login" onClick={() => {
                 if (window.confirm('Are you sure you want to delete your profile?') === true) {
@@ -115,7 +115,7 @@ class UpdateUserComponent extends React.Component {
                 } else {
                     window.location.reload();
                 }
-            }} style={{right: '1610px'}}>Delete profile
+            }} >Delete profile
             </button>
             <div className="login-form">
                 <div className="login-subtitle-edit">Edit your data:</div>

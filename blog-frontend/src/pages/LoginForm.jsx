@@ -5,11 +5,11 @@ const SignUpForm = () => {
     return <div style={{boxSizing: "border-box"}}>
         <button id="button_back" className="button-login" onClick={() => {
             window.history.back();
-        }} style={{right: '1900px'}}>Back
+        }} style={{top: '70px'}}>Back
         </button>
         <button id="button_home" className="button-login" onClick={() => {
             window.location.href = '/';
-        }} style={{right: '1800px'}}>Home
+        }} >Home
         </button>
         <div className="login-form">
             <div className="login-subtitle">Enter your email and password:</div>

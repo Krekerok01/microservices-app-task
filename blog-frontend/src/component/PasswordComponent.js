@@ -87,7 +87,7 @@ class UpdateUserComponent extends React.Component {
             <UserInfoComponent/>
             <button id="button_back" className="button-login" onClick={() => {
                 window.history.back();
-            }} style={{right: '1810px'}}>Back
+            }} style={{top: '70px'}}>Back
             </button>
             <div className="login-form">
                 <div className="login-subtitle-edit">Enter your recent password:</div>
