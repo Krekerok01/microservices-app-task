@@ -84,6 +84,9 @@ body {
     grid-template-rows: repeat(2, 1fr);
     grid-gap: 100px;
     width: 50%;
+    margin-top: 25%;
+    max-height: 1000px;
+    overflow-y: visible;
 }
 
 .card {
@@ -109,6 +112,9 @@ body {
 }
 
 .news-container {
+    margin-top: 25%;
+    max-height: 1000px;
+    overflow-y: visible;
     margin-left: 100px;
     width: 20%;
 }
@@ -144,6 +150,9 @@ body {
 
 
 .jobs-container {
+    margin-top: 25%;
+    max-height: 1000px;
+    overflow-y: visible;
     margin-right: 50px;
     width: 20%;
 }

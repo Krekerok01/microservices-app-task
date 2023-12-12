@@ -51,7 +51,7 @@ class NewsComponent extends React.Component {
                 return <NewsCard key={news.url} sourceName={news.sourceName} title={news.title} url={news.url} publishedAt={news.publishedAt}/>
             })
         } else {
-            news = <div className="loading-container-n" style={{paddingTop: '800px'}}>
+            news = <div className="loading-container-n" style={{paddingTop: '300px'}}>
                 <div className="loading-text-j">
                     <span>L</span>
                     <span>O</span>

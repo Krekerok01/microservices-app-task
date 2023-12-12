@@ -52,7 +52,7 @@ class PostsComponent extends React.Component {
                 return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text} postId={post.postId}/>
             });
         } else {
-            posts = <div className="loading-container" style={{paddingTop: '800px'}}>
+            posts = <div className="loading-container" style={{paddingTop: '300px'}}>
                 <div className="loading-text">
                     <span>L</span>
                     <span>O</span>
@@ -73,7 +73,7 @@ class PostsComponent extends React.Component {
         return <div id="main_posts_container" className="card-grid">
             <button id="button_sign_up" onClick={() => {
                 window.location.href = '/signup';
-            }} className="button-login" style={{right: '120px'}}>Sign up
+            }} className="button-login" style={{top: '60px'}}>Sign up
             </button>
             <button id="button_log" onClick={() => {
                 window.location.href = '/login';
