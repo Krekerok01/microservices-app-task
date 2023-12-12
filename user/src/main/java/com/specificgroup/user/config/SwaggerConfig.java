@@ -35,12 +35,11 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI springShopOpenAPI() {
-        OpenAPI info = new OpenAPI()
+        return new OpenAPI()
                 .servers(List.of(new Server().url("http://localhost:8080")))
                 .info(new Info().title("cloud API")
                         .description("cloud API")
                         .version("1.0")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
-        return info;
     }
 }

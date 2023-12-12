@@ -2,13 +2,11 @@ package com.specificgroup.user.controller;
 
 import com.specificgroup.user.exception.NoPrivilegesException;
 import com.specificgroup.user.exception.NoSuchUserException;
-import com.specificgroup.user.exception.WrongPasswordException;
 import com.specificgroup.user.model.User;
 import com.specificgroup.user.model.dto.*;
 import com.specificgroup.user.service.UserService;
 import com.specificgroup.user.util.DtoMapper;
 import com.specificgroup.user.util.JwtParser;
-import com.specificgroup.user.util.PasswordEncoder;
 import com.specificgroup.user.util.UtilStrings;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -97,7 +95,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Error: Client request error(fields validation)",
                     content = @Content)})
     @PostMapping
-    public ResponseEntity<UserDto> newUser(@RequestBody @Valid User user, BindingResult bindingResult) {
+    public ResponseEntity<UserDto> newUser(@RequestBody @Valid NewUserDto user, BindingResult bindingResult) {
         validateEntity(bindingResult);
         return ResponseEntity.ok(DtoMapper.mapToUserDto(userService.add(user)));
     }
@@ -162,7 +160,7 @@ public class UserController {
 
     @Operation(summary = "Update user", description = "Updating user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Successful request",
+            @ApiResponse(responseCode = "200", description = "Successful request",
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "Error: User wasn't authorized",
                     content = @Content),

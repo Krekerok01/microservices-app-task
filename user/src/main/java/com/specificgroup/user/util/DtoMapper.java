@@ -1,6 +1,7 @@
 package com.specificgroup.user.util;
 
 import com.specificgroup.user.model.User;
+import com.specificgroup.user.model.dto.NewUserDto;
 import com.specificgroup.user.model.dto.UserAuthDtoResponse;
 import com.specificgroup.user.model.dto.UserDto;
 
@@ -31,5 +32,14 @@ public class DtoMapper {
                 user.getPassword(),
                 user.getRole()
         );
+    }
+
+    public static User mapToUser(NewUserDto dto) {
+        return new User(
+                dto.getId(),
+                dto.getUsername(),
+                dto.getPassword(),
+                dto.getEmail(),
+                User.Role.DEFAULT);
     }
 }

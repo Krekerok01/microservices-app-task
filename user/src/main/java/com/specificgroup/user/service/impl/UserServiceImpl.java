@@ -4,10 +4,7 @@ import com.specificgroup.user.exception.DuplicateEmailException;
 import com.specificgroup.user.exception.NoSuchUserException;
 import com.specificgroup.user.exception.WrongPasswordException;
 import com.specificgroup.user.model.User;
-import com.specificgroup.user.model.dto.TokenResponse;
-import com.specificgroup.user.model.dto.UserAuthDtoRequest;
-import com.specificgroup.user.model.dto.UserAuthDtoResponse;
-import com.specificgroup.user.model.dto.UserUpdateRequest;
+import com.specificgroup.user.model.dto.*;
 import com.specificgroup.user.model.dto.message.MessageType;
 import com.specificgroup.user.repos.UserRepository;
 import com.specificgroup.user.service.KafkaService;
@@ -83,12 +80,12 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public User add(@Valid User user) {
+    public User add(@Valid NewUserDto user) {
         if (!checkUserEmailDuplicate(user.getEmail())) {
             user.setPassword(PasswordEncoder.encode(user.getPassword()));
             logger.info("Saving a new user with email " + user.getEmail() + " to the database");
             kafkaService.notify(TOPIC_USER_REGISTRATION, user.getUsername(), user.getEmail(), MessageType.REGISTRATION);
-            return userRepository.save(user);
+            return userRepository.save(DtoMapper.mapToUser(user));
         }
         throw new DuplicateEmailException("User with such email already exists!;");
     }

@@ -4,6 +4,7 @@ import com.specificgroup.user.exception.DuplicateEmailException;
 import com.specificgroup.user.exception.NoSuchUserException;
 import com.specificgroup.user.exception.WrongPasswordException;
 import com.specificgroup.user.model.User;
+import com.specificgroup.user.model.dto.NewUserDto;
 import com.specificgroup.user.model.dto.TokenResponse;
 import com.specificgroup.user.model.dto.UserAuthDtoRequest;
 import com.specificgroup.user.model.dto.UserUpdateRequest;
@@ -186,10 +187,16 @@ public class UserServiceTest {
     @DisplayName("Test adding new user successfully")
     void testAddingNewUserSuccessfully() {
         long id = 100L;
-        User userToAdd = new User(id, "Test username 1", "Test password 1", "Test email 1", User.Role.DEFAULT);
+        NewUserDto userToAdd = new NewUserDto(id, "Test username 1", "Test password 1", "Test email 1");
 
         doReturn(Optional.empty()).when(userRepository).findByEmail(any(String.class));
-        doReturn(userToAdd).when(userRepository).save(any(User.class));
+        doReturn(
+                new User(id,
+                        "Test username 1",
+                        "581f92d364a5613d69e9bbd7f8ddc815d62108f00f05299c8606d5592c736f94",
+                        "Test email 1",
+                        User.Role.DEFAULT)
+        ).when(userRepository).save(any(User.class));
 
         User user = userService.add(userToAdd);
 
@@ -207,7 +214,7 @@ public class UserServiceTest {
     @DisplayName("Test adding new user with existing email")
     void testAddingNewUserWithExistingEmail() {
         long id = 100L;
-        User userToAdd = new User(id, "Test username 1", "Test password 1", "Test email 1", User.Role.DEFAULT);
+        NewUserDto userToAdd = new NewUserDto(id, "Test username 1", "Test password 1", "Test email 1");
 
         doReturn(
                 Optional.of(new User(id + 1, "Test username 2", "Test password 2", "Test email 1", User.Role.ADMIN))
