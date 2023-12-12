@@ -45,6 +45,9 @@ public class UserServiceImpl implements UserService {
     @Value("${spring.kafka.topics.user-password-change}")
     private String TOPIC_USER_PASSWORD_CHANGE;
 
+    @Value("${spring.kafka.topics.user-email-change}")
+    private String TOPIC_USER_EMAIL_CHANGE;
+
     /**
      * {@inheritDoc}
      */
@@ -117,25 +120,30 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(NoSuchUserException::new);
         String email = userUpdateRequest.getEmail();
+        String username = userUpdateRequest.getUsername();
 
-        if (
-                Objects.equals(email, existingUser.getEmail())
-                        ||
-                        (
-                                !Objects.equals(
-                                        email, existingUser.getEmail())
-                                        &&
-                                        !checkUserEmailDuplicate(email)
-                        )
-        ) {
-            existingUser.setEmail(userUpdateRequest.getEmail());
-            existingUser.setUsername(userUpdateRequest.getUsername());
+        if (!Objects.equals(
+                email, existingUser.getEmail()) || !Objects.equals(
+                username, existingUser.getUsername())) {
+            if (!Objects.equals(
+                    email, existingUser.getEmail())
+            ) {
+                if (!checkUserEmailDuplicate(email)) {
+                    kafkaService.notify(TOPIC_USER_EMAIL_CHANGE, existingUser.getUsername(), email, MessageType.EMAIL_CHANGE);
+                    existingUser.setEmail(userUpdateRequest.getEmail());
+                } else {
+                    throw new DuplicateEmailException("User with such email already exists! Please change your email!;");
+                }
+            }
+            if (!Objects.equals(
+                    username, existingUser.getUsername())
+            ) {
+                existingUser.setUsername(username);
+            }
+
             logger.info("Updating a user with id " + id);
             userRepository.save(existingUser);
-        } else {
-            throw new DuplicateEmailException("User with such email already exists! Please change your email!;");
         }
-
     }
 
     /**

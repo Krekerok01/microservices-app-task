@@ -20,12 +20,6 @@ public class KafkaServiceImpl implements KafkaService {
     private final MailService mailService;
     private final Logger logger;
 
-//    @Autowired
-//    public KafkaServiceImpl(MailService mailService, Logger logger) {
-//        this.mailService = mailService;
-//        this.logger = logger;
-//    }
-
     @KafkaListener(topics = "${spring.kafka.topics.notifications.registry}")
     @Override
     public void consumeUserRegistration(NotifyEvent event) {
@@ -41,6 +35,18 @@ public class KafkaServiceImpl implements KafkaService {
     @KafkaListener(topics = "${spring.kafka.topics.notifications.password_change}")
     @Override
     public void consumePasswordChanging(NotifyEvent message) {
+        try {
+            mailService.sendMessage(message);
+        } catch (javax.mail.MessagingException e) {
+            logger.error("Message sending error: " + e.getMessage());
+            throw new MailSendingException(e.getMessage());
+        }
+        logger.info(String.format("User %s has changed password successfully", message.getDestinationEmail()));
+    }
+
+    @KafkaListener(topics = "${spring.kafka.topics.notifications.email_change}")
+    @Override
+    public void consumeEmailChanging(NotifyEvent message) {
         try {
             mailService.sendMessage(message);
         } catch (javax.mail.MessagingException e) {

@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum MessageType {
     REGISTRATION("Registration"),
-    PASSWORD_CHANGE("Password changing");
+    PASSWORD_CHANGE("Password changing"),
+    EMAIL_CHANGE("Email changing");
 
     private final String name;
 

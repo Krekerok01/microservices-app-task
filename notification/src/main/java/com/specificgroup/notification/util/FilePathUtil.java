@@ -10,6 +10,7 @@ public class FilePathUtil {
         return switch (type) {
             case REGISTRATION -> "user/registration_template.ftl";
             case PASSWORD_CHANGE -> "user/password_changing_template.ftl";
+            case EMAIL_CHANGE -> "user/email_changing_template.ftl";
         };
     }
 }

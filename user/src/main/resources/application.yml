@@ -30,6 +30,7 @@ spring:
       subscription-user: subscription-user
       user-registration: registration
       user-password-change: password_change
+      user-email-change: email_change
 
   liquibase:
     enabled: true

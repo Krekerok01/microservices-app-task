@@ -62,4 +62,17 @@ class NotificationApplicationTests {
                 .sendMessage(any(NotifyEvent.class)));
         verifyNoMoreInteractions(mailService);
     }
+
+    @Test
+    @DisplayName("Email changing message test")
+    void userEmailChangingMessageTest() {
+        KafkaServiceImpl kafkaService = new KafkaServiceImpl(mailService, logger);
+        kafkaService.consumeEmailChanging(notifyEvent);
+
+        Assertions.assertDoesNotThrow(() -> Mockito.verify(
+                        mailService,
+                        Mockito.times(1))
+                .sendMessage(any(NotifyEvent.class)));
+        verifyNoMoreInteractions(mailService);
+    }
 }
