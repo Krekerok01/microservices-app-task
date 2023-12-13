@@ -78,26 +78,31 @@ body {
     justify-content: center;
 }
 
+.subscriptions-posts-container {
+    padding-top: 150px;
+}
+
 .card-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-gap: 100px;
     width: 50%;
-    margin-top: 25%;
+    margin-top: 30%;
     max-height: 1000px;
     overflow-y: visible;
 }
 
 .card {
-    min-height: 200px;
-    display: flex;
+    display: inline;
     flex-direction: column;
     justify-content: space-between;
 
-    max-width: 600px;
+    width: 250px;
+    max-width: 250px;
     height: 300px;
-    padding: 5px 25px;
+    max-height: 300px;
+    padding: 5px 15px;
 
     border: 1px solid rgba(255, 255, 255, .25);
     border-radius: 20px;
@@ -107,12 +112,12 @@ body {
     backdrop-filter: blur(15px);
 
     overflow: auto;
-    word-wrap: break-word;
-    word-break: break-all;
+    word-wrap: normal;
+    word-break: break-word;
 }
 
 .news-container {
-    margin-top: 25%;
+    margin-top: 30%;
     max-height: 1000px;
     overflow-y: visible;
     margin-left: 100px;
@@ -150,7 +155,7 @@ body {
 
 
 .jobs-container {
-    margin-top: 25%;
+    margin-top: 30%;
     max-height: 1000px;
     overflow-y: visible;
     margin-right: 50px;
@@ -346,13 +351,20 @@ body {
     width: 100%
 }
 
+.button-container {
+    display: flex;
+}
+
 .delete-update-button {
-    background: #142bc6;
+    background-color: rgba(20, 43, 198, 0.5);
     padding: 10px;
     border-radius: 20px;
     border: none;
     border-bottom: 3px solid #0f2e80;
-    height: 46px;
+    margin-right: 10px;
+    font-size: 14px;
+    height: 35px;
+    width: 45%;
     display: flex;
     align-items: center;
     justify-content: center;

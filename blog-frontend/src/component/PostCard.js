@@ -52,12 +52,13 @@ class PostCard extends React.Component {
         }
         return (
             <div className="card">
-                <h2>{this.state.title}</h2>
-                <h3>{this.state.text}</h3>
-                <hr/>
-                <h5><em>{this.state.username}</em></h5>
-                {deleteButton}
-                {updateButton}
+                <h4>{this.state.title}</h4>
+                <h5>{this.state.text}</h5>
+                <h6><em>{this.state.username}</em></h6>
+                <div className="button-container">
+                    {deleteButton}
+                    {updateButton}
+                </div>
             </div>
         );
     }
