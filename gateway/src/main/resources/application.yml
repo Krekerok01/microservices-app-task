@@ -18,6 +18,8 @@ spring:
     name: gateway
   config:
     import: optional:file:./gateway/.env[.properties]
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVERS}
   cloud:
     gateway:
       routes:

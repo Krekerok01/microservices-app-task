@@ -1,0 +1,17 @@
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <appender name="CUSTOM" class="com.specificgroup.gateway.config.KafkaCustomLoggerAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" level="INFO"/>
+        <appender-ref ref="CUSTOM"/>
+    </root>
+
+</configuration>
