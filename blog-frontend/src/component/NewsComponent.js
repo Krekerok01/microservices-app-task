@@ -13,7 +13,7 @@ class NewsComponent extends React.Component {
 
     componentDidMount(): void {
         this.refreshNewsCards();
-        setInterval(this.refreshNewsCards.bind(this), 600000);
+        setInterval(this.refreshNewsCards.bind(this), 60000);
     }
 
     refreshNewsCards() {

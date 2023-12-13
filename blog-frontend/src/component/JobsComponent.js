@@ -14,7 +14,7 @@ class JobsComponent extends React.Component {
 
     componentDidMount(): void {
         this.refreshJobCards();
-        setInterval(this.refreshJobCards.bind(this), 600000);
+        setInterval(this.refreshJobCards.bind(this), 60000);
     }
 
     refreshJobCards() {
