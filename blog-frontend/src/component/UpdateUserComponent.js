@@ -7,7 +7,8 @@ class UpdateUserComponent extends React.Component {
         super(props);
         this.state = {
             username: "",
-            email: ""
+            email: "",
+            originalEmail: ""
         }
     }
 
@@ -45,6 +46,11 @@ class UpdateUserComponent extends React.Component {
         }).then(response => {
             if (response.ok) {
                 window.sessionStorage.setItem('username', null);
+                response.json().then(data => {
+                    this.setState({
+                        originalEmail: data.email
+                    });
+                });
                 window.location.href = '/';
             } else if (response.status === 400) {
                 //     add error handling here
@@ -70,8 +76,18 @@ class UpdateUserComponent extends React.Component {
             }
         }).then(response => {
             if (response.ok) {
-                window.sessionStorage.setItem('username', username);
-                window.location.href = '/myPage';
+                if(this.state.originalEmail !== email) {
+                    window.sessionStorage.setItem('token', null);
+                    window.sessionStorage.setItem('username', null);
+                    window.sessionStorage.setItem('currentUserId', null);
+                    window.sessionStorage.setItem('isAdmin', null);
+
+                    window.location.href = '/';
+                } else {
+                    window.sessionStorage.setItem('username', username);
+
+                    window.location.href = '/myPage';
+                }
             } else if (response.status === 400) {
                 response.json().then(responseJson => {
                     this.showErrors(responseJson['message']);
