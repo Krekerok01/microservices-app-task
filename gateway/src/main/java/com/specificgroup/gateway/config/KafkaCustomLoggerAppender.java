@@ -11,14 +11,22 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 
-//@Component
+@Component
 public class KafkaCustomLoggerAppender extends AppenderBase<ILoggingEvent> {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(KafkaCustomLoggerAppender.class);
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
     protected void append(ILoggingEvent eventObject) {
         System.out.println("custom logger");
+        System.out.println(kafkaTemplate != null);
+        kafkaTemplate.send("logs", LogEvent.builder()
+                .level("warn")
+                .loggerName("gateway")
+                .message(eventObject.getMessage())
+                .build());
         switch (eventObject.getLevel().levelStr) {
             case "WARN" -> logger.warn(eventObject.getMessage());
             case "ERROR" -> logger.error(eventObject.getMessage());
