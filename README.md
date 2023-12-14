@@ -114,6 +114,18 @@ From this step you can:
     "text":"Useful information"
 }
 ```
+##### Response JSON-body example:
+```http
+{
+    "postId": 8,
+    "userId": 1,
+    "username": "default",
+    "title": "Post about programming",
+    "text": "Useful information",
+    "creationDate": "14 Dec 2023, 13:06",
+    "modificationDate": "14 Dec 2023, 13:06"
+}
+```
 **Requires:** Authorization header with bearer token ([See](#authenticate-user))\
 **HTTP Response Code:** 201 (Created)
 
@@ -324,8 +336,7 @@ Returns a JSON-format of one user by its id
 {
     "username": "a",
     "password": "a",
-    "email":"email@email.com",
-    "role":"DEFAULT"
+    "email":"email@email.com"
 }
 ```
 ##### Response JSON-body example:
@@ -364,8 +375,7 @@ Returns a JSON-format of one user by its id
 ```http
 {
     "username": "aaaaaaaaaaaaaa",
-    "email": "user@user.com",
-    "role": "DEFAULT"
+    "email": "user@user.com"
 }
 ```
 ###### **HTTP Response Code:** 200 (OK)
