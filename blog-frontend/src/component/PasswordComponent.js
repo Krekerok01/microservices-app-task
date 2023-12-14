@@ -92,7 +92,11 @@ class UpdateUserComponent extends React.Component {
             <div className="login-form">
                 <div className="login-subtitle-edit">Enter your recent password:</div>
                 <div className="input-container ic2">
-                    <input id="old_password" className="input" type="text" placeholder=" "/>
+                    <input id="old_password" className="input" type="text" placeholder=" " onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                            this.sendData();
+                        }
+                    }}/>
                     <div className="cut cut-recent"></div>
                     <label form="old_password" className="placeholder">Recent</label>
                 </div>
@@ -100,7 +104,11 @@ class UpdateUserComponent extends React.Component {
                     password:
                 </div>
                 <div id="div-new-pass-input" className="input-container ic2">
-                    <input id="new_password" className="input" type="text" placeholder=" "/>
+                    <input id="new_password" className="input" type="text" placeholder=" " onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                            this.sendData();
+                        }
+                    }}/>
                     <div className="cut cut-new"></div>
                     <label form="old_password" className="placeholder">New</label>
                 </div>

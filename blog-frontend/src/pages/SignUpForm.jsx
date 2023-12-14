@@ -9,27 +9,39 @@ const SignUpForm = () => {
         </button>
         <button id="button_home" className="button-login" onClick={() => {
             window.location.href = '/';
-        }} >Home
+        }}>Home
         </button>
         <div className="form-create">
             <div className="title">Welcome</div>
             <div className="subtitle">Let's create your account!</div>
             <div className="input-container ic1">
-                <input id="username" className="input" type="text" placeholder=" "/>
+                <input id="username" className="input" type="text" placeholder=" " onKeyPress={(event) => {
+                    if (event.key === 'Enter') {
+                        sendData();
+                    }
+                }}/>
                 <div className="cut"></div>
                 <label form="username" className="placeholder">Username</label>
             </div>
             <div className="input-container ic2">
-                <input id="password" className="input" type="password" placeholder=" "/>
+                <input id="password" className="input" type="password" placeholder=" " onKeyPress={(event) => {
+                    if (event.key === 'Enter') {
+                        sendData();
+                    }
+                }}/>
                 <div className="cut"></div>
                 <label form="password" className="placeholder">Password</label>
             </div>
             <div className="input-container ic2">
-                <input id="email" className="input" type="text" placeholder=" "/>
+                <input id="email" className="input" type="text" placeholder=" " onKeyPress={(event) => {
+                    if (event.key === 'Enter') {
+                        sendData();
+                    }
+                }}/>
                 <div className="cut cut-short"></div>
                 <label form="email" className="placeholder">Email</label>
             </div>
-            <button type="text" className="submit" onClick={sendData}>Submit</button>
+            <button id="btn" type="text" className="submit" onClick={sendData}>Submit</button>
         </div>
         <div id="errorList" className="error-list" style={{display: 'none'}}/>
     </div>

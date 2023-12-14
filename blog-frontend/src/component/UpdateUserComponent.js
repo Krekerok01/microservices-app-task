@@ -17,7 +17,8 @@ class UpdateUserComponent extends React.Component {
         this.getUserInfo(userId).then(data => {
             this.setState({
                 username: data.username,
-                email: data.email
+                email: data.email,
+                originalEmail: data.email
             });
         });
     }
@@ -46,11 +47,6 @@ class UpdateUserComponent extends React.Component {
         }).then(response => {
             if (response.ok) {
                 window.sessionStorage.setItem('username', null);
-                response.json().then(data => {
-                    this.setState({
-                        originalEmail: data.email
-                    });
-                });
                 window.location.href = '/';
             } else if (response.status === 400) {
                 //     add error handling here
@@ -76,7 +72,7 @@ class UpdateUserComponent extends React.Component {
             }
         }).then(response => {
             if (response.ok) {
-                if(this.state.originalEmail !== email) {
+                if (this.state.originalEmail !== email) {
                     window.sessionStorage.setItem('token', null);
                     window.sessionStorage.setItem('username', null);
                     window.sessionStorage.setItem('currentUserId', null);
@@ -131,24 +127,33 @@ class UpdateUserComponent extends React.Component {
                 } else {
                     window.location.reload();
                 }
-            }} >Delete profile
+            }}>Delete profile
             </button>
             <div className="login-form">
                 <div className="login-subtitle-edit">Edit your data:</div>
                 <div className="input-container ic2">
                     <input id="username" className="input" type="text" placeholder=" " value={this.state.username}
-                           onChange={e => this.setState({username: e.target.value})}/>
+                           onChange={e => this.setState({username: e.target.value})} onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                            this.sendData();
+                        }
+                    }}/>
                     <div className="cut"></div>
                     <label form="email" className="placeholder">Username</label>
                 </div>
                 <div className="input-container ic2">
                     <input id="email" className="input" type="text" placeholder=" " value={this.state.email}
-                           onChange={e => this.setState({email: e.target.value})}/>
+                           onChange={e => this.setState({email: e.target.value})} onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                            this.sendData();
+                        }
+                    }}/>
                     <div className="cut cut-short"></div>
                     <label form="email" className="placeholder">Email</label>
                 </div>
                 <button type="text" className="login-submit" onClick={this.toPasswordChange}>Change password</button>
-                <div id="errorList" className="error-list" style={{display: 'none', marginTop: '80px', marginLeft: '-33px', marginBottom: '-20px'}}/>
+                <div id="errorList" className="error-list"
+                     style={{display: 'none', marginTop: '80px', marginLeft: '-33px', marginBottom: '-20px'}}/>
                 <button type="text" className="login-submit" onClick={this.sendData}>Submit</button>
             </div>
         </div>
