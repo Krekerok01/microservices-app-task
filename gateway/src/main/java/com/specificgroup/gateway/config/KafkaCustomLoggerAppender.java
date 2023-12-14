@@ -12,12 +12,11 @@ import org.springframework.stereotype.Component;
 
 @EnableKafka
 @Component
-//@Slf4j
+@Slf4j
 public class KafkaCustomLoggerAppender extends AppenderBase<ILoggingEvent> {
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(KafkaCustomLoggerAppender.class);
 
     @Override
     protected void append(ILoggingEvent eventObject) {
