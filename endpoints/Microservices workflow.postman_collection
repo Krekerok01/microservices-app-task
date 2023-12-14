@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "95b6ea3a-73d6-499c-81bc-9dd609bcdac1",
+		"_postman_id": "21422f1b-f4b8-4f63-99dd-3b5e5945b5f4",
 		"name": "Microservices workflow",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29920715"
+		"_exporter_id": "29918838"
 	},
 	"item": [
 		{
@@ -54,7 +54,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\":\"kate\",\r\n    \"password\":\"1234\",\r\n    \"email\":\"kate@gmail.com\",\r\n    \"role\":\"DEFAULT\"\r\n}",
+					"raw": "{\r\n    \"username\":\"kate\",\r\n    \"password\":\"1234\",\r\n    \"email\":\"kate@gmail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -634,7 +634,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\":\"user\",\r\n    \"password\":\"1234\",\r\n    \"email\":\"user@user.com\",\r\n    \"role\":\"DEFAULT\"\r\n}",
+					"raw": "{\r\n    \"username\":\"user\",\r\n    \"email\":\"user@user.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

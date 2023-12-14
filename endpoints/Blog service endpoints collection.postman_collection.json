@@ -7,23 +7,26 @@
 	},
 	"item": [
 		{
-			"name": "Create new post",
+			"name": "1. Authorize default user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"var token = responseBody.token;\r",
+							"pm.collectionVariables.set(\"token\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJERUZBVUxUIn0.VOOq6t-DcRKBOIyP_BjWksdQfjPVGzjeFAuOgkttJ78",
-							"type": "string"
-						}
-					]
-				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\":\"Post about programming\",\r\n    \"text\":\"Useful information\"\r\n}",
+					"raw": "{\r\n    \"email\":\"user@user.com\",\r\n    \"password\":\"password\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -31,21 +34,23 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/posts",
+					"raw": "http://localhost:8080/users/auth/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"posts"
+						"users",
+						"auth",
+						""
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get all posts by specification",
+			"name": "2. Get all posts (specification)",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -86,12 +91,50 @@
 			"response": []
 		},
 		{
-			"name": "Get post by id",
+			"name": "3. Create a new post(by default user)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"Post about programming\",\r\n    \"text\":\"Useful information\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Get a new post by id",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/posts/1",
+					"raw": "http://localhost:8080/posts/7",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -99,21 +142,21 @@
 					"port": "8080",
 					"path": [
 						"posts",
-						"1"
+						"7"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Update post",
+			"name": "5.Update post (by default user)",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJERUZBVUxUIn0.VOOq6t-DcRKBOIyP_BjWksdQfjPVGzjeFAuOgkttJ78",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -122,7 +165,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\":\"New title \",\r\n    \"text\":\" New interesting text.\"\r\n}",
+					"raw": "{\r\n    \"title\":\"New title\",\r\n    \"text\":\" New interesting text.\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -130,7 +173,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/posts/1",
+					"raw": "http://localhost:8080/posts/7",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -138,21 +181,61 @@
 					"port": "8080",
 					"path": [
 						"posts",
-						"1"
+						"7"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Delete post",
+			"name": "6. Get all posts (specification)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/posts?userId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"posts"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "1"
+						},
+						{
+							"key": "title",
+							"value": "title",
+							"disabled": true
+						},
+						{
+							"key": "creationDate",
+							"value": "13-11-2023",
+							"disabled": true
+						},
+						{
+							"key": "modificationDate",
+							"value": "13-11-2023",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. Delete post (by default user)",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiI2IiwiaWF0IjoxNTE2MjM5MDIyfQ._4tuwROMr2ZNKlRpLv7LkFVLCC3J9xdNvMhg7wRPpsw",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -160,7 +243,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/posts/1",
+					"raw": "http://localhost:8080/posts/7",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -168,11 +251,38 @@
 					"port": "8080",
 					"path": [
 						"posts",
-						"1"
+						"7"
 					]
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "initial",
+			"type": "string"
 		}
 	]
 }
