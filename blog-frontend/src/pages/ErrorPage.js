@@ -6,7 +6,7 @@ const ErrorPage = () => {
         <h1>The page you are looking for does not exist</h1>
          <button id="button_home" className="button-login" onClick={() => {
                         window.location.href = '/';
-                    }} style={{right: '1710px'}}>Home
+                    }} >Home
          </button>
     </div>
 

@@ -7,7 +7,8 @@ class UpdateUserComponent extends React.Component {
         super(props);
         this.state = {
             username: "",
-            email: ""
+            email: "",
+            originalEmail: ""
         }
     }
 
@@ -16,7 +17,8 @@ class UpdateUserComponent extends React.Component {
         this.getUserInfo(userId).then(data => {
             this.setState({
                 username: data.username,
-                email: data.email
+                email: data.email,
+                originalEmail: data.email
             });
         });
     }
@@ -70,8 +72,18 @@ class UpdateUserComponent extends React.Component {
             }
         }).then(response => {
             if (response.ok) {
-                window.sessionStorage.setItem('username', username);
-                window.location.href = '/myPage';
+                if (this.state.originalEmail !== email) {
+                    window.sessionStorage.setItem('token', null);
+                    window.sessionStorage.setItem('username', null);
+                    window.sessionStorage.setItem('currentUserId', null);
+                    window.sessionStorage.setItem('isAdmin', null);
+
+                    window.location.href = '/';
+                } else {
+                    window.sessionStorage.setItem('username', username);
+
+                    window.location.href = '/myPage';
+                }
             } else if (response.status === 400) {
                 response.json().then(responseJson => {
                     this.showErrors(responseJson['message']);
@@ -107,7 +119,7 @@ class UpdateUserComponent extends React.Component {
             <UserInfoComponent/>
             <button id="button_back" className="button-login" onClick={() => {
                 window.history.back();
-            }} style={{right: '1810px'}}>Back
+            }} style={{top: '70px'}}>Back
             </button>
             <button id="button_delete_profile" className="button-login" onClick={() => {
                 if (window.confirm('Are you sure you want to delete your profile?') === true) {
@@ -115,24 +127,33 @@ class UpdateUserComponent extends React.Component {
                 } else {
                     window.location.reload();
                 }
-            }} style={{right: '1610px'}}>Delete profile
+            }}>Delete profile
             </button>
             <div className="login-form">
                 <div className="login-subtitle-edit">Edit your data:</div>
                 <div className="input-container ic2">
                     <input id="username" className="input" type="text" placeholder=" " value={this.state.username}
-                           onChange={e => this.setState({username: e.target.value})}/>
+                           onChange={e => this.setState({username: e.target.value})} onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                            this.sendData();
+                        }
+                    }}/>
                     <div className="cut"></div>
                     <label form="email" className="placeholder">Username</label>
                 </div>
                 <div className="input-container ic2">
                     <input id="email" className="input" type="text" placeholder=" " value={this.state.email}
-                           onChange={e => this.setState({email: e.target.value})}/>
+                           onChange={e => this.setState({email: e.target.value})} onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                            this.sendData();
+                        }
+                    }}/>
                     <div className="cut cut-short"></div>
                     <label form="email" className="placeholder">Email</label>
                 </div>
                 <button type="text" className="login-submit" onClick={this.toPasswordChange}>Change password</button>
-                <div id="errorList" className="error-list" style={{display: 'none', marginTop: '80px', marginLeft: '-33px', marginBottom: '-20px'}}/>
+                <div id="errorList" className="error-list"
+                     style={{display: 'none', marginTop: '80px', marginLeft: '-33px', marginBottom: '-20px'}}/>
                 <button type="text" className="login-submit" onClick={this.sendData}>Submit</button>
             </div>
         </div>

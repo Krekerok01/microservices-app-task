@@ -5,21 +5,29 @@ const SignUpForm = () => {
     return <div style={{boxSizing: "border-box"}}>
         <button id="button_back" className="button-login" onClick={() => {
             window.history.back();
-        }} style={{right: '1900px'}}>Back
+        }} style={{top: '70px'}}>Back
         </button>
         <button id="button_home" className="button-login" onClick={() => {
             window.location.href = '/';
-        }} style={{right: '1800px'}}>Home
+        }} >Home
         </button>
         <div className="login-form">
             <div className="login-subtitle">Enter your email and password:</div>
             <div className="input-container ic2">
-                <input id="email" className="input" type="text" placeholder=" "/>
+                <input id="email" className="input" type="text" placeholder=" " onKeyPress={(event) => {
+                    if (event.key === 'Enter') {
+                        sendData();
+                    }
+                }}/>
                 <div className="cut cut-short"></div>
                 <label form="email" className="placeholder">Email</label>
             </div>
             <div className="input-container ic2">
-                <input id="password" className="input" type="password" placeholder=" "/>
+                <input id="password" className="input" type="password" placeholder=" " onKeyPress={(event) => {
+                    if (event.key === 'Enter') {
+                        sendData();
+                    }
+                }}/>
                 <div className="cut"></div>
                 <label form="password" className="placeholder">Password</label>
             </div>

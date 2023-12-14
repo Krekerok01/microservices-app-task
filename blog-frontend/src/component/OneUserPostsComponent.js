@@ -48,12 +48,16 @@ class OneUserPostsComponent extends React.Component {
     render() {
         let posts;
         if (this.state.show === true) {
-            posts = this.state.data.map(post => {
-                return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text}
-                                 postId={post.postId}/>
-            });
+            if (this.state.data.length !== 0) {
+                posts = this.state.data.map(post => {
+                    return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text}
+                                     postId={post.postId}/>
+                });
+            } else {
+                posts = <h1 style={{marginLeft: '500px', marginBottom: '300px', whiteSpace: 'nowrap'}}>Let's create your first post!</h1>
+            }
         } else {
-            posts = <div className="loading-container" style={{paddingTop: '800px'}}>
+            posts = <div className="loading-container">
                 <div className="loading-text">
                     <span>L</span>
                     <span>O</span>
@@ -74,27 +78,24 @@ class OneUserPostsComponent extends React.Component {
         return <div className="card-grid">
             <button id="button_back" className="button-login" onClick={() => {
                 window.history.back();
-            }} style={{top: '300px', right: '1930px'}}>Back
+            }} style={{top: '70px'}}>Back
             </button>
             <button id="button_home" className="button-login" onClick={() => {
                 window.location.href = '/';
-            }} style={{top: '370px', right: '1930px'}}>Home
+            }} style={{right: '170px'}}>Home
             </button>
             <button id="button_edit_profile" className="button-login" onClick={() => {
                 window.location.href = '/myPage/edit';
-            }} style={{right: '1730px'}}>Edit profile
+            }}>Profile settings
             </button>
             <button id="button_all_users" className="button-login" onClick={() => {
                 window.location.href = '/users';
-            }} style={{right: '1600px'}}>All users
+            }} style={{right: '300px'}}>All users
             </button>
             <button id="btn_create" className="button-login" onClick={() => {
                 window.location.href = '/addPost';
-            }}>Create post
+            }} style={{top: '300px'}}>Create post
             </button>
-            {/*{this.state.data.map(post => {*/}
-            {/*    return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text} postId={post.postId}/>*/}
-            {/*})}*/}
             {posts}
         </div>
     }

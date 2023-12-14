@@ -86,11 +86,11 @@ class UpdatePostComponent extends React.Component {
             <UserInfoComponent/>
             <button id="button_back" className="button-login" onClick={() => {
                 window.history.back();
-            }} style={{right: '1810px'}}>Back
+            }} style={{top: '70px'}}>Back
             </button>
             <button id="button_home" className="button-login" onClick={() => {
                 window.location.href = '/';
-            }} style={{right: '1710px'}}>Home
+            }} >Home
             </button>
             <div className="form">
                 <div className="form-left-decoration"></div>

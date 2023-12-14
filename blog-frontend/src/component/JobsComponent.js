@@ -14,7 +14,7 @@ class JobsComponent extends React.Component {
 
     componentDidMount(): void {
         this.refreshJobCards();
-        setInterval(this.refreshJobCards.bind(this), 600000);
+        setInterval(this.refreshJobCards.bind(this), 60000);
     }
 
     refreshJobCards() {
@@ -52,7 +52,7 @@ class JobsComponent extends React.Component {
                 return <JobCard key={job.url} title={job.title} url={job.url} companyName={job.companyName} jobSource={job.jobSource}/>
             });
         } else {
-            jobs = <div className="loading-container-j" style={{paddingTop: '800px'}}>
+            jobs = <div className="loading-container-j" style={{paddingTop: '300px'}}>
                 <div className="loading-text-j">
                     <span>L</span>
                     <span>O</span>

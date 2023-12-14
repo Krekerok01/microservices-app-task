@@ -45,14 +45,29 @@ class PostsComponent extends React.Component {
         });
     }
 
+    LogInButton(props) {
+        return <button id="button_log" onClick={() => {
+            window.location.href = '/login';
+        }} className="button-login">Log in
+        </button>
+    }
+
+    SignUpButton(props) {
+        return <button id="button_sign_up" onClick={() => {
+            window.location.href = '/signup';
+        }} className="button-login" style={{top: '60px'}}>Sign up
+        </button>
+    }
+
     render() {
-        let posts;
+        let posts, logInButton, signUpButton;
         if (this.state.show === true) {
             posts = this.state.data.map(post => {
-                return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text} postId={post.postId}/>
+                return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text}
+                                 postId={post.postId}/>
             });
         } else {
-            posts = <div className="loading-container" style={{paddingTop: '800px'}}>
+            posts = <div className="loading-container" style={{paddingTop: '300px'}}>
                 <div className="loading-text">
                     <span>L</span>
                     <span>O</span>
@@ -70,22 +85,18 @@ class PostsComponent extends React.Component {
                 </div>
             </div>
         }
+        console.log('TOKEN ' + window.sessionStorage.getItem('token'));
+        if (window.sessionStorage.getItem('token') === 'null' || window.sessionStorage.getItem('token') == null) {
+            logInButton = <this.LogInButton style={{display: 'none'}}/>;
+            signUpButton = <this.SignUpButton style={{display: 'none'}}/>;
+        }
         return <div id="main_posts_container" className="card-grid">
-            <button id="button_sign_up" onClick={() => {
-                window.location.href = '/signup';
-            }} className="button-login" style={{right: '120px'}}>Sign up
-            </button>
-            <button id="button_log" onClick={() => {
-                window.location.href = '/login';
-            }} className="button-login">Log in
-            </button>
+            {signUpButton}
+            {logInButton}
             <button id="button_create" className="button-login" onClick={() => {
                 window.location.href = '/addPost';
             }} style={{display: 'none', right: '250px'}}>Create post
             </button>
-            {/*{this.state.data.map(post => {*/}
-            {/*    return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text} postId={post.postId}/>*/}
-            {/*})}*/}
             {posts}
         </div>
     }
