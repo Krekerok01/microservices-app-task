@@ -1,9 +1,9 @@
 <configuration>
 
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-    </appender>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
-    <appender name="CUSTOM" class="com.specificgroup.gateway.config.KafkaCustomLoggerAppender">
+    <appender name="KafkaCustomLoggerAppender" class="com.specificgroup.gateway.config.KafkaCustomLoggerAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>WARN</level>
         </filter>
@@ -11,7 +11,7 @@
 
     <root level="INFO">
         <appender-ref ref="CONSOLE" level="INFO"/>
-        <appender-ref ref="CUSTOM"/>
+        <appender-ref ref="KafkaCustomLoggerAppender"/>
     </root>
 
 </configuration>
