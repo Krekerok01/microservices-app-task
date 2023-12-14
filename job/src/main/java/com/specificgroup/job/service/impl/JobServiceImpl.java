@@ -1,6 +1,7 @@
 package com.specificgroup.job.service.impl;
 
 import com.specificgroup.job.dto.VacancyResponse;
+import com.specificgroup.job.exception.DataProcessingException;
 import com.specificgroup.job.exception.ServiceUnavailableException;
 import com.specificgroup.job.service.JobService;
 import com.specificgroup.job.util.logger.Logger;
@@ -20,7 +21,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.specificgroup.job.util.Constants.Message.DATA_RECEIVING_EXCEPTION;
+import static com.specificgroup.job.util.Constants.Message.*;
 import static com.specificgroup.job.util.Constants.UrlPath.RAPID_API_URL;
 
 @Service
@@ -39,11 +40,11 @@ public class JobServiceImpl implements JobService {
             HttpRequest request = buildGetVacanciesRequest();
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() >= 400 && response.statusCode() <= 599) throw new IOException();
+            checkResponseCode(response);
             return processJobSearchServiceResponse(response.body());
         } catch (IOException | InterruptedException e) {
-            logger.error(DATA_RECEIVING_EXCEPTION);
-            throw new ServiceUnavailableException(DATA_RECEIVING_EXCEPTION);
+            logger.error(DATA_PROCESSING_EXCEPTION);
+            throw new DataProcessingException(DATA_PROCESSING_EXCEPTION);
         }
     }
 
@@ -56,11 +57,26 @@ public class JobServiceImpl implements JobService {
                 .build();
     }
 
+    private void checkResponseCode(HttpResponse<String> response) {
+        int responseStatusCode = response.statusCode();
+
+        if (responseStatusCode >= 400 && responseStatusCode <= 599) {
+            logger.error(SERVICE_UNAVAILABLE_EXCEPTION);
+            throw new ServiceUnavailableException(SERVICE_UNAVAILABLE_EXCEPTION);
+        }
+    }
+
     private List<VacancyResponse> processJobSearchServiceResponse(String body) {
         JsonObject jsonObject = Json.createReader(new StringReader(body))
             .readObject();
 
         JsonArray array = jsonObject.getJsonArray("data");
+
+        if (array.isEmpty()){
+            logger.error(SERVICE_UNAVAILABLE_EXCEPTION + " Empty response body.");
+            throw new ServiceUnavailableException(SERVICE_UNAVAILABLE_EXCEPTION);
+        }
+
         return convertJSONObjectToVacancyResponseList(array, new ArrayList<VacancyResponse>());
     }
 

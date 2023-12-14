@@ -1,6 +1,7 @@
 package com.specificgroup.job.controller.handler;
 
 import com.specificgroup.job.dto.ExceptionResponse;
+import com.specificgroup.job.exception.DataProcessingException;
 import com.specificgroup.job.exception.ServiceUnavailableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,11 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(ServiceUnavailableException.class)
     public ResponseEntity<ExceptionResponse> serviceUnavailableExceptionHandler(ServiceUnavailableException e) {
+        return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler(DataProcessingException.class)
+    public ResponseEntity<ExceptionResponse> dataProcessingExceptionHandler(DataProcessingException e) {
         return new ResponseEntity<>(buildExceptionResponse(e.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
     }
 

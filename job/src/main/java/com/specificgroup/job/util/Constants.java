@@ -13,7 +13,8 @@ public class Constants {
             throw new UnsupportedOperationException();
         }
 
-        public static final String DATA_RECEIVING_EXCEPTION  = "Data receiving problems.";
+        public static final String DATA_PROCESSING_EXCEPTION = "Data processing problems.";
+        public static final String SERVICE_UNAVAILABLE_EXCEPTION  = "Service unavailable. Data receiving problems.";
     }
 
     /**
