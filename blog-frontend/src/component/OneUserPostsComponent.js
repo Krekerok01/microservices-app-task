@@ -48,12 +48,16 @@ class OneUserPostsComponent extends React.Component {
     render() {
         let posts;
         if (this.state.show === true) {
-            posts = this.state.data.map(post => {
-                return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text}
-                                 postId={post.postId}/>
-            });
+            if (this.state.data.length !== 0) {
+                posts = this.state.data.map(post => {
+                    return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text}
+                                     postId={post.postId}/>
+                });
+            } else {
+                posts = <h1 style={{marginLeft: '500px', marginBottom: '300px', whiteSpace: 'nowrap'}}>Let's create your first post!</h1>
+            }
         } else {
-            posts = <div className="loading-container" style={{paddingTop: '800px'}}>
+            posts = <div className="loading-container">
                 <div className="loading-text">
                     <span>L</span>
                     <span>O</span>
@@ -92,9 +96,6 @@ class OneUserPostsComponent extends React.Component {
                 window.location.href = '/addPost';
             }} style={{top: '300px'}}>Create post
             </button>
-            {/*{this.state.data.map(post => {*/}
-            {/*    return <PostCard key={post.postId} username={post.username} title={post.title} text={post.text} postId={post.postId}/>*/}
-            {/*})}*/}
             {posts}
         </div>
     }

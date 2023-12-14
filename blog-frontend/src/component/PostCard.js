@@ -44,8 +44,8 @@ class PostCard extends React.Component {
             display: 'none',
         }
         if (window.sessionStorage.getItem('username') === this.state.username) {
-            deleteButton = <this.DeleteButton text="Delete post" className="delete-update-button" postId={this.props.postId}/>;
-            updateButton = <this.UpdateButton text="Edit post" className="delete-update-button" postId={this.props.postId}/>;
+            deleteButton = <this.DeleteButton text="Delete" className="delete-update-button" postId={this.props.postId}/>;
+            updateButton = <this.UpdateButton text="Edit" className="delete-update-button" postId={this.props.postId}/>;
         } else {
             deleteButton = <this.DeleteButton text="Delete post" style={none}/>;
             updateButton = <this.UpdateButton text="Edit post" style={none}/>;
