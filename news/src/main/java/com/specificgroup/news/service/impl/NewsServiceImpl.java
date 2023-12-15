@@ -1,6 +1,7 @@
 package com.specificgroup.news.service.impl;
 
 import com.specificgroup.news.dto.NewsResponse;
+import com.specificgroup.news.exception.DataProcessingException;
 import com.specificgroup.news.exception.ServiceUnavailableException;
 import com.specificgroup.news.service.NewsService;
 import com.specificgroup.news.util.logger.Logger;
@@ -24,7 +25,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.specificgroup.news.util.Constants.Message.DATA_RECEIVING_EXCEPTION;
+import static com.specificgroup.news.util.Constants.Message.DATA_PROCESSING_EXCEPTION;
+import static com.specificgroup.news.util.Constants.Message.SERVICE_UNAVAILABLE_EXCEPTION;
 import static com.specificgroup.news.util.Constants.UrlPath.RAPID_API_URL;
 
 @Service
@@ -40,15 +42,14 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsResponse> findCurrentNews() {
         logger.info("Receiving news...");
         try {
-
             HttpRequest request = buildGetNewsRequest();
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() >= 400 && response.statusCode() <= 599) throw new IOException();
+            checkResponseCode(response);
             return processNewsApiServiceResponse(response.body());
         } catch (IOException | InterruptedException e) {
-            logger.error(DATA_RECEIVING_EXCEPTION);
-            throw new ServiceUnavailableException(DATA_RECEIVING_EXCEPTION);
+            logger.error(DATA_PROCESSING_EXCEPTION);
+            throw new DataProcessingException(DATA_PROCESSING_EXCEPTION);
         }
     }
 
@@ -61,9 +62,23 @@ public class NewsServiceImpl implements NewsService {
                 .build();
     }
 
+    private void checkResponseCode(HttpResponse<String> response) {
+        int responseStatusCode = response.statusCode();
+
+        if (responseStatusCode >= 400 && responseStatusCode <= 599) {
+            logger.error(SERVICE_UNAVAILABLE_EXCEPTION);
+            throw new ServiceUnavailableException(SERVICE_UNAVAILABLE_EXCEPTION);
+        }
+    }
+
     private List<NewsResponse> processNewsApiServiceResponse(String body) {
         JsonArray array = Json.createReader(new StringReader(body))
                 .readArray();
+
+        if (array.isEmpty()){
+            logger.error(SERVICE_UNAVAILABLE_EXCEPTION + " Empty response body.");
+            throw new ServiceUnavailableException(SERVICE_UNAVAILABLE_EXCEPTION);
+        }
 
         return convertJSONObjectToNewsResponseList(array, new ArrayList<NewsResponse>());
     }
