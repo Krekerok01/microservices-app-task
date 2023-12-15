@@ -39,7 +39,7 @@ form {
 }
 .form-left-decoration {
     bottom: 60px;
-    left: 470px;
+    left: 460px;
 }
 .form-right-decoration {
     top: 60px;
@@ -57,7 +57,7 @@ form {
     background: #fff;
 }
 .form-left-decoration:before {
-    top: -20px;
+    top: -19px;
 }
 .form-left-decoration:after {
     top: 20px;
