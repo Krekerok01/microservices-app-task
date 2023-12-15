@@ -187,7 +187,7 @@ public class UserServiceTest {
     @DisplayName("Test adding new user successfully")
     void testAddingNewUserSuccessfully() {
         long id = 100L;
-        NewUserDto userToAdd = new NewUserDto(id, "Test username 1", "Test password 1", "Test email 1");
+        NewUserDto userToAdd = new NewUserDto("Test username 1", "Test password 1", "Test email 1");
 
         doReturn(Optional.empty()).when(userRepository).findByEmail(any(String.class));
         doReturn(
@@ -214,7 +214,7 @@ public class UserServiceTest {
     @DisplayName("Test adding new user with existing email")
     void testAddingNewUserWithExistingEmail() {
         long id = 100L;
-        NewUserDto userToAdd = new NewUserDto(id, "Test username 1", "Test password 1", "Test email 1");
+        NewUserDto userToAdd = new NewUserDto("Test username 1", "Test password 1", "Test email 1");
 
         doReturn(
                 Optional.of(new User(id + 1, "Test username 2", "Test password 2", "Test email 1", User.Role.ADMIN))

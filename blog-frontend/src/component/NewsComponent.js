@@ -69,9 +69,6 @@ class NewsComponent extends React.Component {
             </div>
         }
         return <div id="main_news_component" className="news-container">
-            {/*{this.state.data.map(news => {*/}
-            {/*    return <NewsCard key={news.url} sourceName={news.sourceName} title={news.title} url={news.url} publishedAt={news.publishedAt}/>*/}
-            {/*})}*/}
             {news}
         </div>
     }

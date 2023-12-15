@@ -184,7 +184,7 @@ public class UserControllerTest {
     @DisplayName("Test adding new user correctly")
     public void testAddingNewUser() throws Exception {
         long id = 1L;
-        NewUserDto expected = new NewUserDto(id, "test1_username", "test1_password", "email1@email.com");
+        NewUserDto expected = new NewUserDto("test1_username", "test1_password", "email1@email.com");
         doReturn(
                 new User(id, "test1_username", "test1_password", "email1@email.com", User.Role.DEFAULT)
         ).when(userService).add(any(NewUserDto.class));
@@ -208,8 +208,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("Test adding incorrect user data")
     public void testAddingIncorrectUserData() throws Exception {
-        long id = 1L;
-        NewUserDto expected = new NewUserDto(id, "test1_username", "test1_password", "wrongEmailTest");
+        NewUserDto expected = new NewUserDto("test1_username", "test1_password", "wrongEmailTest");
         MockHttpServletResponse response = mvc.perform(
                 post("/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)

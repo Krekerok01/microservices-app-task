@@ -38,7 +38,6 @@ public class DtoMapper {
 
     public static User mapToUser(NewUserDto dto) {
         return new User(
-                dto.getId(),
                 dto.getUsername(),
                 dto.getPassword(),
                 dto.getEmail(),
