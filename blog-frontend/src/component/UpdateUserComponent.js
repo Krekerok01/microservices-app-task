@@ -47,6 +47,7 @@ class UpdateUserComponent extends React.Component {
         }).then(response => {
             if (response.ok) {
                 window.sessionStorage.setItem('username', null);
+                window.sessionStorage.setItem('token', null);
                 window.location.href = '/';
             } else if (response.status === 400) {
                 //     add error handling here
